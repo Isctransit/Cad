@@ -75,7 +75,7 @@
 <div class="scrim"></div>
 <div class="mobile-menu">
   <div class="mobile-menu-head">
-    <span class="logo"><span class="logo-mark" style="width:36px;height:36px;"><img src="assets/img/logo-isc.jpg" alt="Logo ISC" /></span> ISC</span>
+    <span class="logo"><span class="logo-mark" style="width:48px;height:48px;"><img src="assets/img/logo-isc.jpg" alt="Logo ISC" /></span> ISC</span>
     <button class="mobile-menu-close" aria-label="Fermer le menu">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
     </button>
@@ -115,7 +115,7 @@
         <div class="hero-trust">
           <div class="stat"><b data-count="18" data-suffix="+">0</b><span>Années d'expérience</span></div>
           <div class="stat"><b data-count="45" data-suffix="+">0</b><span>Pays desservis</span></div>
-          <div class="stat"><b data-count="3200" data-suffix="+">0</b><span>Conteneurs / an</span></div>
+          <div class="stat"><b>7j/7</b><span>Support client</span></div>
           <div class="stat"><b data-count="98" data-suffix="%">0</b><span>Livraisons à temps</span></div>
         </div>
       </div>
@@ -123,15 +123,73 @@
       <div class="hero-visual" data-reveal>
         <div class="hero-card main">
           <svg viewBox="0 0 400 320" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <ellipse cx="200" cy="270" rx="160" ry="14" fill="#0d1424"/>
-            <path d="M60 230 L120 150 L280 150 L340 230 Z" fill="#141b30" stroke="#c9a961" stroke-width="2"/>
-            <rect x="140" y="90" width="30" height="60" fill="#0f1424" stroke="#34d3e0" stroke-width="2"/>
-            <rect x="180" y="70" width="30" height="80" fill="#0f1424" stroke="#34d3e0" stroke-width="2"/>
-            <rect x="220" y="100" width="30" height="50" fill="#0f1424" stroke="#34d3e0" stroke-width="2"/>
-            <line x1="200" y1="40" x2="200" y2="90" stroke="#8791a8" stroke-width="2"/>
-            <path d="M200 45 L235 60 L200 68 Z" fill="#c9a961" opacity="0.8"/>
-            <path d="M40 230 Q200 260 360 230" stroke="#34d3e0" stroke-width="2" opacity="0.4" fill="none"/>
-            <path d="M20 245 Q200 280 380 245" stroke="#c9a961" stroke-width="2" opacity="0.3" fill="none"/>
+            <defs>
+              <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#141b30"/>
+                <stop offset="100%" stop-color="#0a0e1a"/>
+              </linearGradient>
+              <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#123042"/>
+                <stop offset="100%" stop-color="#0a0e1a"/>
+              </linearGradient>
+              <linearGradient id="hullGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#1c2540"/>
+                <stop offset="100%" stop-color="#0f1424"/>
+              </linearGradient>
+              <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#e8cf8e" stop-opacity="0.55"/>
+                <stop offset="100%" stop-color="#e8cf8e" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+
+            <rect x="0" y="0" width="400" height="230" fill="url(#skyGrad)"/>
+            <circle cx="330" cy="55" r="42" fill="url(#sunGlow)"/>
+            <circle cx="330" cy="55" r="16" fill="#e8cf8e" opacity="0.85"/>
+
+            <g opacity="0.35">
+              <path d="M20 150 L20 100 M20 100 L4 100 M20 108 L34 108" stroke="#8791a8" stroke-width="2"/>
+              <path d="M368 158 L368 96 M368 96 L352 96 M368 104 L384 104" stroke="#8791a8" stroke-width="2"/>
+            </g>
+
+            <rect x="0" y="222" width="400" height="98" fill="url(#waterGrad)"/>
+            <path d="M0 222 Q100 214 200 222 T400 222" stroke="#34d3e0" stroke-width="1.5" opacity="0.35" fill="none"/>
+            <path d="M0 236 Q100 244 200 236 T400 236" stroke="#34d3e0" stroke-width="1.5" opacity="0.22" fill="none"/>
+            <path d="M0 252 Q100 246 200 252 T400 252" stroke="#c9a961" stroke-width="1.5" opacity="0.2" fill="none"/>
+
+            <path d="M45 220 L95 165 L305 165 L355 220 Z" fill="url(#hullGrad)" stroke="#c9a961" stroke-width="2"/>
+            <rect x="45" y="212" width="310" height="10" fill="#c9a961" opacity="0.5"/>
+
+            <g>
+              <rect x="112" y="140" width="26" height="25" fill="#c9a961" opacity="0.9"/>
+              <rect x="140" y="140" width="26" height="25" fill="#34d3e0" opacity="0.85"/>
+              <rect x="168" y="140" width="26" height="25" fill="#e8cf8e" opacity="0.75"/>
+              <rect x="196" y="140" width="26" height="25" fill="#7fe9f1" opacity="0.8"/>
+              <rect x="224" y="140" width="26" height="25" fill="#c9a961" opacity="0.7"/>
+              <rect x="252" y="140" width="26" height="25" fill="#34d3e0" opacity="0.9"/>
+
+              <rect x="126" y="113" width="26" height="25" fill="#34d3e0" opacity="0.8"/>
+              <rect x="154" y="113" width="26" height="25" fill="#c9a961" opacity="0.85"/>
+              <rect x="182" y="113" width="26" height="25" fill="#7fe9f1" opacity="0.7"/>
+              <rect x="210" y="113" width="26" height="25" fill="#e8cf8e" opacity="0.85"/>
+              <rect x="238" y="113" width="26" height="25" fill="#34d3e0" opacity="0.75"/>
+
+              <rect x="140" y="86" width="26" height="25" fill="#c9a961" opacity="0.9"/>
+              <rect x="168" y="86" width="26" height="25" fill="#7fe9f1" opacity="0.8"/>
+              <rect x="196" y="86" width="26" height="25" fill="#34d3e0" opacity="0.85"/>
+              <rect x="224" y="86" width="26" height="25" fill="#e8cf8e" opacity="0.75"/>
+            </g>
+
+            <g>
+              <rect x="286" y="118" width="46" height="47" fill="#141b30" stroke="#c9a961" stroke-width="1.5"/>
+              <rect x="294" y="126" width="10" height="10" fill="#34d3e0" opacity="0.6"/>
+              <rect x="310" y="126" width="10" height="10" fill="#34d3e0" opacity="0.6"/>
+              <rect x="294" y="142" width="10" height="10" fill="#34d3e0" opacity="0.4"/>
+              <rect x="310" y="142" width="10" height="10" fill="#34d3e0" opacity="0.4"/>
+              <line x1="309" y1="118" x2="309" y2="72" stroke="#8791a8" stroke-width="2.5"/>
+              <circle cx="309" cy="70" r="3.5" fill="#c9a961"/>
+            </g>
+
+            <path d="M30 220 Q200 246 370 220" stroke="#7fe9f1" stroke-width="1.5" opacity="0.18" fill="none"/>
           </svg>
         </div>
         <div class="hero-card hero-float card-1">
@@ -347,7 +405,7 @@
   <div class="stats-band">
     <div class="container stats-grid">
       <div class="stat-block" data-reveal><b data-count="18" data-suffix="+">0</b><span>Ans d'expérience</span></div>
-      <div class="stat-block" data-reveal><b data-count="3200" data-suffix="+">0</b><span>Conteneurs / an</span></div>
+      <div class="stat-block" data-reveal><b data-count="100" data-suffix="%">0</b><span>Tarifs transparents</span></div>
       <div class="stat-block" data-reveal><b data-count="45" data-suffix="+">0</b><span>Pays desservis</span></div>
       <div class="stat-block" data-reveal><b data-count="600" data-suffix="+">0</b><span>Clients actifs</span></div>
       <div class="stat-block" data-reveal><b data-count="98" data-suffix="%">0</b><span>Ponctualité</span></div>
@@ -392,8 +450,8 @@
           </div>
           <div class="port-row">
             <div class="port-name"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>Shanghai</div>
-            <div class="port-country">Chine</div>
-            <div class="badge">Ligne directe</div>
+            <div class="port-country">Chine (via transbordement)</div>
+            <div class="badge">Transbordement</div>
           </div>
         </div>
 
