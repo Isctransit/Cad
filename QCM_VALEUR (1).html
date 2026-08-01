@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QCM — Valeur en Douane (Tunisie)</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+font-family: Arial, Helvetica, sans-serif;
+background: #f2f2f2;
+color: #333;
+line-height: 1.5;
+padding: 20px;
+}
+.container { max-width: 900px; margin: 0 auto; }
+.progress-bar { height: 5px; background: #ddd; margin-bottom: 20px; }
+.progress-fill { height: 100%; background: #666; transition: width 0.3s ease; }
+
+.intro-box { text-align: center; padding: 40px 30px; background: #fff; border: 1px solid #ddd; }
+.intro-box h1 { font-size: 20px; margin-bottom: 8px; color: #333; }
+.intro-box .subtitle { font-size: 13px; color: #767676; margin-bottom: 20px; }
+.intro-box p { color: #555; margin-bottom: 24px; font-size: 14px; }
+
+.pref-header { font-size: 14px; margin-bottom: 4px; }
+.pref-header .fr { font-weight: bold; }
+.pref-line1 { color: #b8860b; }
+.pref-line2, .pref-line3 { color: #1c3f6e; }
+.pref-divider { border: none; border-top: 2px solid #b8860b; margin: 18px 0; }
+.pref-qcm { font-size: 24px; font-weight: bold; color: #1c3f6e; margin-top: 6px; }
+.pref-cours { font-size: 20px; font-weight: bold; color: #1b7a6c; margin-bottom: 14px; }
+.pref-subtitle { font-size: 13.5px; color: #444; margin-bottom: 10px; }
+.pref-desc { font-size: 13.5px; color: #333; background: #fdf3b0; padding: 8px 14px; display: inline-block; margin-bottom: 6px; font-weight: bold; }
+.pref-formation { font-style: italic; color: #1c3f6e; font-size: 13.5px; margin-top: 6px; }
+.pref-formation u { text-decoration: underline; }
+.pref-auteur { font-weight: bold; color: #b8860b; font-size: 13.5px; margin-top: 6px; }
+
+.btn {
+background: #595959; color: #fff; border: none;
+padding: 10px 24px; font-size: 14px; font-weight: normal;
+cursor: pointer; border-radius: 3px;
+}
+.btn:hover { background: #444; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-outline { background: #fff; color: #595959; border: 1px solid #b7b7b7; }
+.btn-quit { background: #8a3a3a; }
+.btn-quit:hover { background: #732f2f; }
+
+.ex-title { font-size: 15px; font-weight: bold; color: #333; margin: 0 0 8px; text-align: center; }
+.timer-box { text-align: center; font-size: 14px; font-weight: bold; color: #444; margin-bottom: 16px; }
+.timer-box.warn { color: #b35c00; }
+.timer-box.danger { color: #c62828; }
+
+.q-block { margin-bottom: 18px; border: 1px solid #ddd; background: #fff; }
+.q-topbar {
+display: flex; align-items: center; justify-content: space-between;
+background: #f5f5f5; border-bottom: 1px solid #ddd;
+padding: 10px 16px; font-size: 13px; flex-wrap: wrap; gap: 6px;
+}
+.q-topbar-left { display: flex; align-items: center; gap: 10px; color: #4a4a4a; }
+.q-topbar-left b { color: #333; font-size: 14px; }
+.q-sep { color: #bbb; }
+.q-flag { color: #b35c00; font-size: 13px; white-space: nowrap; }
+.q-flag::before { content: "\1F6A9  "; }
+
+.q-body { padding: 18px 20px; }
+.q-text { font-size: 14.5px; color: #222; margin-bottom: 16px; }
+
+.options { display: flex; flex-direction: column; gap: 10px; }
+.opt {
+display: flex; align-items: center; gap: 10px;
+padding: 8px 4px; cursor: pointer; font-size: 14px;
+}
+.opt-box {
+width: 15px; height: 15px; border: 1px solid #767676;
+background: #fff; flex-shrink: 0; display: flex;
+align-items: center; justify-content: center; font-size: 11px;
+}
+.opt.selected .opt-box { background: #e0e0e0; }
+.opt-check { color: #2e7d32; font-size: 15px; margin-left: 4px; }
+.opt-wrong-mark { color: #c62828; font-size: 15px; margin-left: 4px; }
+.opt.answer-correct .opt-text { color: #222; }
+.opt.answer-wrong-selected .opt-text { color: #c62828; }
+
+.feedback-box {
+margin: 16px 20px 18px; padding: 14px 16px;
+background: #fdf6df; border: 1px solid #ecdfb0;
+font-size: 13.5px; color: #333;
+}
+.feedback-box .status-line { font-weight: bold; margin-bottom: 6px; }
+.status-correct { color: #2e7d32; }
+.status-partial { color: #b35c00; }
+.status-wrong { color: #c62828; }
+.feedback-box .detail-line { margin-top: 4px; }
+.feedback-box .detail-line b { color: #222; }
+
+.nav-btns { display: flex; justify-content: space-between; padding: 0 20px 20px; gap: 12px; }
+
+.score-box {
+text-align: center; padding: 26px 20px; background: #fff;
+border: 1px solid #ddd; margin-bottom: 20px;
+}
+.score-num { font-size: 42px; font-weight: bold; color: #333; }
+.score-num span { font-size: 22px; color: #888; }
+.score-label { font-size: 14px; color: #666; margin-top: 2px; }
+.score-msg { font-size: 15px; font-weight: bold; margin-top: 10px; color: #444; }
+
+.continue-box { text-align: center; padding: 30px 20px; background: #fff; border: 1px solid #ddd; margin-bottom: 20px; }
+.continue-box p { font-size: 14px; color: #555; margin-bottom: 20px; }
+.continue-btns { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+
+.final-box { text-align: center; padding: 30px 20px; background: #fff; border: 1px solid #ddd; margin-bottom: 20px; }
+.final-num { font-size: 52px; font-weight: bold; color: #333; }
+.final-num span { font-size: 26px; color: #888; }
+.final-label { font-size: 14px; color: #666; margin-top: 4px; }
+.final-appr { font-size: 18px; font-weight: bold; margin-top: 14px; }
+.final-detail { font-size: 13px; color: #767676; margin-top: 10px; }
+
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="container">
+<div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
+
+<div id="intro" class="intro-box">
+<div class="pref-header pref-line1"><span class="fr">الجمهورية التونسية</span> &nbsp;•&nbsp; <span class="fr">RÉPUBLIQUE TUNISIENNE</span></div>
+<div class="pref-header pref-line2">وزارة المالية &nbsp;•&nbsp; MINISTÈRE DES FINANCES</div>
+<div class="pref-header pref-line3">المدرسة الوطنية للديوانة &nbsp;•&nbsp; ÉCOLE NATIONALE DES DOUANES</div>
+
+<hr class="pref-divider">
+
+<div class="pref-qcm">QCM</div>
+<div class="pref-cours">COURS VALEUR EN DOUANE</div>
+<div class="pref-subtitle">Code des douanes tunisien (Loi 2008-34) · 10 exercices de 10 questions · 100 questions au total</div>
+<div class="pref-desc">Réponds aux questions, valide, et obtiens ta note. A la fin de chaque exercice, choisis de continuer ou de quitter. Ta moyenne finale sur 20 tient compte du nombre d'exercices réellement effectués.</div>
+
+<hr class="pref-divider">
+
+<div class="pref-formation">Formation : Commissionnaire Agréé en <u>Douane</u> &nbsp;•&nbsp; Promotion Août 2026</div>
+<div class="pref-formation">Cours Élaboré par : <u><b>Colonel Major des Douanes Meher Yahiaoui</b></u></div>
+<div class="pref-auteur">(Qcm avec réponse noté élaboré par Reguigui Mokhtar)</div>
+
+<div style="margin-top:26px;">
+<button class="btn" onclick="startQCM()">Commencer le QCM</button>
+</div>
+</div>
+
+<div id="quiz" class="hidden"></div>
+<div id="interstitial" class="hidden"></div>
+<div id="results" class="hidden"></div>
+</div>
+
+<script>
+const exercises = [{"title": "Exercice 1 — Ajustements et déductions (Art. 30-31 CDT)", "questions": [{"q": "Quel est le principe de base pour déterminer la valeur en douane des marchandises importées en Tunisie ?", "options": [{"text": "La valeur marchande sur le marché intérieur tunisien", "correct": false}, {"text": "La valeur transactionnelle (prix effectivement payé ou à payer)", "correct": true}, {"text": "La valeur calculée selon les coûts de production", "correct": false}, {"text": "Le prix de revente déduit en Tunisie", "correct": false}], "exp": "Article 23 du Code des douanes : la valeur en douane est la valeur transactionnelle, c'est-à-dire le prix effectivement payé ou à payer pour les marchandises lorsqu'elles sont vendues pour l'exportation vers la Tunisie."}, {"q": "L'article 30 du Code des douanes établit une liste d'éléments à ajouter au prix. Quel est le caractère de cette liste ?", "options": [{"text": "Indicative, d'autres éléments peuvent être ajoutés au besoin", "correct": false}, {"text": "Limitative et exhaustive, aucun autre élément ne peut être ajouté", "correct": true}, {"text": "Ouverte, l'administration des douanes peut ajouter des éléments", "correct": false}, {"text": "Facultative, l'importateur choisit ce qu'il ajoute", "correct": false}], "exp": "Article 30 §3 : pour la détermination de la valeur en douane, aucun élément n'est ajouté au prix effectivement payé ou à payer, à l'exception de ceux qui sont prévus par le présent article. La liste est donc strictement limitative."}, {"q": "Parmi les éléments suivants, lequel est ajouté au prix selon l'article 30 ?", "options": [{"text": "Les commissions d'achat", "correct": false}, {"text": "Les droits de douane à l'importation", "correct": false}, {"text": "Les commissions de vente et les frais de courtage", "correct": true}, {"text": "Les frais de transport après l'importation en Tunisie", "correct": false}], "exp": "Article 30 §1 a) : les commissions et frais de courtage sont ajoutés (sauf commissions d'achat, exclues par l'art. 31). Les droits de douane et le transport post-importation sont des éléments à retrancher (art. 31)."}, {"q": "Une redevance de licence doit être ajoutée au prix selon l'article 30. Quelle condition est essentielle ?", "options": [{"text": "Elle doit être payée en devises étrangères", "correct": false}, {"text": "Elle doit être une condition de la vente des marchandises importées", "correct": true}, {"text": "Elle doit être inférieure à 10% du prix de la marchandise", "correct": false}, {"text": "Elle doit être payée directement au fabricant", "correct": false}], "exp": "Article 30 §1 c) : les redevances et droits de licence sont ajoutés uniquement si l'acheteur est tenu de les acquitter en tant que condition de la vente des marchandises importées."}, {"q": "Selon l'article 30 §4, quelle redevance n'est jamais ajoutée au prix en douane ?", "options": [{"text": "La redevance pour utiliser une marque déposée", "correct": false}, {"text": "La redevance pour le droit de reproduire les marchandises en Tunisie", "correct": true}, {"text": "La redevance de licence liée au brevet de la marchandise", "correct": false}, {"text": "La redevance pour le droit de distribuer les marchandises (si condition de la vente)", "correct": false}], "exp": "Article 30 §4 a) : les frais relatifs au droit de reproduire les marchandises importées en Tunisie ne sont pas ajoutés au prix, quelle que soit la situation."}, {"q": "Un acheteur tunisien fournit gratuitement des matrices à son fournisseur étranger pour la fabrication des marchandises importées. Comment traite-t-on cette valeur ?", "options": [{"text": "Elle est exclue de la valeur en douane", "correct": false}, {"text": "Elle est ajoutée au prix selon l'article 30 §1 b)", "correct": true}, {"text": "Elle est déduite du prix selon l'article 31", "correct": false}, {"text": "Elle n'a pas d'incidence sur la valeur en douane", "correct": false}], "exp": "Article 30 §1 b) : la valeur des matériaux, composants, outils, matrices, moules fournis par l'acheteur sans frais ou à coût réduit est ajoutée, à condition qu'ils soient utilisés pour la production et la vente pour l'exportation."}, {"q": "Dans une vente entre personnes liées, la valeur transactionnelle est-elle automatiquement rejetée ?", "options": [{"text": "Oui, toujours, car le lien entre les parties fausse le prix", "correct": false}, {"text": "Non, elle est acceptable si le lien n'a pas influencé le prix", "correct": true}, {"text": "Oui, sauf si les parties prouvent qu'elles sont indépendantes", "correct": false}, {"text": "Non, mais elle doit être systématiquement ajustée de 20%", "correct": false}], "exp": "Article 23 §2 : le fait que l'acheteur et le vendeur soient liés ne constitue pas en soi un motif suffisant pour considérer la valeur transactionnelle comme inacceptable. Il faut examiner si le lien a influencé le prix."}, {"q": "Si la valeur transactionnelle ne peut pas être déterminée, quelle est la première méthode subsidiaire applicable ?", "options": [{"text": "La valeur calculée (article 28)", "correct": false}, {"text": "Le prix de revente déduit (article 27)", "correct": false}, {"text": "La valeur transactionnelle de marchandises identiques (article 25)", "correct": true}, {"text": "La méthode de repli (article 29)", "correct": false}], "exp": "Ordre hiérarchique : Art. 23 (VT) puis Art. 25 (identiques) puis Art. 26 (similaires) puis Art. 27 (revente) puis Art. 28 (calculée) puis Art. 29 (repli). La méthode des identiques vient en premier."}, {"q": "Quel élément doit être retranché du prix selon l'article 31 ?", "options": [{"text": "Les frais de chargement jusqu'au lieu d'introduction", "correct": false}, {"text": "Le coût de l'emballage des marchandises", "correct": false}, {"text": "Les droits et taxes exigibles à l'importation en Tunisie", "correct": true}, {"text": "Les redevances de licence condition de la vente", "correct": false}], "exp": "Article 31 e) : les droits et taxes exigibles à l'importation en Tunisie ne font pas partie de la valeur en douane. Les frais de chargement et l'emballage sont ajoutés (art. 30), les redevances condition de la vente aussi (art. 30)."}, {"q": "Concernant les frais de transport à ajouter selon l'article 30 §1 e) et f), jusqu'où sont-ils pris en compte ?", "options": [{"text": "Jusqu'à l'entrepôt de l'acheteur en Tunisie", "correct": false}, {"text": "Jusqu'au lieu d'introduction des marchandises sur le territoire douanier tunisien", "correct": true}, {"text": "Jusqu'au port de départ du pays d'exportation", "correct": false}, {"text": "Jusqu'à la frontière terrestre tunisienne uniquement", "correct": false}], "exp": "Article 30 §1 e) et f) : les frais de transport, d'assurance, de chargement, déchargement et manutention sont ajoutés jusqu'au lieu d'introduction des marchandises sur le territoire douanier tunisien."}]}, {"title": "Exercice 2 — Cadre général et Accord OMC", "questions": [{"q": "Quel est l'objectif officiel de l'Accord OMC sur la mise en oeuvre de l'article VII du GATT 1994 ?", "options": [{"text": "Fournir une base ouverte reposant sur la « valeur réelle »", "correct": false}, {"text": "Fournir un système équitable, uniforme et neutre de détermination de la valeur en douane", "correct": true}, {"text": "Permettre à chaque Etat d'appliquer une politique de protection de ses industries", "correct": false}, {"text": "Remplacer les droits de douane par des taxes forfaitaires", "correct": false}], "exp": "L'Accord vise l'équité, l'uniformité et la neutralité, en rupture avec la notion de « valeur réelle » de la définition de Bruxelles de 1950."}, {"q": "Quel texte transpose l'Accord OMC en droit tunisien ?", "options": [{"text": "Loi n°94-41", "correct": false}, {"text": "Loi n°2008-34, articles 22 à 37 du Code des douanes", "correct": true}, {"text": "Décret n°2008-34", "correct": false}, {"text": "Circulaire DGD 2019", "correct": false}], "exp": "La Loi n°2008-34 transpose l'Accord dans le Code des douanes tunisien, articles 22 à 37."}, {"q": "A quel article de l'Accord OMC correspond l'article 23 du CDT (valeur transactionnelle) ?", "options": [{"text": "Article 1", "correct": true}, {"text": "Article 5", "correct": false}, {"text": "Article 7", "correct": false}, {"text": "Article 15", "correct": false}], "exp": "L'article 1 de l'Accord OMC définit la valeur transactionnelle, transposé à l'article 23 du CDT."}, {"q": "Combien de méthodes d'évaluation prévoit l'Accord OMC ?", "options": [{"text": "4", "correct": false}, {"text": "5", "correct": false}, {"text": "6", "correct": true}, {"text": "8", "correct": false}], "exp": "Six méthodes hiérarchisées, de la valeur transactionnelle (art. 1/23) au dernier recours (art. 7/29)."}, {"q": "Sur quelle base la valeur en douane est-elle toujours établie en Tunisie ?", "options": [{"text": "FOB", "correct": false}, {"text": "EXW", "correct": false}, {"text": "CAF, coût plus assurance plus fret jusqu'au point d'introduction", "correct": true}, {"text": "Prix de revente sur le marché tunisien", "correct": false}], "exp": "La Tunisie retient une valeur CAF, incluant le transport et l'assurance jusqu'au lieu d'introduction sur le territoire douanier. (Art. 30 CDT — frais de transport et d'assurance jusqu'au lieu d'introduction)."}, {"q": "Quel organisme traite des aspects techniques de l'évaluation en douane au niveau international ?", "options": [{"text": "Le comité de la valeur de l'OMC", "correct": false}, {"text": "Le comité technique de l'évaluation en douane de l'OMD", "correct": true}, {"text": "La Banque mondiale", "correct": false}, {"text": "L'Organisation mondiale de la santé", "correct": false}], "exp": "Le Comité technique de l'OMD gère les questions techniques, le Comité de la valeur de l'OMC les questions juridiques et de politique."}, {"q": "Quelle notion l'Accord OMC a-t-il abandonnée par rapport à la définition de Bruxelles de 1950 ?", "options": [{"text": "La valeur transactionnelle", "correct": false}, {"text": "La valeur réelle", "correct": true}, {"text": "Le prix CAF", "correct": false}, {"text": "La méthode déductive", "correct": false}], "exp": "La définition de Bruxelles de 1950 reposait sur une « valeur réelle » théorique, abandonnée au profit de la valeur transactionnelle réelle."}, {"q": "Après le rejet de l'article 23, quelle est la première méthode de substitution à appliquer ?", "options": [{"text": "Article 26, marchandises similaires", "correct": false}, {"text": "Article 25, marchandises identiques", "correct": true}, {"text": "Article 27, méthode déductive", "correct": false}, {"text": "Article 29, dernier recours", "correct": false}], "exp": "La hiérarchie impose l'ordre 25, 26, 27, 28, 29, sauf inversion 27/28 à la demande de l'importateur."}, {"q": "L'inversion de l'ordre entre la méthode déductive et la méthode calculée est permise :", "options": [{"text": "Systématiquement, à la discrétion de la douane", "correct": false}, {"text": "Uniquement à la demande de l'importateur", "correct": true}, {"text": "Jamais", "correct": false}, {"text": "Uniquement pour les marchandises périssables", "correct": false}], "exp": "Seul l'importateur peut demander l'inversion des méthodes 4 et 5. (Art. 27 et 28 CDT, seuls concernés par cette inversion)."}, {"q": "La liste des méthodes d'évaluation dans le Code des douanes tunisien est :", "options": [{"text": "Facultative", "correct": false}, {"text": "Hiérarchique et successive", "correct": true}, {"text": "Laissée au choix du déclarant", "correct": false}, {"text": "Applicable simultanément à toutes les méthodes", "correct": false}], "exp": "Les méthodes s'appliquent dans l'ordre, chaque méthode n'étant utilisée qu'après échec de la précédente. (Art. 23, 25, 26, 27, 28, 29 CDT)."}]}, {"title": "Exercice 3 — Article 23, valeur transactionnelle et conditions", "questions": [{"q": "Que désigne la valeur transactionnelle selon l'article 23 du CDT ?", "options": [{"text": "Le prix de vente sur le marché tunisien", "correct": false}, {"text": "Le prix effectivement payé ou à payer pour les marchandises vendues pour l'exportation vers la Tunisie", "correct": true}, {"text": "Le coût de production dans le pays d'origine", "correct": false}, {"text": "La valeur assurée par l'exportateur", "correct": false}], "exp": "Définition légale de l'article 23, transposant l'article 1 de l'Accord OMC."}, {"q": "Parmi les 4 conditions de recevabilité de la méthode 1, laquelle concerne les restrictions ?", "options": [{"text": "Absence de restrictions à la cession ou l'utilisation des marchandises par l'acheteur, sauf exceptions prévues", "correct": true}, {"text": "Interdiction totale de toute restriction", "correct": false}, {"text": "Les restrictions sont sans effet sur la recevabilité", "correct": false}, {"text": "Seules les restrictions géographiques sont interdites", "correct": false}], "exp": "Certaines restrictions n'excluent pas la VT : imposées par la loi, limitant la zone de revente, ou sans effet sensible sur la valeur. (Art. 23 §1 a) CDT)."}, {"q": "Deuxième condition de recevabilité de l'article 23 : la vente ou le prix ne doit pas être...", "options": [{"text": "Fixé en devises étrangères", "correct": false}, {"text": "Subordonné à des conditions ou prestations dont la valeur n'est pas déterminable", "correct": true}, {"text": "Négocié entre personnes liées", "correct": false}, {"text": "Supérieur au prix du marché mondial", "correct": false}], "exp": "Si la vente dépend d'une contrepartie non chiffrable, la VT est rejetée sauf si cette valeur peut être déterminée et ajoutée."}, {"q": "Troisième condition : concernant le produit de toute revente ultérieure par l'acheteur...", "options": [{"text": "Il doit intégralement revenir au vendeur", "correct": false}, {"text": "Aucune partie ne doit revenir au vendeur, sauf ajustement possible selon l'article 30", "correct": true}, {"text": "Il appartient à l'acheteur sans exception", "correct": false}, {"text": "Cette condition ne concerne que les biens périssables", "correct": false}], "exp": "Si une partie du produit de revente revient au vendeur, la VT n'est acceptable que si un ajustement approprié est possible. (Art. 23 §1 c) CDT)."}, {"q": "Quatrième condition de recevabilité de la valeur transactionnelle :", "options": [{"text": "L'acheteur et le vendeur ne doivent jamais être liés", "correct": false}, {"text": "L'absence de lien, ou si lien il y a, que ce lien n'ait pas influencé le prix", "correct": true}, {"text": "Le vendeur doit être établi en Tunisie", "correct": false}, {"text": "L'acheteur doit être un commissionnaire agréé", "correct": false}], "exp": "Le lien n'exclut pas automatiquement la VT, seule son influence sur le prix compte. (Art. 23 §1 d) et §2 CDT)."}, {"q": "Un véhicule usagé est acheté chez un concessionnaire agréé puis importé directement. Quelle méthode s'applique ?", "options": [{"text": "Article 29 d'office", "correct": false}, {"text": "Article 23, le prix d'achat reflète déjà l'état usagé", "correct": true}, {"text": "Article 27 obligatoirement", "correct": false}, {"text": "Aucune méthode ne s'applique aux véhicules usagés", "correct": false}], "exp": "Achat chez un professionnel agréé, la VT est directement acceptable, le prix intégrant déjà la dépréciation d'usage. (Art. 23 CDT)."}, {"q": "Un véhicule usagé est acheté hors circuit de concessionnaire agréé, puis utilisé avant importation. Que faut-il faire ?", "options": [{"text": "Appliquer l'article 23 sans vérification", "correct": false}, {"text": "Recourir à une expertise ou une cote Argus, puis descendre la hiérarchie si besoin, jusqu'à l'article 29", "correct": true}, {"text": "Refuser systématiquement l'importation", "correct": false}, {"text": "Appliquer d'office l'article 25", "correct": false}], "exp": "Hors dealer agréé, le prix n'est pas fiable seul. Expertise ou Argus, et dépréciation d'usage supplémentaire imposent la descente vers 25, 26, 27, 29. (Art. 25, 26, 27, 29 CDT)."}, {"q": "Si le coût d'un élément visé à l'article 30 ne peut être déterminé de façon exacte et objective, que fait-on ?", "options": [{"text": "On ignore cet élément et on garde la VT", "correct": false}, {"text": "On estime forfaitairement sa valeur", "correct": false}, {"text": "On rejette la valeur transactionnelle et on applique les méthodes de substitution", "correct": true}, {"text": "On applique une pénalité à l'importateur", "correct": false}], "exp": "L'imprécision d'un élément de l'article 30 empêche l'application fiable de la méthode 1, obligeant le passage aux méthodes 2 à 6."}, {"q": "Une restriction imposée par la loi ou les autorités tunisiennes affecte-t-elle la recevabilité de la valeur transactionnelle ?", "options": [{"text": "Oui, systématiquement", "correct": false}, {"text": "Non, elle n'exclut pas la VT", "correct": true}, {"text": "Oui, mais seulement pour les produits sensibles", "correct": false}, {"text": "Cela dépend du montant de la transaction", "correct": false}], "exp": "Les restrictions légales ou réglementaires n'empêchent pas l'acceptation de la valeur transactionnelle. (Art. 23 §1 a) CDT)."}, {"q": "Le test des valeurs critères sert à :", "options": [{"text": "Fixer le taux de change applicable", "correct": false}, {"text": "Vérifier si le lien entre acheteur et vendeur a influencé le prix, en le comparant à des transactions comparables entre personnes non liées", "correct": true}, {"text": "Calculer les droits de douane", "correct": false}, {"text": "Déterminer la nationalité du fabricant", "correct": false}], "exp": "Ce test permet d'accepter la VT entre personnes liées si elle est proche de valeurs transactionnelles de marchandises identiques ou similaires entre personnes non liées. (Art. 23 §2 CDT)."}]}, {"title": "Exercice 4 — Personnes liées et commissionnaires", "questions": [{"q": "Selon l'article 22 du CDT, deux personnes sont réputées liées si :", "options": [{"text": "Elles ont la même nationalité", "correct": false}, {"text": "L'une est membre de la famille de l'autre, ou l'une contrôle l'autre directement ou indirectement", "correct": true}, {"text": "Elles utilisent la même banque", "correct": false}, {"text": "Elles opèrent dans le même secteur économique", "correct": false}], "exp": "L'article 22 énumère les critères de lien : famille, contrôle, participation croisée, dirigeant commun, etc."}, {"q": "Le simple fait que l'acheteur et le vendeur soient liés entraîne-t-il le rejet automatique de la valeur transactionnelle ?", "options": [{"text": "Oui, toujours", "correct": false}, {"text": "Non, seule l'influence du lien sur le prix compte", "correct": true}, {"text": "Oui, sauf accord écrit contraire", "correct": false}, {"text": "Non, le lien est sans aucune incidence", "correct": false}], "exp": "Le lien est un simple indice à examiner, pas un motif de rejet automatique. (Art. 23 §2 CDT)."}, {"q": "Qui représente le commissionnaire à l'achat ?", "options": [{"text": "Le vendeur", "correct": false}, {"text": "L'acheteur, il cherche des fournisseurs pour son compte", "correct": true}, {"text": "La douane", "correct": false}, {"text": "Le transporteur", "correct": false}], "exp": "Le commissionnaire à l'achat agit pour le compte de l'acheteur, à la recherche de fournisseurs. (traitement fiscal : Art. 31 CDT, exclusion de la commission d'achat)."}, {"q": "Qui représente le commissionnaire à la vente ?", "options": [{"text": "Le vendeur, il cherche le meilleur acheteur pour la marchandise", "correct": true}, {"text": "L'acheteur", "correct": false}, {"text": "L'administration douanière", "correct": false}, {"text": "Aucune des deux parties", "correct": false}], "exp": "Le commissionnaire à la vente défend les intérêts du vendeur et cherche les meilleurs clients. (traitement fiscal : Art. 30 CDT, inclusion de la commission de vente)."}, {"q": "Comment traite-t-on la commission d'achat dans la valeur en douane ?", "options": [{"text": "Elle est toujours ajoutée", "correct": false}, {"text": "Elle est exclue de la valeur en douane", "correct": true}, {"text": "Elle est ajoutée uniquement si elle dépasse 5% du prix", "correct": false}, {"text": "Elle est déduite du prix de revente", "correct": false}], "exp": "L'article 31 exclut la commission d'achat de la valeur en douane, contrairement à la commission de vente."}, {"q": "Comment traite-t-on la commission de vente dans la valeur en douane ?", "options": [{"text": "Elle est exclue", "correct": false}, {"text": "Elle est ajoutée au prix, article 30", "correct": true}, {"text": "Elle est indifférente", "correct": false}, {"text": "Elle remplace le prix payé", "correct": false}], "exp": "L'article 30 impose l'ajout des commissions de vente et frais de courtage au prix."}, {"q": "Un fournisseur étranger et son importateur tunisien appartiennent au même groupe. Le prix négocié est acceptable si :", "options": [{"text": "Les deux entités appartiennent au même groupe, cela suffit", "correct": false}, {"text": "Le lien n'a pas influencé le prix, démontré notamment par le test des valeurs critères", "correct": true}, {"text": "Le prix est fixé par décret", "correct": false}, {"text": "Les marchandises sont neuves uniquement", "correct": false}], "exp": "Le lien entre les deux entités n'exclut pas la VT si son absence d'influence sur le prix est démontrée. (Art. 22 et 23 §2 CDT)."}, {"q": "Une commission qualifiée d'« achat » par contrat mais versée en réalité au vendeur pour son propre compte doit être traitée comme :", "options": [{"text": "Une commission d'achat, donc exclue", "correct": false}, {"text": "Une commission de vente déguisée, donc incluse dans la valeur", "correct": true}, {"text": "Un élément neutre", "correct": false}, {"text": "Un remboursement de frais", "correct": false}], "exp": "La qualification contractuelle ne prime pas sur la réalité économique : si elle sert les intérêts du vendeur, elle est une commission de vente incluse. (Art. 30 CDT)."}, {"q": "Le commissionnaire à l'achat peut-il également facturer des frais de groupage pour le compte de l'acheteur ?", "options": [{"text": "Oui, cela relève de son rôle de représentation de l'acheteur", "correct": true}, {"text": "Non, cela ne concerne que le commissionnaire à la vente", "correct": false}, {"text": "Non, c'est une commission de vente déguisée", "correct": false}, {"text": "Oui, mais uniquement pour les produits alimentaires", "correct": false}], "exp": "Le commissionnaire à l'achat agit pour l'acheteur, ses prestations logistiques restent dans ce cadre représentatif. (Art. 31 CDT)."}, {"q": "La distinction essentielle entre commission d'achat et commission de vente repose sur :", "options": [{"text": "Le montant facturé", "correct": false}, {"text": "La partie représentée, acheteur ou vendeur, qui détermine l'inclusion ou l'exclusion", "correct": true}, {"text": "La devise de paiement", "correct": false}, {"text": "Le pays où la commission est versée", "correct": false}], "exp": "C'est la fonction représentée qui détermine le traitement, pas le montant ni la devise. (Art. 30 et 31 CDT)."}]}, {"title": "Exercice 5 — Vente pour l'exportation et cas pratiques", "questions": [{"q": "Qu'est-ce que la notion de « vente pour l'exportation vers le pays d'importation » ?", "options": [{"text": "Toute vente de marchandises quel que soit le pays de destination", "correct": false}, {"text": "Une vente dont la destination contractuelle est le pays d'importation, condition de la valeur transactionnelle", "correct": true}, {"text": "Une vente conclue uniquement entre deux commissionnaires", "correct": false}, {"text": "Une vente qui inclut obligatoirement le transport", "correct": false}], "exp": "L'article 23 exige que la vente ait pour destination le pays d'importation, condition de fond de la valeur transactionnelle."}, {"q": "Cas Royal BANANA, A.C. 14.1 : la vente initiale est annulée en cours de transport et les marchandises sont revendues à un nouvel acheteur tunisien. La valeur en douane repose sur :", "options": [{"text": "La vente initiale annulée", "correct": false}, {"text": "La nouvelle vente conclue avant l'importation, si elle remplit les conditions de l'article 23", "correct": true}, {"text": "Une valeur calculée d'office", "correct": false}, {"text": "Le prix de revente ultérieur en Tunisie", "correct": false}], "exp": "L'Avis Consultatif 14.1 valide la substitution de vente tant que la nouvelle transaction précède l'importation et respecte les conditions légales."}, {"q": "Cas Sun Beach, A.C. 1.1 : le transfert de biens du siège vers une filiale sans transaction commerciale réelle est-il une vente au sens de l'article 23 ?", "options": [{"text": "Oui, toute circulation de biens intra-groupe est une vente", "correct": false}, {"text": "Non, l'absence de vente exclut l'article 23", "correct": true}, {"text": "Oui, si le siège facture un prix symbolique", "correct": false}, {"text": "Cela dépend de la devise de facturation", "correct": false}], "exp": "Sans transfert de propriété à titre onéreux entre deux parties distinctes, il n'y a pas de vente, donc pas de valeur transactionnelle possible."}, {"q": "Dans le cas GAN/Tun_Gan, une redevance de licence est versée par l'importateur au titulaire de la marque. Cette redevance est ajoutée à la valeur en douane si :", "options": [{"text": "Elle est payée en dinars tunisiens", "correct": false}, {"text": "Elle constitue une condition de la vente des marchandises importées", "correct": true}, {"text": "Elle dépasse 100 000 DT", "correct": false}, {"text": "Le titulaire de la marque est basé en Tunisie", "correct": false}], "exp": "Conformément à l'article 30 §1 c), seule la redevance conditionnant la vente est ajoutée au prix."}, {"q": "TECHNO-IMPORT importe des presses avec une assistance technique fournie par l'acheteur au fabricant étranger. Cette assistance est traitée comme :", "options": [{"text": "Un élément exclu de la valeur en douane", "correct": false}, {"text": "Un apport de l'acheteur à ajouter selon l'article 30 §1 b)", "correct": true}, {"text": "Un service post-importation", "correct": false}, {"text": "Une commission de vente", "correct": false}], "exp": "Les apports (« assists ») fournis gratuitement ou à coût réduit par l'acheteur sont ajoutés au prix selon l'article 30."}, {"q": "Cas EN_TN, importation de véhicules par une entreprise nationale liée à son fournisseur étranger. Le prix négocié est acceptable si :", "options": [{"text": "Les deux entités appartiennent au même groupe", "correct": false}, {"text": "Le lien n'a pas influencé le prix", "correct": true}, {"text": "Le prix est fixé par décret", "correct": false}, {"text": "Les véhicules sont neufs uniquement", "correct": false}], "exp": "Le lien entre les deux entités n'exclut pas la valeur transactionnelle si son absence d'influence sur le prix est démontrée. (Art. 22 et 23 CDT)."}, {"q": "L'assistance logicielle fournie par TUNISIA AUTOMATION pour une machine importée est développée localement en Tunisie. Ce coût est :", "options": [{"text": "Ajouté à la valeur en douane", "correct": false}, {"text": "Exclu, car réalisé en Tunisie et non à l'étranger", "correct": true}, {"text": "Ajouté uniquement s'il dépasse 10% du prix", "correct": false}, {"text": "Soumis à un droit de licence spécifique", "correct": false}], "exp": "Seuls les apports intellectuels réalisés à l'étranger sont ajoutés selon l'article 30, ceux réalisés en Tunisie sont exclus."}, {"q": "Une vente pour l'exportation implique nécessairement :", "options": [{"text": "Un transfert de propriété à titre onéreux entre deux parties distinctes", "correct": true}, {"text": "Un paiement en devises étrangères uniquement", "correct": false}, {"text": "Un contrat écrit notarié", "correct": false}, {"text": "Une livraison directe sans intermédiaire", "correct": false}], "exp": "La notion de vente suppose un transfert de propriété moyennant contrepartie, condition de base de l'article 23."}, {"q": "Dans un groupe international, un transfert de marchandises entre le siège et une filiale, facturé à un prix purement comptable interne, est-il retenu comme valeur transactionnelle ?", "options": [{"text": "Oui, automatiquement", "correct": false}, {"text": "Non, il faut examiner s'il existe une véritable vente et si le prix reflète une transaction commerciale réelle", "correct": true}, {"text": "Oui, si le prix est en euros", "correct": false}, {"text": "Non, ce type de transfert est totalement interdit", "correct": false}], "exp": "Un prix purement comptable sans transaction réelle ne constitue pas une base fiable pour la valeur transactionnelle. (Art. 23 CDT)."}, {"q": "Lorsque la valeur transactionnelle est écartée faute de vente réelle, la valeur en douane est déterminée par :", "options": [{"text": "Une décision arbitraire de l'administration", "correct": false}, {"text": "Application successive des méthodes de substitution, articles 25 à 29", "correct": true}, {"text": "Le prix de revente immédiat sans ajustement", "correct": false}, {"text": "La moyenne des trois derniers prix connus", "correct": false}], "exp": "L'absence de vente valable impose la descente hiérarchique dans les méthodes 2 à 6. (Art. 25 à 29 CDT)."}]}, {"title": "Exercice 6 — Méthode 2, marchandises identiques (Art. 25)", "questions": [{"q": "Que sont des marchandises identiques selon l'article 25 ?", "options": [{"text": "Des marchandises semblables sur certains points", "correct": false}, {"text": "Des marchandises les mêmes à tous égards, sauf différences mineures d'aspect", "correct": true}, {"text": "Des marchandises de même fonction mais de marque différente", "correct": false}, {"text": "Des marchandises importées par le même déclarant", "correct": false}], "exp": "L'identité s'apprécie sur les caractéristiques physiques, la qualité, la réputation, sans marge d'interprétation fonctionnelle."}, {"q": "Pour appliquer la méthode 2, les marchandises identiques doivent avoir été vendues :", "options": [{"text": "Vers n'importe quel pays d'importation", "correct": false}, {"text": "Pour l'exportation vers le même pays d'importation, à peu près au même moment", "correct": true}, {"text": "Uniquement au même prix", "correct": false}, {"text": "Par le même transporteur", "correct": false}], "exp": "La comparabilité exige la même destination d'importation et une proximité temporelle de la vente. (Art. 25 CDT)."}, {"q": "En présence de plusieurs valeurs transactionnelles de marchandises identiques, quelle valeur retient-on ?", "options": [{"text": "La valeur la plus élevée", "correct": false}, {"text": "La valeur la plus basse", "correct": true}, {"text": "La moyenne arithmétique", "correct": false}, {"text": "La valeur du premier importateur", "correct": false}], "exp": "Le principe retient la valeur transactionnelle la plus basse parmi les marchandises identiques comparables. (Art. 25 CDT)."}, {"q": "Une différence de marque entre deux produits empêche-t-elle la qualification d'identité ?", "options": [{"text": "Non, la marque est indifférente", "correct": false}, {"text": "Oui, une marque différente rompt l'identité au sens strict", "correct": true}, {"text": "Cela dépend uniquement du prix", "correct": false}, {"text": "Non, sauf contrefaçon", "correct": false}], "exp": "L'identité suppose une identité totale, y compris de marque et de réputation associée. (Art. 25 CDT)."}, {"q": "Priorité de recherche des marchandises identiques : on privilégie d'abord :", "options": [{"text": "Le même producteur", "correct": true}, {"text": "Le même pays quel que soit le producteur", "correct": false}, {"text": "Le même importateur", "correct": false}, {"text": "Le même transporteur", "correct": false}], "exp": "La comparaison privilégie en priorité les marchandises identiques produites par le même fabricant. (Art. 25 CDT)."}, {"q": "Si aucune marchandise identique du même producteur n'est trouvée, on recherche :", "options": [{"text": "Des marchandises identiques produites par un autre producteur du même pays", "correct": true}, {"text": "Directement la méthode 6", "correct": false}, {"text": "Une marchandise similaire uniquement, sans recherche complémentaire", "correct": false}, {"text": "Le prix de revente en Tunisie", "correct": false}], "exp": "A défaut du même producteur, on élargit la recherche à d'autres producteurs du pays d'exportation, avant de passer à l'article 26."}, {"q": "Des différences mineures d'aspect entre deux marchandises empêchent-elles la qualification d'identité ?", "options": [{"text": "Oui, toute différence exclut l'identité", "correct": false}, {"text": "Non, des différences mineures d'aspect sont admises", "correct": true}, {"text": "Cela dépend du prix", "correct": false}, {"text": "Oui, sauf accord de l'importateur", "correct": false}], "exp": "L'article 25 tolère des différences mineures d'aspect, sans remettre en cause l'identité substantielle."}, {"q": "La méthode 2 s'applique :", "options": [{"text": "Avant la méthode 1", "correct": false}, {"text": "Après le rejet de la méthode 1, avant la méthode 3", "correct": true}, {"text": "Uniquement en dernier recours", "correct": false}, {"text": "En parallèle de la méthode 1", "correct": false}], "exp": "L'ordre hiérarchique impose l'application de la méthode 2 seulement après échec de la méthode 1, avant la méthode 3. (Art. 25 CDT, après l'art. 23 et avant l'art. 26)."}, {"q": "Exemple type : des perceuses de marque identique, mêmes caractéristiques, importées au même moment vers la Tunisie, à des prix différents selon le fournisseur. Que retient-on ?", "options": [{"text": "Le prix moyen", "correct": false}, {"text": "Le prix le plus bas parmi les valeurs transactionnelles comparables", "correct": true}, {"text": "Le prix le plus élevé", "correct": false}, {"text": "Le prix du premier arrivage", "correct": false}], "exp": "Conformément à la règle de la valeur la plus basse en cas de pluralité de valeurs transactionnelles identiques. (Art. 25 CDT)."}, {"q": "La méthode des marchandises identiques repose sur :", "options": [{"text": "Une estimation forfaitaire de l'administration", "correct": false}, {"text": "Une valeur transactionnelle déjà acceptée pour des marchandises identiques", "correct": true}, {"text": "Le coût de production standard", "correct": false}, {"text": "Le prix affiché sur catalogue du fabricant", "correct": false}], "exp": "La méthode 2 réutilise une valeur transactionnelle réelle et déjà validée par la douane, pas une estimation. (Art. 25 CDT)."}]}, {"title": "Exercice 7 — Méthode 3, marchandises similaires (Art. 26)", "questions": [{"q": "Que sont des marchandises similaires selon l'article 26 ?", "options": [{"text": "Des marchandises identiques à tous égards", "correct": false}, {"text": "Des marchandises non identiques mais aux caractéristiques et fonctions semblables, commercialement interchangeables", "correct": true}, {"text": "Des marchandises de prix identique", "correct": false}, {"text": "Des marchandises fabriquées par le même employé", "correct": false}], "exp": "La similarité repose sur des caractéristiques et fonctions semblables et l'interchangeabilité commerciale, sans exiger l'identité totale."}, {"q": "Le critère décisif distinguant identiques et similaires est :", "options": [{"text": "Le pays d'origine", "correct": false}, {"text": "L'interchangeabilité commerciale", "correct": true}, {"text": "Le poids net", "correct": false}, {"text": "Le mode de transport", "correct": false}], "exp": "L'article 26 exige expressément la condition d'interchangeabilité commerciale, absente de la définition de l'identité stricte."}, {"q": "Deux produits de marques différentes à réputation distincte peuvent-ils être qualifiés d'identiques ?", "options": [{"text": "Oui, toujours", "correct": false}, {"text": "Non, la réputation diffère, ils restent similaires seulement si l'interchangeabilité est maintenue", "correct": true}, {"text": "Oui, si le prix est identique", "correct": false}, {"text": "Non, ils sont automatiquement exclus de toute méthode", "correct": false}], "exp": "Une marque à réputation distincte exclut l'identité stricte, mais n'empêche pas la qualification de similarité si les conditions sont remplies. (Art. 26 CDT)."}, {"q": "Une marque différente qui rompt l'interchangeabilité commerciale entraîne :", "options": [{"text": "L'application automatique de l'article 26", "correct": false}, {"text": "L'exclusion des méthodes 2 et 3, passage aux méthodes 4, 5 ou 6", "correct": true}, {"text": "Le maintien de la méthode 1", "correct": false}, {"text": "Un abattement forfaitaire de 10%", "correct": false}], "exp": "Sans interchangeabilité commerciale, ni identité ni similarité ne sont retenues, la hiérarchie descend plus loin. (Art. 26, 27, 28, 29 CDT)."}, {"q": "Une fausse marque ou une contrefaçon permet-elle la qualification de marchandise similaire ?", "options": [{"text": "Oui, car le produit reste physiquement semblable", "correct": false}, {"text": "Non, le faux ne porte pas la réputation réelle de la marque authentique", "correct": true}, {"text": "Oui, si le prix est inférieur au produit authentique", "correct": false}, {"text": "Cela dépend de la décision de l'importateur", "correct": false}], "exp": "Une contrefaçon rompt la réputation associée à la marque authentique, excluant identité et similarité, en amont d'un problème de propriété intellectuelle. (Art. 26 CDT)."}, {"q": "Exemple type : un aspirateur robot de marque inconnue importé de Chine, sans marchandise identique disponible. La douane recherche :", "options": [{"text": "Directement une valeur calculée", "correct": false}, {"text": "Une marchandise similaire remplissant les mêmes fonctions et commercialement interchangeable", "correct": true}, {"text": "Le prix affiché en ligne", "correct": false}, {"text": "La méthode 6 immédiatement", "correct": false}], "exp": "Faute d'identique, on recherche une similaire selon les critères de l'article 26 avant de descendre plus loin dans la hiérarchie."}, {"q": "La méthode 3 s'applique :", "options": [{"text": "Avant la méthode 2", "correct": false}, {"text": "Après échec des méthodes 1 et 2", "correct": true}, {"text": "En parallèle de la méthode 1", "correct": false}, {"text": "Uniquement pour les produits alimentaires", "correct": false}], "exp": "L'ordre hiérarchique impose l'échec préalable des méthodes 1 et 2 avant de recourir à la méthode 3. (Art. 26 CDT)."}, {"q": "En cas de pluralité de valeurs transactionnelles de marchandises similaires, on retient :", "options": [{"text": "La valeur la plus élevée", "correct": false}, {"text": "La valeur la plus basse", "correct": true}, {"text": "La valeur moyenne", "correct": false}, {"text": "La valeur choisie par l'importateur", "correct": false}], "exp": "Même principe que pour les identiques, la valeur la plus basse est retenue parmi les valeurs comparables. (Art. 26 CDT)."}, {"q": "Un facteur d'appréciation de la similarité mentionné par l'article 26 est :", "options": [{"text": "Le pays de destination finale", "correct": false}, {"text": "La qualité, la réputation, l'existence d'une marque de fabrique ou de commerce", "correct": true}, {"text": "Le nombre d'unités vendues", "correct": false}, {"text": "Le mode de paiement", "correct": false}], "exp": "L'article 26 cite explicitement qualité, réputation et marque comme facteurs d'appréciation de la similarité."}, {"q": "Priorité de recherche pour les marchandises similaires :", "options": [{"text": "Le même producteur, dans le même pays", "correct": true}, {"text": "N'importe quel producteur mondial", "correct": false}, {"text": "L'importateur ayant le prix le plus bas", "correct": false}, {"text": "Le fabricant ayant le chiffre d'affaires le plus élevé", "correct": false}], "exp": "Comme pour les identiques, la priorité va au même producteur, dans le même pays de production. (Art. 26 CDT)."}]}, {"title": "Exercice 8 — Méthodes 4-5, déductive et calculée (Art. 27-28)", "questions": [{"q": "Sur quoi repose la méthode déductive, article 27 ?", "options": [{"text": "Le coût de production dans le pays d'origine", "correct": false}, {"text": "Le prix unitaire de vente dans le pays d'importation, en l'état importé, après déductions", "correct": true}, {"text": "Le prix affiché en devise étrangère", "correct": false}, {"text": "Une estimation administrative forfaitaire", "correct": false}], "exp": "La méthode déductive part du prix de revente sur le marché tunisien, en déduisant les frais et marges post-importation."}, {"q": "Parmi les éléments à déduire dans la méthode déductive figurent :", "options": [{"text": "Les commissions, bénéfices, frais de transport intérieurs et droits de douane", "correct": true}, {"text": "Le coût des matières premières", "correct": false}, {"text": "Les redevances de licence liées à la vente", "correct": false}, {"text": "Le coût du transport jusqu'au point d'introduction", "correct": false}], "exp": "La méthode déductive retranche les marges et coûts postérieurs à l'importation, pour isoler la valeur en douane. (Art. 27 CDT)."}, {"q": "Sur quoi repose la méthode de la valeur calculée, article 28 ?", "options": [{"text": "Le coût des matières, les opérations de fabrication, plus bénéfices et frais généraux habituels, plus autres frais", "correct": true}, {"text": "Le prix de revente déduit en Tunisie", "correct": false}, {"text": "Une valeur estimative arbitraire", "correct": false}, {"text": "Le prix affiché par le producteur sur catalogue", "correct": false}], "exp": "La méthode calculée reconstruit la valeur à partir des données de production du fabricant, coûts et marge normale incluse."}, {"q": "Quelle méthode se fonde sur les données comptables et de production du fabricant étranger ?", "options": [{"text": "La méthode déductive", "correct": false}, {"text": "La méthode calculée", "correct": true}, {"text": "La méthode des identiques", "correct": false}, {"text": "Le dernier recours", "correct": false}], "exp": "La méthode calculée (art. 28) exige la coopération du producteur pour ses coûts réels, contrairement à la déductive basée sur le prix de revente local."}, {"q": "L'inversion de l'ordre entre méthode déductive et méthode calculée est permise :", "options": [{"text": "Systématiquement à la discrétion de la douane", "correct": false}, {"text": "Uniquement à la demande de l'importateur", "correct": true}, {"text": "Jamais", "correct": false}, {"text": "Uniquement si le producteur est tunisien", "correct": false}], "exp": "Seul l'importateur peut solliciter l'inversion des méthodes 4 et 5, la douane ne peut l'imposer. (Art. 27 et 28 CDT)."}, {"q": "Dans la méthode déductive, quelle date de vente est retenue en priorité ?", "options": [{"text": "La date de vente la plus proche de la date d'importation, à des personnes non liées", "correct": true}, {"text": "La première vente réalisée après l'importation, sans condition", "correct": false}, {"text": "La date d'arrivée du navire uniquement", "correct": false}, {"text": "La date de facturation du fournisseur étranger", "correct": false}], "exp": "La méthode déductive privilégie le prix unitaire de vente le plus proche de l'importation, à des acheteurs non liés au vendeur. (Art. 27 CDT)."}, {"q": "Que signifie l'expression « super-déductive » évoquée dans la méthode 4 ?", "options": [{"text": "Une déduction supplémentaire de 20%", "correct": false}, {"text": "Le cas où les marchandises sont revendues après transformation, avec déduction de la valeur ajoutée par cette transformation", "correct": true}, {"text": "Une méthode réservée aux véhicules", "correct": false}, {"text": "Une exception réservée aux produits alimentaires", "correct": false}], "exp": "La super-déductive permet d'utiliser le prix de revente après ouvraison, en déduisant la valeur ajoutée par la transformation locale. (Art. 27 CDT)."}, {"q": "Parmi les composantes de la valeur calculée, le « bénéfice et frais généraux habituels » correspond à :", "options": [{"text": "Une marge fixée arbitrairement par la douane tunisienne", "correct": false}, {"text": "La marge et les frais généraux usuellement pratiqués par des producteurs du même pays pour des marchandises de même nature", "correct": true}, {"text": "Le bénéfice net déclaré à l'administration fiscale tunisienne", "correct": false}, {"text": "Le bénéfice de l'importateur tunisien", "correct": false}], "exp": "L'article 28 se réfère aux pratiques usuelles des producteurs du pays d'exportation pour ce type de marchandises."}, {"q": "La méthode déductive et la méthode calculée s'appliquent :", "options": [{"text": "Avant les méthodes 1, 2 et 3", "correct": false}, {"text": "Après échec des méthodes 1, 2 et 3", "correct": true}, {"text": "Uniquement en cas de fraude", "correct": false}, {"text": "Simultanément avec la méthode 1", "correct": false}], "exp": "Ces deux méthodes n'interviennent qu'après l'échec des trois premières méthodes hiérarchiques. (Art. 27 et 28 CDT, après les art. 23, 25, 26)."}, {"q": "Un des cas de recours prioritaire à la méthode déductive plutôt qu'à la valeur calculée est :", "options": [{"text": "Le producteur étranger refuse de communiquer ses données de coûts", "correct": true}, {"text": "Le producteur est situé en Tunisie", "correct": false}, {"text": "La marchandise est un bien immobilier", "correct": false}, {"text": "L'importateur est un particulier", "correct": false}], "exp": "L'indisponibilité des données du producteur rend la valeur calculée impraticable, orientant naturellement vers la méthode déductive. (Art. 27 et 28 CDT)."}]}, {"title": "Exercice 9 — Méthode 6, dernier recours (Art. 29) et cas pratiques", "questions": [{"q": "Quand applique-t-on la méthode du dernier recours, article 29 ?", "options": [{"text": "En premier lieu, avant toute autre méthode", "correct": false}, {"text": "Lorsqu'aucune des méthodes 1 à 5 ne permet de déterminer la valeur en douane", "correct": true}, {"text": "Uniquement pour les marchandises périssables", "correct": false}, {"text": "A la demande systématique de l'importateur", "correct": false}], "exp": "L'article 29 est la méthode ultime, appliquée seulement après échec de toutes les précédentes."}, {"q": "Sur quels principes repose la méthode de dernier recours ?", "options": [{"text": "Des critères totalement libres, sans limite", "correct": false}, {"text": "Des moyens raisonnables compatibles avec les principes des méthodes précédentes, sur la base de données disponibles en Tunisie", "correct": true}, {"text": "Une taxation forfaitaire fixée par décret", "correct": false}, {"text": "Le prix maximum du marché mondial", "correct": false}], "exp": "L'article 29 impose une flexibilité raisonnable, mais toujours ancrée dans la logique des méthodes précédentes."}, {"q": "Parmi les bases suivantes, laquelle est interdite pour fonder la valeur selon l'article 29 ?", "options": [{"text": "Le prix de vente en Tunisie de marchandises produites localement", "correct": true}, {"text": "Une valeur transactionnelle de marchandises identiques", "correct": false}, {"text": "Une expertise technique documentée", "correct": false}, {"text": "Une cote professionnelle reconnue", "correct": false}], "exp": "Le prix intérieur de marchandises produites en Tunisie figure parmi les sept interdictions absolues de l'article 29."}, {"q": "Parmi les interdictions de l'article 29 figure également :", "options": [{"text": "Le prix de vente sur le marché intérieur du pays d'exportation", "correct": true}, {"text": "Le recours à un expert indépendant", "correct": false}, {"text": "La référence à une cote automobile reconnue", "correct": false}, {"text": "L'utilisation de données comptables du producteur", "correct": false}], "exp": "Le prix de vente intérieur du pays exportateur est exclu, car il ne reflète pas les conditions d'exportation vers la Tunisie."}, {"q": "Exemple type : évaluation d'une sculpture unique sans comparable sur le marché. Quelle méthode s'applique nécessairement ?", "options": [{"text": "Article 25", "correct": false}, {"text": "Article 29, dernier recours, avec expertise", "correct": true}, {"text": "Article 27", "correct": false}, {"text": "Aucune valeur en douane n'est due", "correct": false}], "exp": "L'absence totale de comparables impose le recours à l'article 29, généralement via expertise indépendante."}, {"q": "Véhicule usagé importé après utilisation dans le pays d'exportation, prix d'achat non représentatif de la valeur actuelle. La démarche correcte est :", "options": [{"text": "Appliquer directement l'article 23", "correct": false}, {"text": "Descendre la hiérarchie, articles 25, 26, 27, jusqu'à l'article 29 si besoin, avec expertise ou cote Argus", "correct": true}, {"text": "Refuser l'importation du véhicule", "correct": false}, {"text": "Appliquer un abattement fixe de 30%", "correct": false}], "exp": "La dépréciation d'usage impose la recherche de comparables ou, à défaut, une évaluation par expert ou cote reconnue via l'article 29."}, {"q": "Le recours à une cote automobile reconnue, type Argus, pour un véhicule usagé s'inscrit dans le cadre de :", "options": [{"text": "L'article 23 uniquement", "correct": false}, {"text": "La descente hiérarchique jusqu'à l'article 29", "correct": true}, {"text": "Une pratique interdite par le Code des douanes", "correct": false}, {"text": "Une négociation directe avec le vendeur étranger", "correct": false}], "exp": "Une cote reconnue constitue une donnée raisonnable et disponible en Tunisie, conforme à l'esprit de l'article 29."}, {"q": "L'article 29 interdit-il de retenir systématiquement la plus haute de deux valeurs possibles ?", "options": [{"text": "Non, l'administration retient toujours la valeur la plus élevée", "correct": false}, {"text": "Oui, cette pratique figure parmi les interdictions", "correct": true}, {"text": "Cela dépend de la nature de la marchandise", "correct": false}, {"text": "Non, seule la valeur déclarée par l'importateur compte", "correct": false}], "exp": "Retenir systématiquement la valeur la plus haute parmi deux possibles est une des sept interdictions absolues de l'article 29."}, {"q": "Un prix minimal fixé arbitrairement par l'administration peut-il fonder la valeur en douane selon l'article 29 ?", "options": [{"text": "Oui, si la douane le juge nécessaire", "correct": false}, {"text": "Non, les prix minimaux arbitraires sont interdits", "correct": true}, {"text": "Oui, uniquement pour les produits de luxe", "correct": false}, {"text": "Cela dépend de l'accord de l'importateur", "correct": false}], "exp": "Les valeurs arbitraires ou fictives sont expressément proscrites, y compris les prix minimaux sans fondement objectif."}, {"q": "La méthode de dernier recours doit rester fondée sur :", "options": [{"text": "Des données disponibles en Tunisie, appliquées avec une souplesse raisonnable", "correct": true}, {"text": "Une décision discrétionnaire sans justification", "correct": false}, {"text": "Le prix affiché sur un site internet étranger uniquement", "correct": false}, {"text": "Une moyenne des valeurs des cinq dernières importations", "correct": false}], "exp": "L'article 29 exige une méthode raisonnable, documentée, et cohérente avec l'esprit des méthodes précédentes."}]}, {"title": "Exercice 10 — Contrôle de la valeur (Art. 35), DECV et synthèse", "questions": [{"q": "Sur quel motif la douane peut-elle rejeter la valeur déclarée selon l'article 35 ?", "options": [{"text": "Le simple lien entre acheteur et vendeur", "correct": false}, {"text": "Des doutes fondés sur la véracité ou l'exactitude des documents ou déclarations fournis", "correct": true}, {"text": "Un prix jugé trop bas par principe", "correct": false}, {"text": "Une décision arbitraire sans justification", "correct": false}], "exp": "L'article 35 fonde le rejet sur des doutes documentés, pas sur le seul lien entre les parties."}, {"q": "La procédure de contestation de la valeur déclarée comporte notamment :", "options": [{"text": "Une notification motivée à l'importateur et un droit de réponse", "correct": true}, {"text": "Une saisie immédiate sans préavis", "correct": false}, {"text": "Une amende automatique", "correct": false}, {"text": "Le rejet sans possibilité de recours", "correct": false}], "exp": "L'article 35 encadre une procédure contradictoire, avec motivation et possibilité de justification par l'importateur."}, {"q": "Quelles voies de recours existent en cas de rejet de la valeur déclarée ?", "options": [{"text": "Aucune, la décision de la douane est définitive", "correct": false}, {"text": "Recours administratifs et/ou judiciaires selon les règles du Code des douanes", "correct": true}, {"text": "Recours uniquement devant l'OMD", "correct": false}, {"text": "Recours uniquement par voie diplomatique", "correct": false}], "exp": "Le Code des douanes tunisien prévoit des voies de recours internes, administratives et judiciaires. (Art. 35 CDT)."}, {"q": "La DECV (déclaration des éléments relatifs à la valeur en douane) est exigée lorsque la valeur est déterminée par application de :", "options": [{"text": "Tous les articles sans exception", "correct": false}, {"text": "Des articles 23, 25 ou 26 du Code des douanes", "correct": true}, {"text": "Uniquement l'article 29", "correct": false}, {"text": "Uniquement pour les marchandises en franchise", "correct": false}], "exp": "La DECV accompagne les méthodes fondées sur une valeur transactionnelle réelle, propre ou comparable (art. 23, 25, 26)."}, {"q": "Une réduction de prix accordée par le vendeur à l'acheteur est-elle automatiquement retenue pour le calcul de la valeur transactionnelle ?", "options": [{"text": "Oui, toujours, dès qu'elle figure sur la facture", "correct": false}, {"text": "Non, elle doit être réelle, non liée à une contrepartie cachée, et acquise avant ou au moment de la vente", "correct": true}, {"text": "Oui, uniquement si elle dépasse 15% du prix", "correct": false}, {"text": "Non, toute réduction de prix est interdite en matière douanière", "correct": false}], "exp": "Article 23 : une réduction de prix effective, non conditionnée par une prestation compensatoire dissimulée, et justifiée avant le dédouanement, peut être admise dans le prix effectivement payé ou à payer."}, {"q": "Une remise accordée après le dédouanement des marchandises peut-elle réduire rétroactivement la valeur en douane déjà déclarée ?", "options": [{"text": "Oui, automatiquement sur simple demande", "correct": false}, {"text": "Non, en principe la valeur en douane est figée à la date de la déclaration en détail", "correct": true}, {"text": "Oui, si le taux de change a varié entre-temps", "correct": false}, {"text": "Non, seule la douane peut initier une révision", "correct": false}], "exp": "Article 23 : la valeur en douane s'apprécie à la date d'enregistrement de la déclaration. Une remise consentie après coup n'a pas d'effet rétroactif automatique sur la valeur déjà déclarée."}, {"q": "Comment sont traités les intérêts financiers liés à un paiement différé (crédit fournisseur) pour l'achat des marchandises importées ?", "options": [{"text": "Toujours inclus dans la valeur en douane, qu'ils soient distincts ou non", "correct": false}, {"text": "Exclus s'ils sont distincts du prix payé, dûment établis par écrit et à un taux raisonnable", "correct": true}, {"text": "Inclus uniquement si le taux d'intérêt dépasse 10%", "correct": false}, {"text": "Toujours exclus, sans aucune condition", "correct": false}], "exp": "Les frais de financement peuvent être exclus de la valeur en douane s'ils sont distincts du prix des marchandises, constatés par un accord de financement écrit, et correspondent à un taux d'intérêt usuel du marché. (Art. 30 CDT, ajustements exclus)."}, {"q": "Les frais d'assurance internationale du transport font-ils partie de la valeur en douane en Tunisie ?", "options": [{"text": "Non, jamais, ils restent à la charge exclusive du vendeur", "correct": false}, {"text": "Oui, ils sont inclus dans la valeur CAF jusqu'au lieu d'introduction en Tunisie", "correct": true}, {"text": "Oui, mais uniquement au-delà de 50 000 DT de marchandises", "correct": false}, {"text": "Non, sauf accord exprès entre les parties", "correct": false}], "exp": "Article 30 : la Tunisie retenant une valeur CAF, les frais d'assurance jusqu'au lieu d'introduction sur le territoire douanier font partie intégrante de la valeur en douane."}, {"q": "Sur quelle base la valeur en douane sert-elle également au calcul des autres droits et taxes à l'importation ?", "options": [{"text": "Une base distincte pour chaque taxe", "correct": false}, {"text": "La même base CAF, sauf disposition contraire spécifique", "correct": true}, {"text": "Le prix de revente au consommateur final", "correct": false}, {"text": "Le prix FOB uniquement", "correct": false}], "exp": "La valeur en douane CAF sert d'assiette commune aux droits et taxes ad valorem à l'importation, sauf régime particulier. (Art. 23 CDT, base CAF)."}, {"q": "En synthèse, quel est l'ordre complet des méthodes d'évaluation en douane ?", "options": [{"text": "23, 29, 25, 26, 27, 28", "correct": false}, {"text": "23, 25, 26, 27, 28, 29, avec inversion possible de 27 et 28 à la demande de l'importateur", "correct": true}, {"text": "29, 28, 27, 26, 25, 23", "correct": false}, {"text": "23, 27, 28, 25, 26, 29", "correct": false}], "exp": "L'ordre hiérarchique strict va de la valeur transactionnelle au dernier recours, seule l'inversion 27/28 étant tolérée, sur demande de l'importateur. (Art. 23, 25, 26, 27, 28, 29 CDT)."}]}];
+
+let currentEx = 0;
+let currentQ = 0;
+let answers = [];
+let submitted = false;
+let cumulativeScore = 0;
+let exercisesDone = 0;
+let remainingSeconds = 1200;
+let timerInterval = null;
+let timeSpent = [];
+const EX_DURATION = 1200;
+
+function totalQuestions() { return exercises.length * 10; }
+
+function startQCM() {
+document.getElementById('intro').classList.add('hidden');
+document.getElementById('quiz').classList.remove('hidden');
+currentEx = 0;
+currentQ = 0;
+answers = [];
+cumulativeScore = 0;
+exercisesDone = 0;
+timeSpent = [];
+renderQuestion();
+updateProgress();
+startTimer();
+}
+
+function formatTime(s) {
+s = Math.max(s, 0);
+const m = Math.floor(s / 60);
+const sec = s % 60;
+return (m < 10 ? '0' : '') + m + ':' + (sec < 10 ? '0' : '') + sec;
+}
+
+function startTimer() {
+clearInterval(timerInterval);
+remainingSeconds = EX_DURATION;
+updateTimerDisplay();
+timerInterval = setInterval(() => {
+remainingSeconds--;
+updateTimerDisplay();
+if (remainingSeconds <= 0) {
+clearInterval(timerInterval);
+submitExercise();
+}
+}, 1000);
+}
+
+function updateTimerDisplay() {
+const el = document.getElementById('timer-display');
+if (!el) return;
+el.textContent = 'Temps restant : ' + formatTime(remainingSeconds);
+el.classList.remove('warn', 'danger');
+if (remainingSeconds <= 60) el.classList.add('danger');
+else if (remainingSeconds <= 300) el.classList.add('warn');
+}
+
+function stopTimerAndRecord() {
+clearInterval(timerInterval);
+const used = EX_DURATION - Math.max(remainingSeconds, 0);
+timeSpent.push(used);
+}
+
+function renderQuestion() {
+const ex = exercises[currentEx];
+const q = ex.questions[currentQ];
+const container = document.getElementById('quiz');
+let html = '<div class="ex-title">' + ex.title + ' — Question ' + (currentQ + 1) + ' / 10</div>';
+html += '<div class="timer-box" id="timer-display">Temps restant : ' + formatTime(remainingSeconds) + '</div>';
+html += '<div class="q-block">';
+html += '<div class="q-topbar"><div class="q-topbar-left"><b>Question ' + (currentQ + 1) + '</b><span class="q-sep">|</span><span>Non répondu</span><span class="q-sep">|</span><span>Note de 0,00 sur 1,00</span></div><div class="q-flag">Marquer la question</div></div>';
+html += '<div class="q-body">';
+html += '<div class="q-text">' + q.q + '</div>';
+html += '<div class="options">';
+q.options.forEach((opt, idx) => {
+const sel = answers[currentQ] === idx ? 'selected' : '';
+html += '<div class="opt ' + sel + '" onclick="selectOption(' + idx + ')"><span class="opt-box">' + (answers[currentQ] === idx ? '✓' : '') + '</span><span class="opt-text">' + opt.text + '</span></div>';
+});
+html += '</div></div></div>';
+
+html += '<div class="nav-btns">';
+html += '<button class="btn btn-outline" onclick="prevQuestion()" ' + (currentQ === 0 ? 'disabled' : '') + '>← Précédent</button>';
+if (currentQ < 9) {
+html += '<button class="btn" onclick="nextQuestion()">Suivant →</button>';
+} else {
+html += '<button class="btn" onclick="submitExercise()" id="submit-btn">Valider et corriger</button>';
+}
+html += '</div>';
+container.innerHTML = html;
+}
+
+function selectOption(idx) {
+if (submitted) return;
+answers[currentQ] = idx;
+renderQuestion();
+}
+
+function nextQuestion() {
+if (currentQ < 9) {
+currentQ++;
+renderQuestion();
+updateProgress();
+}
+}
+
+function prevQuestion() {
+if (currentQ > 0) {
+currentQ--;
+renderQuestion();
+updateProgress();
+}
+}
+
+function updateProgress() {
+const doneQ = exercisesDone * 10 + currentQ + 1;
+const pct = (doneQ / totalQuestions()) * 100;
+document.getElementById('progress').style.width = pct + '%';
+}
+
+function appreciationExercice(score) {
+if (score === 10) return "Parfait. Maîtrise totale de l'exercice";
+if (score >= 8) return "Excellent. Quelques points à revoir";
+if (score >= 6) return "Bien, mais des lacunes à combler";
+if (score >= 4) return "Insuffisant, relis le cours attentivement";
+return "A retravailler sérieusement, le Code des douanes t'attend";
+}
+
+function submitExercise() {
+if (submitted) return;
+submitted = true;
+stopTimerAndRecord();
+const ex = exercises[currentEx];
+let score = 0;
+const container = document.getElementById('quiz');
+let html = '';
+
+ex.questions.forEach((q, qi) => {
+const userAns = answers[qi];
+const correctIdx = q.options.findIndex(o => o.correct);
+const isCorrect = userAns === correctIdx;
+const answered = userAns !== undefined;
+if (isCorrect) score++;
+
+const statusLabel = !answered ? 'Non répondu' : (isCorrect ? 'Correct' : 'Incorrect');
+const noteVal = isCorrect ? '1,00' : '0,00';
+
+html += '<div class="q-block">';
+html += '<div class="q-topbar"><div class="q-topbar-left"><b>Question ' + (qi + 1) + '</b><span class="q-sep">|</span><span>' + statusLabel + '</span><span class="q-sep">|</span><span>Note de ' + noteVal + ' sur 1,00</span></div><div class="q-flag">Marquer la question</div></div>';
+html += '<div class="q-body">';
+html += '<div class="q-text">' + q.q + '</div>';
+html += '<div class="options">';
+q.options.forEach((opt, idx) => {
+let cls = '';
+let mark = '';
+if (idx === correctIdx) { cls = 'answer-correct'; mark = '<span class="opt-check">✓</span>'; }
+else if (idx === userAns && !isCorrect) { cls = 'answer-wrong-selected'; mark = '<span class="opt-wrong-mark">✗</span>'; }
+html += '<div class="opt ' + cls + '"><span class="opt-box">' + (idx === userAns ? '✓' : '') + '</span><span class="opt-text">' + opt.text + '</span>' + mark + '</div>';
+});
+html += '</div>';
+html += '</div>';
+
+const statusClass = !answered ? 'status-wrong' : (isCorrect ? 'status-correct' : 'status-wrong');
+const statusText = !answered ? "Vous n'avez pas répondu à cette question." : (isCorrect ? 'Votre réponse est correcte.' : 'Votre réponse est incorrecte.');
+html += '<div class="feedback-box">';
+html += '<div class="status-line ' + statusClass + '">' + statusText + '</div>';
+html += '<div class="detail-line">La réponse correcte est : <b>' + q.options[correctIdx].text + '</b></div>';
+html += '<div class="detail-line">' + q.exp + '</div>';
+html += '</div>';
+html += '</div>';
+});
+
+cumulativeScore += score;
+exercisesDone += 1;
+
+document.getElementById('quiz').classList.add('hidden');
+document.getElementById('progress').style.width = ((exercisesDone * 10) / totalQuestions()) * 100 + '%';
+
+const results = document.getElementById('results');
+results.innerHTML =
+'<div class="score-box">' +
+'<div class="score-num">' + score + '<span>/10</span></div>' +
+'<div class="score-label">Note de ' + ex.title + '</div>' +
+'<div class="score-msg">' + appreciationExercice(score) + '</div>' +
+'</div>' + html;
+results.classList.remove('hidden');
+
+showInterstitial();
+}
+
+function showInterstitial() {
+const box = document.getElementById('interstitial');
+const isLast = currentEx >= exercises.length - 1;
+const cumulOn20 = (cumulativeScore / (exercisesDone * 10)) * 20;
+const lastTime = timeSpent[timeSpent.length - 1];
+const timeLine = 'Temps utilisé sur cet exercice : ' + formatTime(lastTime) + ' / ' + formatTime(EX_DURATION) + '.';
+
+let html = '<div class="continue-box">';
+if (isLast) {
+html += '<p>Tu as terminé les ' + exercises.length + ' exercices, soit ' + totalQuestions() + ' questions. Cumul actuel : ' + cumulativeScore + ' / ' + (exercisesDone * 10) + ' (' + cumulOn20.toFixed(2) + ' / 20). ' + timeLine + '</p>';
+html += '<div class="continue-btns"><button class="btn" onclick="showFinal()">Voir ma moyenne finale</button></div>';
+} else {
+html += '<p>Exercice ' + exercisesDone + ' / ' + exercises.length + ' terminé. Cumul actuel : ' + cumulativeScore + ' / ' + (exercisesDone * 10) + ' (' + cumulOn20.toFixed(2) + ' / 20). ' + timeLine + ' Veux-tu continuer avec l\'exercice suivant ou quitter et voir ta moyenne ?</p>';
+html += '<div class="continue-btns">';
+html += '<button class="btn" onclick="continueQCM()">Continuer</button>';
+html += '<button class="btn btn-quit" onclick="showFinal()">Quitter</button>';
+html += '</div>';
+}
+html += '</div>';
+box.innerHTML = html;
+box.classList.remove('hidden');
+}
+
+function continueQCM() {
+currentEx++;
+currentQ = 0;
+answers = [];
+submitted = false;
+document.getElementById('interstitial').classList.add('hidden');
+document.getElementById('results').classList.add('hidden');
+document.getElementById('results').innerHTML = '';
+document.getElementById('quiz').classList.remove('hidden');
+renderQuestion();
+updateProgress();
+startTimer();
+}
+
+function appreciationFinale(note) {
+if (note >= 19) return "Excellent";
+if (note >= 17) return "Très bien";
+if (note >= 15) return "Bien";
+if (note >= 13) return "Moyen";
+if (note >= 12) return "Juste la moyenne";
+return "En dessous de la moyenne";
+}
+
+function showFinal() {
+clearInterval(timerInterval);
+document.getElementById('interstitial').classList.add('hidden');
+document.getElementById('quiz').classList.add('hidden');
+document.getElementById('results').classList.add('hidden');
+document.getElementById('results').innerHTML = '';
+
+const rawTotal = exercisesDone * 10;
+const note20 = (cumulativeScore / rawTotal) * 20;
+const appr = appreciationFinale(note20);
+const totalTime = timeSpent.reduce((a, b) => a + b, 0);
+const avgTime = totalTime / exercisesDone;
+
+const box = document.getElementById('interstitial');
+box.innerHTML =
+'<div class="final-box">' +
+'<div class="final-num">' + note20.toFixed(2) + '<span>/20</span></div>' +
+'<div class="final-label">Moyenne finale</div>' +
+'<div class="final-appr">' + appr + '</div>' +
+'<div class="final-detail">Score brut : ' + cumulativeScore + ' / ' + rawTotal + ' sur ' + exercisesDone + ' exercice(s) sur ' + exercises.length + ' effectué(s), soit ' + rawTotal + ' question(s) sur ' + totalQuestions() + '.</div>' +
+'<div class="final-detail">Temps moyen par exercice : ' + formatTime(Math.round(avgTime)) + ' &nbsp;·&nbsp; Temps total : ' + formatTime(totalTime) + '.</div>' +
+'<div style="margin-top:22px;"><button class="btn" onclick="location.reload()">Recommencer le QCM</button></div>' +
+'</div>';
+box.classList.remove('hidden');
+document.getElementById('progress').style.width = '100%';
+}
+</script>
+</body>
+</html>
