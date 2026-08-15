@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Révision complète — Examen oral CAD — Cours vidéo animé</title>
+<style>
+  :root{
+    --navy:#0c1526; --bg0:#0c1526; --panel:#151f30;
+    --gold:#d4af37; --blue:#5aa9e6; --green:#7DBE85; --ice:#cadcfc;
+    --red:#c96a6a; --text:#f0ece0; --muted:#9fb0c9; --line:#233150;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100%;background:radial-gradient(1200px 800px at 50% -10%,#1c2a44,var(--bg0));
+    font-family:"Segoe UI",Tahoma,Arial,sans-serif;color:var(--text);}
+  .wrap{max-width:980px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:20px;}
+  .player{position:relative;background:linear-gradient(180deg,var(--panel),#0f1626);border:1px solid var(--line);
+    border-radius:16px;min-height:600px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+  .brand{position:absolute;top:14px;left:18px;font-size:12px;letter-spacing:2px;color:var(--gold);font-weight:700;z-index:5;}
+  .modtag{position:absolute;top:14px;right:18px;font-size:11px;letter-spacing:1px;color:var(--muted);z-index:5;}
+  .stage{flex:1;position:relative;padding:74px 46px 30px 46px;display:flex;align-items:center;justify-content:center;}
+  .scene{position:absolute;inset:0;padding:74px 46px 30px 46px;display:flex;flex-direction:column;justify-content:center;
+    opacity:0;transform:translateY(14px);transition:opacity .5s ease, transform .5s ease;pointer-events:none;overflow:auto;}
+  .scene.show{opacity:1;transform:translateY(0);pointer-events:auto;}
+  .kicker{letter-spacing:3px;text-transform:uppercase;font-size:12px;color:var(--gold);font-weight:700;margin-bottom:10px;}
+  .arabickick{direction:rtl;unicode-bidi:isolate;font-family:"KacstNaskh","Segoe UI",sans-serif;font-size:13px;color:var(--muted);margin-bottom:6px;}
+  .title{font-size:clamp(18px,3vw,26px);font-weight:800;margin:0 0 12px 0;color:#fff;}
+  .sub{font-size:13.5px;color:var(--muted);margin-bottom:8px;line-height:1.45;}
+  ul.bullets{margin:6px 0 0 0;padding-left:20px;}
+  ul.bullets li{margin-bottom:6px;line-height:1.4;font-size:13.5px;}
+  .pillars{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;}
+  .pillar{flex:1;min-width:190px;background:#ffffff0d;border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:12.5px;line-height:1.4;}
+  .pillar b{color:var(--gold);}
+  .flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0;}
+  .chip{background:#ffffff10;border:1px solid var(--line);border-radius:10px;padding:9px 14px;text-align:center;}
+  .chip .v{font-weight:700;color:#fff;font-size:13px;}
+  .chip .l{font-size:9.5px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:2px;}
+  .chip.res{border-color:var(--gold);}
+  .chip.warn{border-color:var(--red);}
+  .op{color:var(--gold);font-weight:800;font-size:16px;}
+  .badge{display:inline-block;background:#fdf1d822;border:1.5px solid var(--gold);color:var(--gold);border-radius:20px;
+    padding:4px 14px;font-weight:700;font-size:12.5px;margin-bottom:8px;}
+  .badge.red{border-color:var(--red);color:#e79a9a;background:#c96a6a1a;}
+  .two-col{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap;}
+  .col{flex:1;min-width:210px;background:#ffffff0d;border:1px solid var(--line);border-radius:10px;padding:11px 13px;}
+  .col h4{margin:0 0 6px 0;color:var(--blue);font-size:12.5px;text-transform:uppercase;letter-spacing:1px;}
+  .col.warncol{border-color:var(--red);}
+  .col.warncol h4{color:var(--red);}
+  .three-col{display:flex;gap:9px;margin-top:8px;flex-wrap:wrap;}
+  .card{flex:1;min-width:145px;background:#ffffff0d;border:1px solid var(--line);border-radius:10px;padding:10px 11px;font-size:12px;line-height:1.35;}
+  .card h5{margin:0 0 4px 0;color:var(--gold);font-size:12px;}
+  .tag{display:inline-block;background:#5aa9e622;border:1px solid var(--blue);color:var(--blue);border-radius:14px;
+    padding:2px 9px;font-size:10.5px;margin:2px 4px 2px 0;}
+  .mtable{width:100%;border-collapse:collapse;margin-top:8px;font-size:12px;}
+  .mtable th,.mtable td{border:1px solid var(--line);padding:5px 8px;text-align:left;}
+  .mtable th{background:#ffffff10;color:var(--gold);font-size:11px;text-transform:uppercase;letter-spacing:.5px;}
+  .note{background:#ffffff0a;border-left:3px solid var(--blue);border-radius:6px;padding:8px 12px;margin-top:8px;font-size:12.5px;line-height:1.4;}
+  .warnbox{background:#c96a6a14;border-left:3px solid var(--red);border-radius:6px;padding:8px 12px;margin-top:8px;font-size:12.5px;line-height:1.4;color:#f0d9d9;}
+  .warnbox b{color:#e79a9a;}
+  .tipbox{background:#d4af3714;border-left:3px solid var(--gold);border-radius:6px;padding:8px 12px;margin-top:8px;font-size:12.5px;line-height:1.4;}
+  .tipbox b{color:var(--gold);}
+  .chapter{text-align:center;}
+  .chapter .num{display:inline-block;width:52px;height:52px;line-height:52px;border-radius:50%;background:linear-gradient(180deg,#f3c659,#e8b23a);
+    color:#23314f;font-weight:800;font-size:22px;margin-bottom:14px;}
+  .chapter h1{font-size:clamp(22px,4vw,32px);color:#fff;margin:0 0 8px 0;}
+  .chapter .ar{direction:rtl;unicode-bidi:isolate;font-family:"KacstNaskh","Segoe UI",sans-serif;font-size:17px;color:var(--gold);margin-bottom:10px;}
+  .chapter p{color:var(--muted);max-width:600px;margin:0 auto;line-height:1.5;font-size:13.5px;}
+
+  .caption{padding:14px 46px;min-height:56px;background:#0a1120;border-top:1px solid var(--line);}
+  .caption span{color:var(--ice);font-size:14px;line-height:1.4;}
+  .bar{height:5px;background:#ffffff10;position:relative;}
+  .bar i{position:absolute;left:0;top:0;bottom:0;width:0%;background:linear-gradient(90deg,var(--gold),var(--ice));}
+
+  .controls{display:flex;align-items:center;gap:7px;padding:10px 16px;background:#0a1120;border-top:1px solid var(--line);flex-wrap:wrap;}
+  .btn{background:#ffffff12;border:1px solid var(--line);color:var(--text);border-radius:8px;padding:7px 10px;
+    cursor:pointer;font-size:13px;}
+  .btn:hover{background:#ffffff22;}
+  .btn.off{opacity:.4;}
+  .btn.sp{min-width:50px;}
+  .dots{display:flex;gap:4px;flex:1;justify-content:center;flex-wrap:wrap;max-height:34px;overflow:hidden;}
+  .dot{width:7px;height:7px;border-radius:50%;background:#ffffff30;cursor:pointer;}
+  .dot.active{background:var(--gold);}
+  .dot.chapterdot{background:var(--blue);width:9px;height:9px;}
+  .dot.chapterdot.active{background:var(--gold);}
+  .tlabel{font-size:11.5px;color:var(--muted);min-width:44px;text-align:right;}
+
+  .menu{padding:8px 16px 12px 16px;background:#0a1120;border-top:1px solid var(--line);display:flex;gap:6px;flex-wrap:wrap;}
+  .menubtn{background:#ffffff0d;border:1px solid var(--line);color:var(--muted);border-radius:16px;padding:5px 11px;font-size:11px;cursor:pointer;}
+  .menubtn:hover{background:#ffffff1a;color:var(--text);}
+  .menubtn.active{border-color:var(--gold);color:var(--gold);}
+
+  .overlay{position:absolute;inset:0;z-index:10;background:linear-gradient(180deg,#0f1626,#0a1120);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;}
+  .overlay .kicker{margin-bottom:6px;}
+  .overlay h1{font-size:clamp(21px,4vw,32px);color:#fff;margin:0 0 10px 0;}
+  .overlay p{color:var(--muted);max-width:600px;margin:0 0 20px 0;line-height:1.5;font-size:13.5px;}
+  .start{background:linear-gradient(180deg,#f3c659,#e8b23a);border:none;color:#23314f;font-weight:800;
+    padding:14px 28px;border-radius:30px;font-size:15.5px;cursor:pointer;box-shadow:0 10px 30px rgba(232,178,58,.35);}
+  .start:hover{filter:brightness(1.05);}
+  .mini{font-size:11px;color:var(--muted);margin-top:14px;}
+  .hint{text-align:center;color:var(--muted);font-size:11.5px;margin-top:10px;}
+  .hidden{display:none !important;}
+  .modlist{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:640px;margin-bottom:6px;}
+  .modlist span{background:#ffffff0d;border:1px solid var(--line);border-radius:14px;padding:4px 10px;font-size:11px;color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="player" id="player">
+    <div class="brand">ENDouane · Révision orale</div>
+    <div class="modtag" id="modtag">Module —</div>
+    <div class="stage" id="stage"></div>
+    <div class="caption" id="caption"><span></span></div>
+    <div class="bar"><i id="fill"></i></div>
+    <div class="controls">
+      <button class="btn" id="playBtn" title="Lecture/Pause">⏸</button>
+      <button class="btn" id="prevBtn" title="Précédent">⏮</button>
+      <button class="btn" id="nextBtn" title="Suivant">⏭</button>
+      <button class="btn" id="replayBtn" title="Recommencer">⟲</button>
+      <button class="btn" id="soundBtn" title="Voix (on/off)">🔊</button>
+      <button class="btn" id="musicBtn" title="Musique (on/off)">🎵</button>
+      <button class="btn sp" id="speedBtn" title="Vitesse de la voix">×0.9</button>
+      <div class="dots" id="dots"></div>
+      <div class="tlabel"><span id="sceneNo">1</span>/<span id="sceneTot">0</span></div>
+    </div>
+    <div class="menu" id="menu"></div>
+    <div class="overlay" id="overlay">
+      <div class="kicker">Cours vidéo animé · narration + musique</div>
+      <div class="modlist">
+        <span>1 · Éthique</span><span>2 · Organisation</span><span>3 · Fiscalité</span><span>4 · Tarif</span>
+        <span>5 · Valeur</span><span>6 · Origine</span><span>7 · Régimes</span><span>8 · Avantages fiscaux</span>
+      </div>
+      <h1>Révision complète — Examen oral (17-18 août 2026)</h1>
+      <p>Les 8 modules de l'examen oral, condensés à partir de vos cours vidéo — définitions, bases légales,
+      délais, exemples chiffrés et pièges classiques — avec voix posée et musique d'ambiance.</p>
+      <button class="start" id="startBtn">▶ Démarrer la révision</button>
+      <div class="mini" id="ttsNote">Version test iPhone — navigation et révision sans audio. Utilisez le menu en bas pour sauter directement à un module.</div>
+    </div>
+  </div>
+  <div class="hint">▶ « Démarrer » lance la narration et la musique · Espace = pause · ← → = naviguer · cliquez un module pour y sauter directement</div>
+</div>
+
+<script>
+const scenes = [
+
+/* ================= MODULE 1 — ÉTHIQUE ================= */
+{mod:1, chapter:true, kicker:"Module 1 / 8", html:`
+  <div class="chapter"><div class="num">1</div>
+  <h1>Éthique de la profession</h1>
+  <div class="ar">أخلاقيات المهنة</div>
+  <p>Le Commissionnaire Agréé en Douane : cadre légal, agrément, obligations, déontologie et dilemmes pratiques.</p></div>`,
+ cap:"Premier module : l'éthique de la profession, centrée sur le commissionnaire agréé en douane, le CAD. Nous verrons son cadre légal, les conditions d'agrément, ses obligations envers la douane, le client et ses confrères, sa responsabilité, et des dilemmes pratiques à connaître pour l'oral."},
+
+{mod:1, kicker:"Qu'est-ce qu'un CAD", html:`
+  <h2 class="title">Le Commissionnaire Agréé en Douane</h2>
+  <ul class="bullets">
+    <li>Personne physique ou morale <b>agréée par le Ministre des Finances</b> pour accomplir, pour autrui, la déclaration en détail des marchandises (DDM)</li>
+    <li>Environ <b>210 CAD</b> agréés en Tunisie</li>
+    <li>Interface entre les opérateurs économiques et les administrations</li>
+  </ul>
+  <div class="note"><b>Cadre juridique :</b> Code des Douanes art. 101, 102, 104 à 107, 109, 110 et 368 · arrêté du 29/12/1955 (modifié 1988, 2001) · circulaire du 17/02/1990 · arrêté du 27/12/2017. Art. 102 : nul ne peut exercer sans agrément.</div>`,
+ cap:"Le Commissionnaire Agréé en Douane, le CAD, est une personne physique ou morale agréée par le Ministre des Finances pour accomplir, pour autrui, les formalités de déclaration en détail des marchandises. On en compte environ deux cent dix en Tunisie. Le cadre juridique repose sur les articles 101, 102, 104 à 107, 109, 110 et 368 du Code des Douanes, ainsi que sur plusieurs textes réglementaires. L'article 102 pose le principe : nul ne peut exercer sans agrément."},
+
+{mod:1, kicker:"Conditions d'accès", html:`
+  <h2 class="title">Les conditions d'accès à la profession</h2>
+  <div class="two-col">
+    <div class="col"><h4>Liées à la personne</h4>
+      <ul class="bullets"><li>Nationalité tunisienne</li><li>Jouissance de tous les droits civils</li>
+      <li>Retrait possible si condamnation définitive</li></ul></div>
+    <div class="col"><h4>Liées à la compétence</h4>
+      <ul class="bullets"><li>Licence ou diplôme équivalent</li><li>2 ans d'expérience en matière douanière</li>
+      <li>Examen d'aptitude professionnelle</li><li>Formation de 18 mois (6 académiques + 12 de stage)</li></ul></div>
+  </div>`,
+ cap:"Deux catégories de conditions s'appliquent. Liées à la personne d'abord : la nationalité tunisienne, la jouissance de tous les droits civils, avec un retrait possible de l'agrément en cas de condamnation définitive. Liées à la compétence ensuite : une licence ou un diplôme équivalent, deux ans d'expérience minimum en matière douanière, la réussite à un examen d'aptitude professionnelle, et une formation de dix-huit mois, six mois académiques à l'École Nationale des Douanes suivis de douze mois de stage pratique."},
+
+{mod:1, kicker:"L'agrément", html:`
+  <h2 class="title">L'agrément et le registre matricule</h2>
+  <ul class="bullets">
+    <li>Accordé par le Ministre des Finances, sur proposition du DG des Douanes</li>
+    <li>Valable pour un ou plusieurs bureaux de douane précis</li>
+    <li>Enregistrement sur un registre matricule — numéro reporté en <b>case 63/1 de la DDM</b></li>
+    <li>Local professionnel obligatoire + au moins 2 employés CNSS dans l'année</li>
+    <li>Durée indéterminée, mais retrait possible (temporaire ou définitif), <b>sans indemnité</b></li>
+  </ul>`,
+ cap:"L'agrément est accordé par le Ministre des Finances, sur proposition du directeur général des douanes, pour un ou plusieurs bureaux de douane précis. Il donne lieu à un enregistrement sur un registre matricule, dont le numéro est reporté en case soixante-trois barre un de la déclaration en détail. Le CAD doit disposer d'un local professionnel et recruter au moins deux employés déclarés à la CNSS. L'agrément est de durée indéterminée, mais son retrait reste possible, sans indemnité."},
+
+{mod:1, kicker:"Qui peut déclarer + SINDA", html:`
+  <h2 class="title">Qui peut déclarer en douane ? Et SINDA</h2>
+  <div>
+    <span class="tag">Le CAD (art. 102)</span><span class="tag">Services de transport publics (art. 109)</span>
+    <span class="tag">Propriétaires</span><span class="tag">Représentants légaux</span>
+    <span class="tag">Mandataires (procuration)</span><span class="tag">Autorisation ponctuelle</span>
+  </div>
+  <div class="note"><b>SINDA</b> — système informatique douanier tunisien : accès via un certificat de signature électronique, pour la saisie et la validation à distance des déclarations.</div>`,
+ cap:"Plusieurs catégories de personnes peuvent déclarer en douane : le CAD selon le principe général de l'article 102, les services de transport publics selon l'article 109, les propriétaires des marchandises en leur nom propre, les représentants légaux, les représentants par procuration, et les déclarants sous autorisation ponctuelle. L'accès au système informatique douanier SINDA se fait via un certificat de signature électronique."},
+
+{mod:1, kicker:"Obligations & responsabilité", html:`
+  <h2 class="title">Obligations et triple responsabilité</h2>
+  <div class="two-col">
+    <div class="col"><h4>Envers la douane</h4>
+      <ul class="bullets"><li>Répertoire annuel (case 63/2)</li><li>Conservation 3 ans</li>
+      <li>Notification changement sous 2 mois</li></ul></div>
+    <div class="col"><h4>Envers le client</h4>
+      <ul class="bullets"><li>Diligence</li><li>Transparence sur les honoraires</li></ul></div>
+  </div>
+  <div class="three-col">
+    <div class="card"><h5>Administrative</h5>Sanctions/retrait après avis du COCAD</div>
+    <div class="card"><h5>Pénale (art. 368)</h5>Répond des opérations, sauf faute personnelle démontrée du client</div>
+    <div class="card"><h5>Civile</h5>Recours du client en cas de faute d'exécution</div>
+  </div>`,
+ cap:"Envers la douane, le CAD tient un répertoire annuel de ses opérations, dont le numéro figure en case soixante-trois barre deux, conserve ses documents trois ans, et notifie tout changement de statut sous deux mois. Envers le client, il doit diligence et transparence sur ses honoraires. Sa responsabilité est triple : administrative, avec des sanctions après avis du COCAD ; pénale, selon l'article 368, sauf à démontrer une faute personnelle du client ; et civile, en cas de faute dans l'exécution du mandat."},
+
+{mod:1, kicker:"Déontologie", html:`
+  <h2 class="title">Déontologie envers client, administration, confrères</h2>
+  <ul class="bullets">
+    <li><b>Devoir de conseil</b> — limité strictement à ce que permet la loi</li>
+    <li><b>Secret professionnel</b> — sauf obligation légale de communication</li>
+    <li><b>Refus de mandat</b> en cas de doute sérieux sur une opération</li>
+    <li><b>Envers l'administration</b> — loyauté, exactitude, coopération, signalement des anomalies</li>
+    <li><b>Envers les confrères</b> — pas de dénigrement ni de concurrence déloyale (chambre de discipline)</li>
+    <li><b>Conflit d'intérêts</b> — transparence, et retrait du dossier si nécessaire</li>
+  </ul>`,
+ cap:"La déontologie du CAD repose sur un devoir de conseil qui s'arrête strictement à ce que permet la loi, un secret professionnel qui ne cède que devant une obligation légale, et un refus de mandat en cas de doute sérieux sur la régularité d'une opération. Envers l'administration, il doit loyauté et exactitude. Envers ses confrères, un comportement loyal, sans dénigrement ni concurrence déloyale, sous le contrôle de la chambre de discipline. Face à un conflit d'intérêts, la règle est la transparence, et le retrait du dossier si nécessaire."},
+
+{mod:1, kicker:"Sanctions", html:`
+  <h2 class="title">Des sanctions graduées</h2>
+  <div class="flow">
+    <div class="chip"><div class="v">Avertissement</div><div class="l">manquement mineur</div></div>
+    <div class="op">→</div>
+    <div class="chip res"><div class="v">Suspension</div><div class="l">temporaire</div></div>
+    <div class="op">→</div>
+    <div class="chip warn"><div class="v">Retrait</div><div class="l">de l'agrément</div></div>
+  </div>
+  <div class="warnbox"><b>Cumul possible :</b> exercer après retrait d'agrément = infraction douanière : emprisonnement de 1 à 15 jours + amende de 500 à 3 000 dinars.</div>`,
+ cap:"Les sanctions disciplinaires sont graduées : l'avertissement pour un manquement mineur, la suspension temporaire pour un manquement plus sérieux, et le retrait de l'agrément pour les manquements les plus graves. Ce retrait peut se cumuler avec une sanction pénale : continuer d'exercer après un retrait d'agrément expose à un emprisonnement d'un à quinze jours et à une amende de cinq cents à trois mille dinars."},
+
+{mod:1, kicker:"Dilemmes pratiques", html:`
+  <h2 class="title">Quatre dilemmes à connaître</h2>
+  <ul class="bullets">
+    <li><b>Pression pour sous-évaluer</b> — facture modifiée par un client → refus catégorique</li>
+    <li><b>Lien familial avec l'agent du dossier</b> → signaler pour réattribution</li>
+    <li><b>Cadeau important après dédouanement</b> → refuser ou signaler</li>
+    <li><b>Confrère qui « ferme les yeux »</b> → pas de dénigrement direct, signaler à la chambre de discipline</li>
+  </ul>
+  <div class="badge">Fin du Module 1 — Éthique de la profession</div>`,
+ cap:"Quatre dilemmes à retenir pour l'oral. Un client qui fournit une facture modifiée pour sous-évaluer : le refus est catégorique. Un lien familial avec l'agent chargé du dossier : il faut le signaler pour réattribution. Un cadeau important après un dédouanement réussi : mieux vaut le refuser ou le signaler. Un confrère qui ferme les yeux sur des irrégularités : pas de dénigrement direct, mais un signalement factuel à la chambre de discipline. Ceci conclut le module sur l'éthique de la profession."},
+
+/* ================= MODULE 2 — ORGANISATION ================= */
+{mod:2, chapter:true, kicker:"Module 2 / 8", html:`
+  <div class="chapter"><div class="num">2</div>
+  <h1>Organisation et attributions de l'Administration Générale des Douanes</h1>
+  <div class="ar">تنظيم ومشمولات الإدارة العامة للديوانة</div>
+  <p>Ordre n° 1845 de 1994 — missions, composition, bureaux spécialisés, directions centrales et régionales.</p></div>`,
+ cap:"Deuxième module : l'organisation de l'Administration Générale des Douanes, fixée par l'ordre numéro mille huit cent quarante-cinq de mille neuf cent quatre-vingt-quatorze. Nous verrons ses missions, sa composition, ses bureaux spécialisés, ses directions centrales, et son organisation régionale jusqu'aux bureaux de douane."},
+
+{mod:2, kicker:"Missions", html:`
+  <h2 class="title">Les missions de l'Administration des Douanes</h2>
+  <div class="sub">Rattachée au ministère des Finances, elle est chargée notamment de :</div>
+  <ul class="bullets">
+    <li>Appliquer les lois et règlements douaniers sur tout le territoire</li>
+    <li>Surveiller les frontières nationales</li>
+    <li>Recouvrer les droits, taxes et impôts douaniers</li>
+    <li>Représenter la Tunisie dans les instances internationales (GATT, UE, ONU)</li>
+    <li>Rechercher et réprimer les infractions douanières</li>
+    <li>Former et recycler les agents des douanes</li>
+  </ul>`,
+ cap:"L'Administration Générale des Douanes relève du ministère des Finances. Elle applique les lois douanières sur tout le territoire, contribue à la surveillance des frontières, recouvre les droits et taxes, représente la Tunisie dans les instances internationales comme le GATT, l'Union européenne ou l'ONU, réprime les infractions douanières, et assure la formation des agents."},
+
+{mod:2, kicker:"Composition", html:`
+  <h2 class="title">Cinq composantes, plus deux organes d'appui</h2>
+  <div class="flow">
+    <div class="chip"><div class="v">Secrétariat</div><div class="l">de la douane</div></div>
+    <div class="op">+</div>
+    <div class="chip res"><div class="v">Contrôle</div><div class="l">général</div></div>
+    <div class="op">+</div>
+    <div class="chip"><div class="v">Admin.</div><div class="l">centrale</div></div>
+    <div class="op">+</div>
+    <div class="chip"><div class="v">Admin.</div><div class="l">régionale</div></div>
+    <div class="op">+</div>
+    <div class="chip"><div class="v">Garde</div><div class="l">douanière</div></div>
+  </div>
+  <div class="sub" style="margin-top:10px;">+ le Conseil de la douane (consultatif) et l'École Nationale des Douanes (formation)</div>`,
+ cap:"L'Administration comprend cinq composantes : le secrétariat de la douane, le contrôle général, l'administration centrale, l'administration régionale, et la garde douanière. S'y ajoutent le conseil de la douane, organe consultatif présidé par le directeur général, et l'école nationale des douanes, chargée de la formation initiale et continue, dirigée par un directeur assisté de trois sous-directeurs et six chefs de service."},
+
+{mod:2, kicker:"Contrôle général", html:`
+  <h2 class="title">Le Contrôle général de la douane</h2>
+  <div class="three-col">
+    <div class="card"><h5>Mission</h5>Coordination, inspection, suivi, évaluation nationale</div>
+    <div class="card"><h5>Structure</h5>6 sections, sous des contrôleurs généraux</div>
+    <div class="card"><h5>Rang</h5>Directeur d'administration centrale</div>
+  </div>`,
+ cap:"Le contrôle général est composé de contrôleurs généraux chargés de la coordination, de l'inspection et de l'évaluation de tous les services. Il comprend six sections, et chaque contrôleur général a rang de directeur d'administration centrale."},
+
+{mod:2, kicker:"Bureaux spécialisés & directions", html:`
+  <h2 class="title">9 bureaux spécialisés + 12 directions centrales</h2>
+  <div class="sub">Bureaux spécialisés :</div>
+  <div><span class="tag">Sécurité douanière</span><span class="tag">Tunisiens à l'étranger</span><span class="tag">Entreprises exportatrices</span>
+  <span class="tag">Avantages fiscaux</span><span class="tag">Coopération internationale</span><span class="tag">Législation/études</span>
+  <span class="tag">Anti-dumping</span><span class="tag">Dépôt et saisie</span><span class="tag">Renseignements (2004)</span></div>
+  <div class="pillars" style="margin-top:10px;">
+    <div class="pillar"><b>4 techniques</b><br>Tarif, Régimes, Statistiques/Info., Valeur (2004)</div>
+    <div class="pillar"><b>4 de contrôle</b><br>Inspection, Recherches, Contentieux, Risques (2004)</div>
+    <div class="pillar"><b>4 de soutien</b><br>RH, Recrutement/Formation (2014), Matériel, Finances</div>
+  </div>`,
+ cap:"L'administration centrale comprend neuf bureaux spécialisés, chacun dirigé par un chef de bureau ayant rang de directeur d'administration centrale. Elle comprend aussi douze directions réparties en trois groupes : quatre directions techniques, dont le tarif, les régimes douaniers, les statistiques et informatique, et la valeur ajoutée en deux mille quatre ; quatre directions de contrôle, dont les recherches douanières en lien avec Interpol, et la gestion des risques ; et quatre directions de soutien, dont le recrutement et la formation créés en deux mille quatorze."},
+
+{mod:2, kicker:"Régions & bureaux de terrain", html:`
+  <h2 class="title">8 directions régionales et bureaux de douane</h2>
+  <div><span class="tag">Tunis Nord</span><span class="tag">Tunis Sud</span><span class="tag">Jendouba</span>
+  <span class="tag">Sousse</span><span class="tag">Sfax</span><span class="tag">Kasserine</span>
+  <span class="tag">Gafsa</span><span class="tag">Médenine</span></div>
+  <div class="sub" style="margin-top:8px;">Chacune : 3 sous-directions (techniques, contrôle, soutien)</div>
+  <div class="flow" style="margin-top:8px;">
+    <div class="chip"><div class="v">Frontaliers</div><div class="l">Postes, ports, aéroports</div></div>
+    <div class="op">·</div>
+    <div class="chip res"><div class="v">Régionaux</div><div class="l">Sièges de gouvernorats</div></div>
+    <div class="op">·</div>
+    <div class="chip"><div class="v">Intérieurs</div><div class="l">Territoire douanier</div></div>
+  </div>
+  <div class="badge">Fin du Module 2 — Organisation</div>`,
+ cap:"L'administration régionale repose sur huit directions régionales, révisées en deux mille treize : Tunis Nord, Tunis Sud, Jendouba, Sousse, Sfax, Kasserine, Gafsa et Médenine, chacune structurée en trois sous-directions. Sur le terrain, on distingue les bureaux frontaliers, régionaux et intérieurs, chaque bureau central comprenant un service technique, une recette douanière dont le receveur est comptable public, un service de soutien, et un peloton commercial de surveillance. Ceci conclut le module sur l'organisation."},
+
+/* ================= MODULE 3 — FISCALITÉ ================= */
+{mod:3, chapter:true, kicker:"Module 3 / 8", html:`
+  <div class="chapter"><div class="num">3</div>
+  <h1>Le système fiscal tunisien et les obligations des contribuables</h1>
+  <div class="ar">الواجبات الجبائية</div>
+  <p>Régime déclaratif, quatre régimes fiscaux, IRPP et IS, obligations déclaratives, comptables et de facturation.</p></div>`,
+ cap:"Troisième module : le système fiscal tunisien et les obligations des contribuables. Nous verrons le régime déclaratif, les quatre régimes fiscaux possibles, le calcul de l'impôt sur le revenu et de l'impôt sur les sociétés, puis les principales obligations : déclaration d'existence, comptabilité, déclarations périodiques, et facturation."},
+
+{mod:3, kicker:"Système déclaratif", html:`
+  <h2 class="title">Un système fondé sur la déclaration spontanée</h2>
+  <ul class="bullets">
+    <li>Le contribuable (« mutalib bil-adaa ») déclare lui-même et paie l'impôt dû</li>
+    <li>Pas de contrôle préalable systématique</li>
+  </ul>
+  <div class="note">Textes : Code de l'IRPP/IS · Code de la TVA · Code des droits d'enregistrement et de timbre · Code des droits et procédures fiscaux · Code de la fiscalité locale · Code d'incitation aux investissements.</div>`,
+ cap:"Le système fiscal tunisien repose sur la déclaration spontanée : c'est le contribuable, appelé mutalib bil-adaa, qui déclare lui-même ses revenus et paie l'impôt dû, sans contrôle préalable systématique. Il est encadré par plusieurs codes : celui de l'impôt sur le revenu et des sociétés, celui de la TVA, celui des droits d'enregistrement et de timbre, celui des droits et procédures fiscaux, et celui de la fiscalité locale."},
+
+{mod:3, kicker:"Les 4 régimes fiscaux", html:`
+  <h2 class="title">Quatre régimes fiscaux possibles</h2>
+  <table class="mtable">
+    <tr><th>Régime</th><th>Seuils / conditions</th></tr>
+    <tr><td>Réel</td><td>Sociétés + personnes physiques CA &gt; 100 000 D</td></tr>
+    <tr><td>Réel simplifié</td><td>CA ≤ 300 000 D (achat-revente) / 150 000 D (services)</td></tr>
+    <tr><td>Forfaitaire</td><td>CA ≤ 10 000 D fixe · 10 000 à 100 000 D : taux 3%</td></tr>
+    <tr><td>Forfaitaire d'assiette</td><td>Optionnel — 80% des recettes</td></tr>
+  </table>`,
+ cap:"Quatre régimes fiscaux existent. Le régime réel, obligatoire pour les sociétés et les personnes physiques dont le chiffre d'affaires dépasse cent mille dinars, avec comptabilité complète. Le réel simplifié, jusqu'à trois cent mille dinars pour l'achat-revente ou cent cinquante mille pour les services. Le forfaitaire, un montant fixe jusqu'à dix mille dinars, puis un taux de trois pourcent jusqu'à cent mille. Et le forfaitaire d'assiette, optionnel, où le bénéfice imposable est fixé à quatre-vingt pourcent des recettes."},
+
+{mod:3, kicker:"IRPP & IS — cadre", html:`
+  <h2 class="title">IRPP et IS : qui, et sur quoi ?</h2>
+  <div class="two-col">
+    <div class="col"><h4>Résident</h4>Résidence principale en Tunisie, ou présence ≥ 183 jours/an, ou agent de l'État à l'étranger non imposé là-bas</div>
+    <div class="col"><h4>7 catégories de revenus</h4>Traitements/salaires · agricole/pêche · professions non commerciales · revenus fonciers · bénéfices industriels/commerciaux · valeurs mobilières · autres</div>
+  </div>`,
+ cap:"L'impôt sur le revenu des personnes physiques et l'impôt sur les sociétés frappent les revenus des résidents et les revenus de source tunisienne des non-résidents. Est résident toute personne ayant sa résidence principale en Tunisie, ou y étant présente au moins cent quatre-vingt-trois jours par an. Sept catégories de revenus sont soumises à l'IRPP, des traitements et salaires jusqu'aux revenus des valeurs mobilières."},
+
+{mod:3, kicker:"Barème IRPP", html:`
+  <h2 class="title">Le barème progressif de l'IRPP</h2>
+  <table class="mtable">
+    <tr><th>Tranche</th><th>Taux</th></tr>
+    <tr><td>0 à 5 000 D</td><td>0%</td></tr>
+    <tr><td>5 000 à 10 000 D</td><td>15%</td></tr>
+    <tr><td>10 000 à 20 000 D</td><td>25%</td></tr>
+    <tr><td>20 000 à 30 000 D</td><td>30%</td></tr>
+    <tr><td>30 000 à 40 000 D</td><td>33%</td></tr>
+    <tr><td>40 000 à 50 000 D</td><td>36%</td></tr>
+    <tr><td>50 000 à 70 000 D</td><td>38%</td></tr>
+    <tr><td>Au-delà de 70 000 D</td><td>40%</td></tr>
+  </table>`,
+ cap:"Le barème progressif de l'IRPP s'échelonne ainsi : aucun impôt jusqu'à cinq mille dinars, quinze pourcent jusqu'à dix mille, vingt-cinq pourcent jusqu'à vingt mille, trente pourcent jusqu'à trente mille, trente-trois pourcent jusqu'à quarante mille, trente-six pourcent jusqu'à cinquante mille, trente-huit pourcent jusqu'à soixante-dix mille, et quarante pourcent au-delà."},
+
+{mod:3, kicker:"Déductions & IS", html:`
+  <h2 class="title">Déductions communes et impôt sur les sociétés</h2>
+  <ul class="bullets">
+    <li>300 D chef de famille · 100 D/enfant à charge (4 premiers) · 1 000 D enfant étudiant &lt;25 ans · 2 000 D enfant handicapé</li>
+    <li>Jusqu'à 5% du revenu net (plafond 450 D) par parent à charge</li>
+    <li>Minimum d'impôt : 0,2% du CA (plancher 300 D)</li>
+  </ul>
+  <div class="note"><b>IS :</b> résultat fiscal = résultat comptable + réintégrations − déductions ; taux général et taux spécifiques (10 à 40%) ; minimum 0,2% ou 0,1% du CA.</div>`,
+ cap:"Plusieurs déductions communes existent : trois cents dinars au titre de chef de famille, cent dinars par enfant à charge dans la limite de quatre, mille dinars par enfant étudiant non boursier, deux mille dinars par enfant handicapé. Un minimum d'impôt de zéro virgule deux pourcent du chiffre d'affaires s'applique par ailleurs. Pour les sociétés, le résultat fiscal s'obtient à partir du résultat comptable, retraité par des réintégrations et des déductions, avec un taux général ou des taux spécifiques."},
+
+{mod:3, kicker:"Paiement & obligations", html:`
+  <h2 class="title">Paiement de l'impôt et obligations déclaratives</h2>
+  <div class="flow">
+    <div class="chip"><div class="v">Retenue</div><div class="l">à la source</div></div>
+    <div class="op">+</div>
+    <div class="chip res"><div class="v">3 acomptes</div><div class="l">30% chacun</div></div>
+    <div class="op">+</div>
+    <div class="chip"><div class="v">Solde</div><div class="l">déclaration annuelle</div></div>
+  </div>
+  <ul class="bullets" style="margin-top:8px;">
+    <li>Déclaration d'existence avant activité — amende 1 000 à 50 000 D</li>
+    <li>Comptabilité conservée 10 ans — amende 100 à 10 000 D</li>
+    <li>Retenue à la source : 10% honoraires/loyers (5% véhicules), 1,5% achats ≥1 000 D</li>
+  </ul>
+  <div class="badge">Fin du Module 3 — Fiscalité</div>`,
+ cap:"L'impôt se règle en trois temps : la retenue à la source, trois acomptes provisionnels de trente pourcent chacun, et le solde lors de la déclaration annuelle. Avant toute activité, une déclaration d'existence est obligatoire, sous peine d'amende. La comptabilité doit être conservée dix ans. Et la retenue à la source s'applique à dix pourcent sur les honoraires et loyers, à un virgule cinq pourcent sur les achats supérieurs à mille dinars. Ceci conclut le module sur la fiscalité."},
+
+/* ================= MODULE 4 — TARIF ================= */
+{mod:4, chapter:true, kicker:"Module 4 / 8", html:`
+  <div class="chapter"><div class="num">4</div>
+  <h1>Le tarif douanier</h1>
+  <div class="ar">التعريفة الديوانية</div>
+  <p>Le Système Harmonisé : 21 sections, 97 chapitres — la logique de classement plutôt que le par-cœur.</p></div>`,
+ cap:"Quatrième module : le tarif douanier, et sa colonne vertébrale, le Système Harmonisé, avec ses vingt-et-une sections et ses quatre-vingt-dix-sept chapitres. L'objectif n'est pas de tout mémoriser, mais de maîtriser la logique de classement : le degré de transformation d'un produit, et la fonction qui prime souvent sur la matière. Nous parcourrons les sections en groupes, avec les pièges classiques signalés dans votre guide."},
+
+{mod:4, kicker:"Structure du SH", html:`
+  <h2 class="title">21 sections, 97 chapitres : la hiérarchie</h2>
+  <div class="flow">
+    <div class="chip"><div class="v">Section</div><div class="l">I à XXI</div></div>
+    <div class="op">→</div>
+    <div class="chip"><div class="v">Chapitre</div><div class="l">2 chiffres (01-97)</div></div>
+    <div class="op">→</div>
+    <div class="chip res"><div class="v">Position</div><div class="l">4 chiffres</div></div>
+    <div class="op">→</div>
+    <div class="chip"><div class="v">Sous-position</div><div class="l">6 chiffres</div></div>
+  </div>
+  <div class="note">Les sections regroupent les chapitres par grande famille de matière ou de fonction (animal, végétal, textile, machines...). Chaque section porte des <b>notes clés</b> et souvent des <b>exclusions explicites</b> vers d'autres sections.</div>`,
+ cap:"Le Système Harmonisé s'organise en quatre niveaux : la section, qui regroupe une grande famille de produits ; le chapitre, à deux chiffres ; la position, à quatre chiffres ; et la sous-position, à six chiffres, harmonisée au niveau international. Chaque section porte des notes clés, et surtout des exclusions explicites qui renvoient certains produits vers une autre section."},
+
+{mod:4, kicker:"Principe 1 — Degré de transformation", html:`
+  <h2 class="title">Premier réflexe : le degré de transformation</h2>
+  <div class="sub">Un produit brut change souvent de section dès qu'il subit une transformation industrielle.</div>
+  <table class="mtable">
+    <tr><th>Produit brut</th><th>Transformation</th><th>Nouvelle section</th></tr>
+    <tr><td>Viande fraîche (I)</td><td>Cuisson, conserve</td><td>IV, Ch.16</td></tr>
+    <tr><td>Peau fraîche (I)</td><td>Tannage</td><td>VIII, Ch.41</td></tr>
+    <tr><td>Graine/fruit (II)</td><td>Extraction d'huile</td><td>III, Ch.15</td></tr>
+    <tr><td>Graisse (III)</td><td>Saponification</td><td>VI, Ch.34 (savon)</td></tr>
+  </table>`,
+ cap:"Premier grand réflexe pour l'oral : le degré de transformation. Une viande fraîche de la Section I devient, une fois cuisinée ou mise en conserve, une préparation alimentaire de la Section IV. Une peau fraîche devient, après tannage, un cuir de la Section VIII. Une graine ou un fruit devient, après extraction, une huile de la Section III. Et cette huile, une fois saponifiée, devient un savon classé en Section VI. À chaque étape de transformation industrielle, la marchandise change généralement de section."},
+
+{mod:4, kicker:"Principe 2 — La fonction prime", html:`
+  <h2 class="title">Deuxième réflexe : la fonction prime sur la matière</h2>
+  <div class="sub">Pour de nombreux objets finis, c'est leur usage — pas leur matière — qui détermine la section.</div>
+  <table class="mtable">
+    <tr><th>Objet</th><th>Matière</th><th>Classé selon...</th></tr>
+    <tr><td>Chaussure</td><td>Cuir, textile ou caoutchouc</td><td>Toujours Section XII, Ch.64</td></tr>
+    <tr><td>Meuble</td><td>Bois, métal ou plastique</td><td>Toujours Section XX, Ch.94</td></tr>
+    <tr><td>Jouet</td><td>Plastique, bois, peluche...</td><td>Toujours Section XX, Ch.95</td></tr>
+    <tr><td>Coiffure</td><td>Textile, feutre...</td><td>Toujours Section XII, Ch.65</td></tr>
+  </table>
+  <div class="tipbox"><b>À l'oral :</b> face à un objet composite ou fini, demandez-vous d'abord « à quoi ça sert ? » avant de penser à la matière.</div>`,
+ cap:"Deuxième grand réflexe : la fonction prime souvent sur la matière. Une chaussure, qu'elle soit en cuir, en textile ou en caoutchouc, reste toujours classée au chapitre soixante-quatre, dans la Section douze. Un meuble, quelle que soit sa matière, reste toujours en chapitre quatre-vingt-quatorze. Un jouet, de même, rejoint toujours le chapitre quatre-vingt-quinze de la Section vingt. Face à un objet fini ou composite, le réflexe à l'oral est de se demander d'abord à quoi il sert, avant de penser à sa matière."},
+
+{mod:4, kicker:"Sections I à III", html:`
+  <h2 class="title">Sections I à III — Du vivant à la matière grasse</h2>
+  <div class="pillars">
+    <div class="pillar"><b>I — Animaux (Ch.1-5)</b><br>Animaux vivants, viandes, poissons, lait, miel</div>
+    <div class="pillar"><b>II — Végétaux (Ch.6-14)</b><br>Plantes, légumes, fruits, céréales, épices</div>
+    <div class="pillar"><b>III — Graisses (Ch.15)</b><br>Huiles et graisses brutes ou raffinées</div>
+  </div>
+  <div class="warnbox"><b>Pièges à connaître :</b> un animal empaillé (taxidermie) → Section XXI, Ch.97, pas Section I · des plumes préparées pour coussins → Section XII, Ch.67 · la farine de blé pour panification <b>reste</b> en Ch.11 (Section II) — ce n'est qu'une première transformation physique.</div>`,
+ cap:"Les sections un à trois couvrent le vivant et ses premiers dérivés : les animaux et leurs produits bruts, les végétaux à l'état brut ou peu transformé, puis les graisses et huiles. Attention à trois pièges : un animal naturalisé par taxidermie change de destination économique et rejoint les objets de collection en Section vingt-et-un ; des plumes préparées pour la literie rejoignent la Section douze ; et la farine de blé destinée à la panification reste en chapitre onze, car il ne s'agit que d'une première transformation physique, pas d'une préparation alimentaire composée."},
+
+{mod:4, kicker:"Sections IV à V", html:`
+  <h2 class="title">Sections IV à V — Alimentaire élaboré, boissons, tabac, minéraux</h2>
+  <div class="two-col">
+    <div class="col"><h4>IV — Industries alimentaires (Ch.16-24)</h4>Préparations, sucres, cacao, boissons, tabacs — produits transformés/élaborés</div>
+    <div class="col"><h4>V — Produits minéraux (Ch.25-27)</h4>Sel, pierres, minerais, combustibles — matières premières brutes ou peu travaillées</div>
+  </div>
+  <div class="warnbox"><b>Pièges :</b> le tabac brut <b>reste</b> en Ch.24, qu'il soit brut ou manufacturé, seule la sous-position change · le ciment Portland <b>reste</b> en Ch.25 même conditionné en sacs · les diamants taillés quittent la Section V pour la Section XIV (Ch.71).</div>`,
+ cap:"La Section quatre regroupe les produits alimentaires élaborés, les boissons et le tabac : dès qu'un ingrédient est ajouté ou qu'une cuisson intervient, un produit brut de la Section deux bascule ici. La Section cinq, elle, couvre les matières premières minérales brutes ou peu travaillées. Deux précisions à retenir : le tabac, brut ou manufacturé, reste toujours au chapitre vingt-quatre ; et le ciment reste au chapitre vingt-cinq même conditionné en sacs, tant qu'il n'est pas transformé en ouvrage comme du béton coulé."},
+
+{mod:4, kicker:"Section VI — la chimie", html:`
+  <h2 class="title">Section VI — La chimie, section la plus vaste (11 chapitres)</h2>
+  <ul class="bullets">
+    <li>Ch.28-38 : chimie inorganique, organique, pharmacie, engrais, parfumerie, savons, explosifs, photo...</li>
+  </ul>
+  <div class="warnbox"><b>Piège majeur :</b> les matières plastiques et le caoutchouc (Ch.39-40), bien que produits chimiquement, ont leur <b>propre section VII</b> dédiée — ils ne restent PAS en Section VI.</div>
+  <div class="note">Autres précisions : les allumettes <b>restent</b> en Ch.36 (ce n'est pas une exclusion) · une pellicule vierge non exposée <b>reste</b> en Ch.37 · une fibre synthétique une fois filée quitte la chimie pour la Section XI (textile).</div>`,
+ cap:"La Section six est la plus vaste du tarif avec onze chapitres : elle couvre toute la chimie de base, des produits inorganiques aux produits pharmaceutiques, en passant par les engrais, la parfumerie et les explosifs. Piège majeur à connaître : les matières plastiques et le caoutchouc, bien que produits chimiquement, ne restent pas dans cette section, ils ont leur propre section sept. Autres précisions utiles : les allumettes restent bien en chapitre trente-six, et une pellicule photographique vierge, non encore exposée, reste en chapitre trente-sept."},
+
+{mod:4, kicker:"Section VII — plastique & caoutchouc", html:`
+  <h2 class="title">Section VII — Plastique et caoutchouc : la fonction reprend le dessus</h2>
+  <ul class="bullets">
+    <li>Ch.39 Matières plastiques et ouvrages · Ch.40 Caoutchouc et ouvrages</li>
+  </ul>
+  <div class="note">Un objet composite n'est classé ici que si le plastique/caoutchouc lui donne son <b>caractère essentiel</b>. Sinon, la fonction reprend le dessus : jouet en plastique → XX (Ch.95) · meuble en plastique → XX (Ch.94) · chaussure en caoutchouc → XII (Ch.64).</div>
+  <div class="tipbox">Un emballage plastique vide, non associé à son contenu, reste en Ch.39.</div>`,
+ cap:"La Section sept couvre les matières plastiques et le caoutchouc, sous forme brute comme sous forme d'ouvrages finis. Mais dès qu'un objet composite a une fonction identifiable, cette fonction reprend le dessus sur la matière : un jouet en plastique rejoint la Section vingt, un meuble en plastique aussi, une chaussure en caoutchouc rejoint la Section douze. Seul un emballage plastique vide, non encore associé à son contenu, reste classé selon sa matière, en chapitre trente-neuf."},
+
+{mod:4, kicker:"Sections VIII à X", html:`
+  <h2 class="title">Sections VIII à X — Cuir, bois, papier</h2>
+  <div class="pillars">
+    <div class="pillar"><b>VIII — Cuir (Ch.41-43)</b><br>Peau brute → cuir tanné → article fini</div>
+    <div class="pillar"><b>IX — Bois (Ch.44-46)</b><br>Bois brut → transformé → ouvrages (meubles exclus)</div>
+    <div class="pillar"><b>X — Papier (Ch.47-49)</b><br>Pâte à papier → papier → produits imprimés</div>
+  </div>
+  <div class="warnbox"><b>Pièges :</b> chaussures en cuir → XII, pas VIII · meubles en bois → XX, pas IX · une peau simplement séchée/salée <b>reste</b> en Ch.41 (le tannage n'est pas encore intervenu) · le papier peint mural <b>reste</b> en Ch.48 (ce n'est pas une exclusion) · les jeux en carton → XX (Ch.95).</div>`,
+ cap:"Ces trois sections suivent chacune une chaîne de transformation : la peau brute devient cuir tanné puis article de maroquinerie ; le bois brut devient bois transformé puis ouvrage, les meubles restant toutefois exclus vers la Section vingt ; la pâte à papier devient papier puis produit imprimé. Pièges à retenir : une peau simplement séchée reste en chapitre quarante-et-un tant que le tannage chimique n'est pas intervenu, et le papier peint mural reste bien classé en chapitre quarante-huit, ce n'est pas une exclusion."},
+
+{mod:4, kicker:"Section XI — le textile", html:`
+  <h2 class="title">Section XI — Le textile, section la plus longue (14 chapitres)</h2>
+  <div class="flow">
+    <div class="chip"><div class="v">Matière</div><div class="l">soie, laine, coton...</div></div>
+    <div class="op">→</div>
+    <div class="chip"><div class="v">Fil</div><div class="l">filature</div></div>
+    <div class="op">→</div>
+    <div class="chip res"><div class="v">Tissu</div><div class="l">bonneterie ou tissé</div></div>
+    <div class="op">→</div>
+    <div class="chip"><div class="v">Vêtement</div><div class="l">Ch.61 ou 62</div></div>
+  </div>
+  <div class="note"><b>Distinction clé :</b> bonneterie/tricoté (Ch.60-61) vs tissé (Ch.62). Chaussures et coiffures textiles → Section XII, pas XI. Un filet de pêche confectionné <b>reste</b> en Ch.56.</div>`,
+ cap:"La Section onze, consacrée au textile, est la plus longue du tarif avec quatorze chapitres. Elle suit la chaîne complète : de la matière première à la fibre filée, puis au tissu, tricoté en bonneterie ou tissé classique, jusqu'au vêtement fini. La distinction entre bonneterie, chapitres soixante et soixante-et-un, et tissé, chapitre soixante-deux, est essentielle. Et malgré leur matière textile, les chaussures et les coiffures rejoignent toujours la Section douze."},
+
+{mod:4, kicker:"Sections XII à XIV", html:`
+  <h2 class="title">Sections XII à XIV — Chaussures, pierre/verre, pierres précieuses</h2>
+  <div class="pillars">
+    <div class="pillar"><b>XII (Ch.64-67)</b><br>Chaussures, coiffures, parapluies, fleurs artificielles</div>
+    <div class="pillar"><b>XIII (Ch.68-70)</b><br>Pierre, plâtre, céramique, verre</div>
+    <div class="pillar"><b>XIV (Ch.71)</b><br>Perles, pierres gemmes, métaux précieux, bijouterie</div>
+  </div>
+  <div class="warnbox"><b>Pièges :</b> chaussure orthopédique médicale → XVIII (Ch.90), pas XII · isolateur électrique en céramique → XVI (Ch.85) · pierres gemmes → XIV, pas XIII · <b>la bijouterie de fantaisie</b>, même en métal commun, reste par convention au <b>Ch.71</b> (Section XIV) · pièce de collection ancienne → XXI.</div>`,
+ cap:"Ces trois sections regroupent les chaussures et accessoires vestimentaires, puis la pierre, la céramique et le verre, puis enfin les perles, pierres gemmes et métaux précieux. Trois pièges à connaître : une chaussure conçue à des fins médicales rejoint la Section dix-huit ; un isolateur électrique en céramique rejoint la Section seize dès que sa fonction électrique est reconnaissable ; et surtout, la bijouterie de fantaisie, même fabriquée en métal commun, reste classée par convention du Système Harmonisé au chapitre soixante-et-onze, dans la Section quatorze."},
+
+{mod:4, kicker:"Section XV — métaux communs", html:`
+  <h2 class="title">Section XV — Métaux communs (10 chapitres)</h2>
+  <ul class="bullets">
+    <li>Organisée par métal : fer/acier (Ch.72-73) d'abord, puis cuivre, nickel, aluminium, zinc... puis outils et ouvrages divers</li>
+  </ul>
+  <div class="warnbox"><b>Pièges :</b> une partie reconnaissable de machine → Section XVI · un meuble métallique → Section XX · une carrosserie de véhicule → Section XVII · un coffre-fort <b>reste</b> en Ch.83 malgré sa fonction de sécurité · les vis/boulons/roulements « d'usage général » restent en Section XV même destinés à un véhicule ou une machine.</div>`,
+ cap:"La Section quinze organise les métaux communs, d'abord le fer et l'acier, puis les métaux non ferreux, puis les outils et ouvrages divers. Une pièce métallique identifiable comme faisant exclusivement partie d'une machine rejoint la Section seize ; un meuble métallique rejoint la Section vingt ; une carrosserie de véhicule, la Section dix-sept. Mais attention, les vis, boulons et roulements dits d'usage général restent en Section quinze, même s'ils sont destinés à un véhicule ou une machine précise — c'est une exclusion explicite des sections voisines."},
+
+{mod:4, kicker:"Section XVI — machines & électrique", html:`
+  <h2 class="title">Section XVI — Machines et matériel électrique (Ch.84-85)</h2>
+  <div class="sub">L'une des sections les plus importantes en volume d'échanges mondiaux : ordinateurs, téléphones, moteurs, électroménager...</div>
+  <div class="warnbox"><b>Pièges :</b> meuble avec éclairage intégré → <b>reste</b> XX (fonction d'ameublement prime) · montres/horlogerie électronique → XVIII, pas XVI · jouets électroniques → XX · les ampoules et lampes électriques <b>restent</b> en Ch.85 (ce n'est pas une exclusion).</div>`,
+ cap:"La Section seize, qui couvre les machines et le matériel électrique, pèse énormément dans le commerce mondial : ordinateurs, téléphones, moteurs, électroménager. Trois pièges classiques : un meuble avec éclairage intégré reste en Section vingt, car la fonction d'ameublement prime sur le composant électrique accessoire ; l'horlogerie, même électronique, reste une catégorie à part en Section dix-huit ; et les jouets électroniques rejoignent toujours la Section vingt, malgré leurs composants électroniques."},
+
+{mod:4, kicker:"Section XVII — transport", html:`
+  <h2 class="title">Section XVII — Matériel de transport (Ch.86-89)</h2>
+  <ul class="bullets">
+    <li>Par mode : ferroviaire, automobile, aérien, maritime</li>
+  </ul>
+  <div class="warnbox"><b>Pièges :</b> les pièces « d'usage général » (vis, roulements) → <b>restent</b> Section XV, même destinées à un véhicule · les pneumatiques → Section VII (Ch.40), classés selon leur matière · un fauteuil roulant électrique médical <b>reste</b> en Ch.87 (position nommément dédiée) · un moteur d'avion vendu séparément → Section XVI (Ch.84).</div>`,
+ cap:"La Section dix-sept regroupe le matériel de transport par mode : ferroviaire, automobile, aérien, maritime. Comme pour les métaux, les pièces d'usage général restent hors de cette section. Les pneumatiques, malgré leur rôle indispensable, restent classés selon leur matière en Section sept. En revanche, un fauteuil roulant électrique à fonction médicale reste bien en chapitre quatre-vingt-sept, car le Système Harmonisé lui réserve une position nommément dédiée, malgré sa fonction médicale."},
+
+{mod:4, kicker:"Sections XVIII à XIX", html:`
+  <h2 class="title">Sections XVIII à XIX — Précision, horlogerie, musique · Armes</h2>
+  <div class="two-col">
+    <div class="col"><h4>XVIII (Ch.90-92)</h4>Instruments d'optique, médicaux, de mesure · horlogerie · instruments de musique</div>
+    <div class="col"><h4>XIX (Ch.93)</h4>Armes, munitions et leurs parties — section à chapitre unique, réglementation stricte</div>
+  </div>
+  <div class="warnbox"><b>Pièges :</b> un étui à lunettes en cuir → Section VIII, pas XVIII · un bracelet de montre en métal précieux vendu seul → Section XIV (Ch.71) · un couteau de table → Section XV (Ch.82), ce n'est pas une arme · une arme jouet/réplique inerte → Section XX (Ch.95) · une épée ancienne de collection (+100 ans) → Section XXI.</div>`,
+ cap:"La Section dix-huit couvre les instruments de précision, l'horlogerie et les instruments de musique. La Section dix-neuf, à chapitre unique, couvre les armes, sous réglementation stricte. Pièges à connaître : un étui à lunettes en cuir suit sa propre matière en Section huit ; un bracelet de montre en métal précieux vendu séparément devient un article de joaillerie en Section quatorze ; un couteau de table reste un simple article de coutellerie en Section quinze, ce n'est pas une arme ; et une arme jouet sans fonction offensive réelle rejoint la Section vingt."},
+
+{mod:4, kicker:"Sections XX-XXI + synthèse", html:`
+  <h2 class="title">Sections XX-XXI — Le « fourre-tout », et l'art/collection</h2>
+  <div class="two-col">
+    <div class="col"><h4>XX (Ch.94-96)</h4>Meubles, jouets, ouvrages divers — <b>toujours vérifier</b> une exclusion plus précise avant de classer ici</div>
+    <div class="col"><h4>XXI (Ch.97)</h4>Objets d'art, de collection, d'antiquité — seuil strict de <b>100 ans</b>, authenticité requise</div>
+  </div>
+  <div class="tipbox"><b>5 réflexes pour l'oral :</b> 1. Degré de transformation · 2. Fonction avant matière · 3. Repérer les « reste » (pièges pédagogiques) · 4. Vérifier notes de section/chapitre et RGI 1 · 5. Ancienneté 100 ans + authenticité → Ch.97 (une reproduction moderne suit sa matière, pas le Ch.97).</div>
+  <div class="badge">Fin du Module 4 — Le tarif douanier (Système Harmonisé)</div>`,
+ cap:"La Section vingt est la section fourre-tout du tarif : meubles, jouets, ouvrages divers — mais le réflexe reste toujours de vérifier d'abord une exclusion plus précise avant de classer ici. La Section vingt-et-un, enfin, couvre les objets d'art, de collection et d'antiquité, avec un seuil strict de cent ans et une exigence d'authenticité : une reproduction moderne, même fidèle, suit sa matière et non le chapitre quatre-vingt-dix-sept. Pour résumer ce module : dégré de transformation, fonction avant matière, repérage des cas « reste » qui piègent l'intuition, vérification systématique des notes de section, et attention au seuil de cent ans pour les objets de collection. Ceci conclut le module sur le tarif douanier."},
+
+/* ================= MODULE 5 — VALEUR ================= */
+{mod:5, chapter:true, kicker:"Module 5 / 8", html:`
+  <div class="chapter"><div class="num">5</div>
+  <h1>La valeur en douane</h1>
+  <div class="ar">القيمة لدى الديوانة</div>
+  <p>Comment déterminer l'assiette des droits de douane, méthode par méthode.</p></div>`,
+ cap:"Cinquième module : la valeur en douane. Nous allons découvrir, une par une, les six méthodes officielles d'évaluation, avec des exemples concrets."},
+
+{mod:5, kicker:"Principe & Méthode 1", html:`
+  <h2 class="title">L'assiette « ad valorem » et la valeur transactionnelle</h2>
+  <div class="flow">
+    <div class="chip"><div class="v">Valeur en douane</div><div class="l">BASE</div></div>
+    <div class="op">×</div>
+    <div class="chip res"><div class="v">Taux du tarif</div><div class="l">DD, DC, TVA</div></div>
+    <div class="op">=</div>
+    <div class="chip"><div class="v">Droits & taxes</div><div class="l">À PAYER</div></div>
+  </div>
+  <div class="note"><b>M1 — Valeur transactionnelle (art. 23) :</b> prix payé/à payer + ajustements art. 30 (matières incorporées, outils/moules, transport+assurance jusqu'au lieu d'introduction).
+  <br><b>Exemple :</b> 50 000 (prix) + 3 000 (transport) + 500 (assurance) = <b>53 500</b>.</div>`,
+ cap:"La valeur en douane est l'assiette des droits ad valorem : le montant sur lequel on applique le taux du tarif. La première méthode, la valeur transactionnelle, retient le prix effectivement payé ou à payer, ajusté selon l'article 30, notamment du transport et de l'assurance jusqu'au lieu d'introduction. Exemple : une machine facturée cinquante mille, plus trois mille de transport et cinq cents d'assurance, donne une valeur en douane de cinquante-trois mille cinq cents."},
+
+{mod:5, kicker:"Méthodes 2 et 3", html:`
+  <h2 class="title">Marchandises identiques et similaires</h2>
+  <div class="two-col">
+    <div class="col"><h4>M2 — Identiques</h4>Mêmes caractéristiques, qualité, réputation, même pays, époque et niveau commercial comparables.
+    <div class="note" style="margin-top:6px;">Ex : valises déclarées à 5, import identique antérieur évalué à 12 → on retient 12.</div></div>
+    <div class="col"><h4>M3 — Similaires</h4>Caractéristiques/composants semblables, mêmes fonctions, interchangeables.
+    <div class="note" style="margin-top:6px;">Ex : pas de données sur des chaises identiques → similaires à 80 €/unité.</div></div>
+  </div>`,
+ cap:"Si la première méthode est inapplicable, on passe à la valeur de marchandises identiques : mêmes caractéristiques, même pays, époque comparable. Exemple, des valises déclarées à cinq unités sont réévaluées à douze, valeur d'un import identique antérieur. À défaut, on utilise la valeur de marchandises similaires, non identiques mais aux fonctions comparables. Exemple : des chaises de bureau similaires évaluées à quatre-vingts euros l'unité."},
+
+{mod:5, kicker:"Méthodes 4 et 5", html:`
+  <h2 class="title">Méthode déductive et valeur calculée</h2>
+  <div class="two-col">
+    <div class="col"><h4>M4 — Déductive</h4>Prix de revente local − marges/commissions − transport/assurance intérieurs − droits/taxes import.
+    <div class="note" style="margin-top:6px;">Ex : 100 − 20 − 5 − 15 = <b>60</b></div></div>
+    <div class="col"><h4>M5 — Valeur calculée</h4>Coût matières+fabrication + bénéfices/frais généraux secteur + transport.
+    <div class="note" style="margin-top:6px;">Ex : 40 + 10 + 5 = <b>55</b></div></div>
+  </div>`,
+ cap:"La méthode déductive part du prix de revente local, dont on retranche les marges, le transport intérieur et les droits et taxes : cent moins vingt, moins cinq, moins quinze, donne une valeur de soixante. La valeur calculée, elle, part des coûts du fabricant : coût de production plus bénéfices et frais généraux plus transport, soit quarante plus dix plus cinq, égale cinquante-cinq."},
+
+{mod:5, kicker:"Méthode 6 & synthèse", html:`
+  <h2 class="title">Le dernier recours, et l'ordre à retenir</h2>
+  <ul class="bullets">
+    <li><b>M6</b> : moyens raisonnables compatibles OMC — interdits : valeurs arbitraires, prix le plus élevé, prix marché du pays d'exportation</li>
+  </ul>
+  <div class="flow">
+    <div class="chip"><div class="v">M1→M2→M3</div><div class="l">ordre strict</div></div>
+    <div class="op">→</div>
+    <div class="chip res"><div class="v">M4⇄M5</div><div class="l">inversables sur demande</div></div>
+    <div class="op">→</div>
+    <div class="chip"><div class="v">M6</div><div class="l">dernier recours</div></div>
+  </div>
+  <div class="badge">Fin du Module 5 — Valeur en douane</div>`,
+ cap:"Enfin, la sixième méthode, le dernier recours, s'appuie sur des moyens raisonnables compatibles avec l'accord de l'OMC — sont interdits les valeurs arbitraires ou le prix du marché intérieur du pays d'exportation. Pour résumer, les six méthodes s'appliquent dans l'ordre strict, de un à six, seules les méthodes quatre et cinq pouvant être inversées à la demande de l'importateur. La règle reste la valeur transactionnelle. Ceci conclut le module sur la valeur en douane."},
+
+/* ================= MODULE 6 — ORIGINE ================= */
+{mod:6, chapter:true, kicker:"Module 6 / 8", html:`
+  <div class="chapter"><div class="num">6</div>
+  <h1>Les règles d'origine des marchandises</h1>
+  <div class="ar">قواعد منشأ البضائع</div>
+  <p>Conventions de la Tunisie, convention PEM révisée, et les trois types de cumul de l'origine.</p></div>`,
+ cap:"Sixième module : les règles d'origine. Nous verrons les conventions commerciales de la Tunisie, la convention Pan-Euro-Méditerranéenne dans sa version révisée, et les différents types de cumul de l'origine, avec un cas pratique corrigé."},
+
+{mod:6, kicker:"Accords tunisiens", html:`
+  <h2 class="title">Les grands accords commerciaux tunisiens</h2>
+  <div class="pillars">
+    <div class="pillar"><b>UE</b><br>Signé 1995, ZLE effective 1/1/2008</div>
+    <div class="pillar"><b>GZALE</b><br>18 pays arabes, exonération totale</div>
+    <div class="pillar"><b>Agadir</b><br>2004/2007 — Maroc, Égypte, Jordanie</div>
+    <div class="pillar"><b>AELE + bilatéraux</b><br>Réseau complémentaire</div>
+  </div>`,
+ cap:"La Tunisie est signataire de plusieurs accords : l'accord d'association avec l'Union européenne, signé en mille neuf cent quatre-vingt-quinze, avec une zone de libre-échange effective depuis le premier janvier deux mille huit ; la Grande zone arabe de libre-échange, regroupant dix-huit pays ; l'accord d'Agadir avec le Maroc, l'Égypte et la Jordanie ; ainsi que l'AELE et plusieurs accords bilatéraux."},
+
+{mod:6, kicker:"Convention PEM", html:`
+  <h2 class="title">La convention Pan-Euro-Méditerranéenne (PEM)</h2>
+  <ul class="bullets">
+    <li>Née du processus de Barcelone, adoptée 2011, <b>signée par la Tunisie en janvier 2013</b></li>
+    <li><b>PEM révisée</b> : adoptée décembre 2023, règles plus souples</li>
+    <li>Application anticipée Tunisie-UE dès le <b>1er mars 2025</b></li>
+    <li>Élargit le cumul (Maroc, Égypte, Jordanie, Turquie…)</li>
+  </ul>
+  <div class="warnbox"><b>Période transitoire :</b> coexistence des anciennes et nouvelles règles selon la ratification de chaque partenaire — le cumul diagonal exige des règles identiques entre partenaires.</div>`,
+ cap:"La convention PEM, née du processus de Barcelone, a été adoptée en deux mille onze et signée par la Tunisie en janvier deux mille treize. Une version révisée a été adoptée en décembre deux mille vingt-trois, avec une application anticipée entre la Tunisie et l'Union européenne dès le premier mars deux mille vingt-cinq. Attention : une période transitoire fait coexister deux jeux de règles, et le cumul diagonal exige que les partenaires appliquent des règles identiques."},
+
+{mod:6, kicker:"Déterminer l'origine", html:`
+  <h2 class="title">Deux voies pour être « originaire »</h2>
+  <div class="two-col">
+    <div class="col"><h4>Entièrement obtenu</h4>Liste fermée : minéraux extraits, végétaux récoltés, animaux nés/élevés, chasse/pêche, déchets de fabrication…</div>
+    <div class="col"><h4>Suffisamment transformé (Annexe II)</h4>Changement de position tarifaire · règle de valeur ajoutée · ouvraison spécifique (ex. tissage+confection textile)</div>
+  </div>
+  <div class="note"><b>Tolérance (de minimis) :</b> jusqu'à 10% de la valeur départ usine (en poids pour le textile, chapitres 50-63).</div>`,
+ cap:"Un produit est originaire par deux voies : entièrement obtenu, selon une liste fermée de situations, ou suffisamment transformé, selon les règles de l'Annexe II : changement de position tarifaire, règle de valeur ajoutée, ou ouvraison spécifique. Une règle de tolérance, dite de minimis, permet d'ignorer jusqu'à dix pourcent de matières non originaires en valeur, ou en poids pour les textiles."},
+
+{mod:6, kicker:"Ouvraisons insuffisantes", html:`
+  <h2 class="title">Les opérations qui ne confèrent jamais l'origine</h2>
+  <div>
+    <span class="tag">Conservation simple</span><span class="tag">Dépoussiérage/criblage/lavage</span>
+    <span class="tag">Découpe simple</span><span class="tag">Changement d'emballage</span>
+    <span class="tag">Marquage/étiquetage</span><span class="tag">Simple assemblage</span>
+    <span class="tag">Simple mélange</span><span class="tag">Cumul d'opérations insuffisantes</span>
+  </div>`,
+ cap:"Certaines opérations sont toujours jugées insuffisantes pour conférer l'origine, même en apparence conformes : la simple conservation, le dépoussiérage, le lavage, la découpe simple, le changement d'emballage, l'apposition de marques, le simple assemblage ou mélange, et le cumul de plusieurs de ces opérations."},
+
+{mod:6, kicker:"Les 3 types de cumul", html:`
+  <h2 class="title">Cumul bilatéral, diagonal, intégral</h2>
+  <table class="mtable">
+    <tr><th>Type</th><th>Principe</th></tr>
+    <tr><td>Bilatéral</td><td>Entre 2 parties seulement</td></tr>
+    <tr><td>Diagonal</td><td>Entre plusieurs partenaires d'une même zone, règles identiques</td></tr>
+    <tr><td>Intégral</td><td>Les opérations de fabrication elles-mêmes se cumulent</td></tr>
+  </table>`,
+ cap:"Le cumul bilatéral ne joue qu'entre deux parties. Le cumul diagonal l'élargit à plusieurs partenaires d'une même zone, à condition qu'ils appliquent des règles identiques. Le cumul intégral, le plus poussé, permet de cumuler les opérations de fabrication elles-mêmes, réalisées successivement dans plusieurs pays partenaires."},
+
+{mod:6, kicker:"Cas pratique", html:`
+  <h2 class="title">Cas pratique : un jean fabriqué en Tunisie</h2>
+  <div class="note">Prix départ usine 100 D · tissu denim marocain 12 D (Maroc = règles révisées comme Tunisie/UE) · fils/boutons turcs 5 D (Turquie = anciennes règles) · fermeture éclair non originaire 3 D.</div>
+  <ul class="bullets">
+    <li>Tissu marocain → <b>cumul diagonal OK</b> (mêmes règles)</li>
+    <li>Fils turcs → cumul diagonal impossible, traités comme non originaires</li>
+    <li>Fermeture éclair = 3% du prix départ usine, <b>sous le seuil de tolérance (10%)</b></li>
+  </ul>
+  <div class="badge">Fin du Module 6 — Règles d'origine</div>`,
+ cap:"Cas pratique : un jean tunisien à cent dinars départ usine, avec un tissu denim marocain à douze dinars, des fils turcs à cinq dinars, et une fermeture éclair non originaire à trois dinars. Le tissu marocain bénéficie du cumul diagonal, le Maroc appliquant les mêmes règles révisées que la Tunisie et l'Union européenne. Les fils turcs, eux, ne peuvent pas en bénéficier, la Turquie appliquant encore les anciennes règles. Quant à la fermeture éclair, sa valeur ne représente que trois pourcent du prix départ usine, bien en dessous du seuil de tolérance de dix pourcent. Ceci conclut le module sur les règles d'origine."},
+
+/* ================= MODULE 7 — RÉGIMES DOUANIERS ================= */
+{mod:7, chapter:true, kicker:"Module 7 / 8", html:`
+  <div class="chapter"><div class="num">7</div>
+  <h1>Les régimes douaniers</h1>
+  <div class="ar">النظم الديوانية</div>
+  <p>Base légale, délais, garanties et pièges classiques — les 7 régimes suspensifs en détail.</p></div>`,
+ cap:"Septième module : les régimes douaniers en Tunisie. Nous verrons, régime par régime, la base légale, les délais, les garanties exigées, et les pièges classiques signalés dans les cours."},
+
+{mod:7, kicker:"Régime suspensif — art. 137", html:`
+  <h2 class="title">Qu'est-ce qu'un régime suspensif ?</h2>
+  <ul class="bullets">
+    <li>Placer une marchandise sous contrôle douanier <b>sans payer immédiatement</b> les droits et taxes</li>
+    <li>En vue d'un stockage, transit, transformation ou usage temporaire</li>
+  </ul>
+  <div class="pillars">
+    <div class="pillar"><b>Transport</b><br>Transit douanier</div>
+    <div class="pillar"><b>Stockage</b><br>Entrepôts public/privé</div>
+    <div class="pillar"><b>Transformation</b><br>Perfectionnement actif/passif</div>
+    <div class="pillar"><b>Usage temporaire</b><br>Admission/export temporaires</div>
+  </div>`,
+ cap:"L'article 137 du Code des Douanes définit les régimes suspensifs : ils permettent de placer une marchandise sous contrôle douanier sans payer immédiatement les droits, en vue d'un stockage, d'un transit, d'une transformation ou d'un usage temporaire. On les classe selon quatre fonctions : transport, stockage, transformation, et usage temporaire."},
+
+{mod:7, kicker:"Transit & entrepôts", html:`
+  <h2 class="title">Transit douanier et entrepôts</h2>
+  <table class="mtable">
+    <tr><th>Régime</th><th>Délai</th><th>Garantie / prorogation</th></tr>
+    <tr><td>Transit (art. 155-165)</td><td>Cas par cas</td><td>Acquit-à-caution 100% — force majeure</td></tr>
+    <tr><td>Entrepôt public (art. 174-178)</td><td><b>5 ans</b> (3 ans si dangereux)</td><td>Prorogation par le Ministre des Finances</td></tr>
+    <tr><td>Entrepôt privé (art. 179-191)</td><td><b>2 ans</b></td><td>Prorogation par le DG des Douanes</td></tr>
+  </table>
+  <div class="warnbox"><b>Piège classique :</b> ne pas confondre 5 ans (entrepôt public) et 2 ans (entrepôt privé).</div>`,
+ cap:"Le transit douanier permet de traverser le territoire en suspension totale, avec une garantie de cent pourcent. L'entrepôt public autorise un stockage jusqu'à cinq ans, trois ans pour les produits dangereux, avec une prorogation décidée par le ministre des Finances lui-même. L'entrepôt privé, en revanche, est limité à deux ans, avec une prorogation accordée par le directeur général des douanes. Attention à ne pas confondre ces deux durées : cinq ans pour le public, deux ans pour le privé."},
+
+{mod:7, kicker:"Admission temporaire", html:`
+  <h2 class="title">L'admission temporaire (art. 233 à 242)</h2>
+  <ul class="bullets">
+    <li>Usage déterminé <b>sans transformation</b> — à ne pas confondre avec le perfectionnement actif</li>
+    <li><b>SE736</b> (foires) : 1 an + prorogations semestrielles · <b>SE735</b> (travaux) : durée du chantier</li>
+    <li><b>AT totale</b> (100%, décret 711-2009 : pédagogique, médical, presse…) vs <b>AT partielle</b> (moitié des droits/an)</li>
+    <li>Véhicules non-résidents : franchise « Diptyque » 3 mois, renouvelable jusqu'à 1 an</li>
+  </ul>`,
+ cap:"L'admission temporaire couvre un usage déterminé, sans transformation de la marchandise. Elle peut être totale, avec suspension à cent pourcent pour des cas fixés par décret comme le matériel pédagogique ou médical, ou partielle, avec paiement de la moitié des droits à chaque prorogation annuelle. Les véhicules de tourisme des non-résidents bénéficient d'une franchise de trois mois, renouvelable jusqu'à un an."},
+
+{mod:7, kicker:"Réacheminement & transformation sous douane", html:`
+  <h2 class="title">Réacheminement et transformation sous douane</h2>
+  <div class="two-col">
+    <div class="col"><h4>Réacheminement (art. 162)</h4>Décharger/recharger sous douane sans nationalisation — opérations simples autorisées (groupage, étiquetage, tri)</div>
+    <div class="col"><h4>Transformation sous douane (art. 192-217)</h4>3 variantes : export total (TE), export partiel (taux mini fixé par le DG), marché local (peu utilisé)</div>
+  </div>`,
+ cap:"Le réacheminement, prévu à l'article 162, permet de décharger une marchandise pour la recharger sur un autre moyen de transport, sous surveillance douanière, sans nationalisation. La transformation sous douane, elle, comprend trois variantes : l'export total pour les entreprises totalement exportatrices, l'export partiel avec un taux minimum fixé par le directeur général, et le marché local, un régime peu utilisé."},
+
+{mod:7, kicker:"Perfectionnement actif", html:`
+  <h2 class="title">Perfectionnement actif (art. 218 à 232)</h2>
+  <ul class="bullets">
+    <li>Déclaration <b>SA530</b>, garantie forfaitaire <b>5%</b></li>
+    <li>4 conditions (art. 220) : promotion export, résidence Tunisie, équipements, identification des intrants</li>
+    <li>Délai réexportation : <b>6 mois</b> ≠ validité autorisation SINDA : <b>12 mois</b></li>
+    <li>Sortie : réexportation (EA360), cession, ou mise à la consommation exceptionnelle</li>
+  </ul>`,
+ cap:"Le perfectionnement actif, à la différence de l'admission temporaire, transforme la marchandise. La déclaration est SA530, avec une garantie forfaitaire de cinq pourcent, et quatre conditions cumulatives fixées par l'article 220. Attention à ne pas confondre deux durées : le délai de réexportation des produits transformés, six mois, et la validité de l'autorisation SINDA elle-même, douze mois."},
+
+{mod:7, kicker:"Perfectionnement passif", html:`
+  <h2 class="title">Perfectionnement passif (art. 243 à 260)</h2>
+  <ul class="bullets">
+    <li><b>Condition clé (art. 251)</b> : même titulaire pour l'export temporaire et la mise à la consommation</li>
+    <li>Exonération totale (réparation gratuite) ou partielle (taxation sur différence de valeur)</li>
+    <li><b>Échange standard</b> : remplacer directement le bien défectueux — même position tarifaire, qualité, degré d'usage (art. 254)</li>
+  </ul>`,
+ cap:"Le perfectionnement passif permet d'exporter temporairement une marchandise pour transformation ou réparation à l'étranger. Condition essentielle : le titulaire de la déclaration d'export temporaire doit être le même que celui qui met le produit à la consommation. Un mécanisme particulier, l'échange standard, permet de remplacer directement le bien défectueux par un identique, sous des conditions strictes de conformité."},
+
+{mod:7, kicker:"Export temporaire, sanctions & piège", html:`
+  <h2 class="title">Export temporaire, intérêt de retard, et le piège du drawback</h2>
+  <ul class="bullets">
+    <li><b>Régime 7</b> — Export temporaire en l'état (art. 261-264) : déclaration ET276</li>
+    <li><b>Intérêt légal de retard</b> : 0,75%/mois si non régularisé dans le délai</li>
+    <li><b>Sanction (art. 403)</b> : exclusion possible par arrêté du Ministre des Finances</li>
+  </ul>
+  <div class="warnbox"><b>Piège fréquent :</b> le remboursement/drawback (art. 298) n'est <b>pas</b> un régime économique — rattaché à l'exportation définitive. Ne pas confondre avec le perfectionnement actif « en rembours », qui lui, est un vrai régime économique.</div>
+  <div class="badge">Fin du Module 7 — Régimes douaniers</div>`,
+ cap:"L'exportation temporaire en l'état utilise la déclaration ET276. Si un régime suspensif n'est pas régularisé dans le délai, un intérêt légal de retard de zéro virgule soixante-quinze pourcent par mois s'applique, et l'article 403 prévoit une exclusion possible en cas d'abus. Piège fréquent à l'examen : le remboursement, ou drawback classique, n'est pas un régime économique au sens de l'article 137, contrairement au perfectionnement actif en rembours qui, lui, en est un. Ceci conclut le module sur les régimes douaniers."},
+
+/* ================= MODULE 8 — AVANTAGES FISCAUX ================= */
+{mod:8, chapter:true, kicker:"Module 8 / 8", html:`
+  <div class="chapter"><div class="num">8</div>
+  <h1>Les avantages fiscaux douaniers</h1>
+  <div class="ar">الامتيازات الجبائية</div>
+  <p>Trois familles de textes : dispositions préliminaires du tarif, régimes différentiels, Code d'investissement.</p></div>`,
+ cap:"Huitième et dernier module : les avantages fiscaux douaniers en Tunisie. Trois grandes familles de textes les organisent : les dispositions préliminaires du tarif, les régimes fiscaux différentiels spéciaux, et le Code d'investissement."},
+
+{mod:8, kicker:"Cadre général", html:`
+  <h2 class="title">Portée, bénéficiaires, dépôt des demandes</h2>
+  <ul class="bullets">
+    <li>Portée : exonération <b>partielle</b> (réduction de taux) ou <b>totale</b></li>
+    <li>Bénéficiaires : industriels, commerçants, personnes physiques</li>
+    <li>Conditions : demande d'avantage fiscal, situation fiscale régulière, échéancier de dettes à jour</li>
+  </ul>
+  <div class="note"><b>Dépôt :</b> voie manuelle (formulaire 6-3-41, 35 cases) ou électronique (SINDA — opérateur → flux TTN → inspecteur → réviseur → décision du chef de bureau).</div>`,
+ cap:"Un avantage fiscal douanier peut être une exonération partielle ou totale, au bénéfice des industriels, commerçants ou personnes physiques, sous conditions générales : demande d'avantage fiscal, situation fiscale régulière, échéancier de dettes à jour. Les demandes se déposent par voie manuelle, avec le formulaire six-trois-quarante-et-un, ou par voie électronique via le système SINDA."},
+
+{mod:8, kicker:"A. Dispositions préliminaires du tarif", html:`
+  <h2 class="title">Les 4 régimes du tarif (loi n°113/1989)</h2>
+  <table class="mtable">
+    <tr><th>Régime</th><th>Avantage</th><th>Base légale</th></tr>
+    <tr><td>Industrie locale</td><td>-10% droits</td><td>Ordre 1190 du 1/7/1996</td></tr>
+    <tr><td>Compétitivité industrielle</td><td>Exo. totale droits</td><td>Ordre 1090 du 17/5/2004</td></tr>
+    <tr><td>Forage/prospection eau</td><td>-10% + exo. TVA</td><td>Ordre gouv. 532 du 20/7/2023</td></tr>
+    <tr><td>Industrie pharmaceutique</td><td>Exo. totale / TVA 7%</td><td>Ordre 1258 du 2/6/2003</td></tr>
+  </table>`,
+ cap:"La première famille de textes, issue de la loi cent treize de mille neuf cent quatre-vingt-neuf, regroupe quatre régimes : l'encouragement de l'industrie locale, avec dix pourcent de réduction ; le soutien à la compétitivité, avec une exonération totale ; le matériel de forage et de prospection d'eau ; et l'industrie pharmaceutique, avec exonération totale des matières premières et TVA réduite à sept pourcent sur les produits de fabrication."},
+
+{mod:8, kicker:"B. Régimes différentiels spéciaux", html:`
+  <h2 class="title">Quatre avantages ciblés</h2>
+  <ul class="bullets">
+    <li><b>Les dons</b> (art. 272 CD) — administrations, associations caritatives, marchandises de première nécessité</li>
+    <li><b>Voitures handicapés</b> — position 8703, ≤7 places, &lt;7 ans, incessible 5 ans</li>
+    <li><b>Étrangers s'installant en Tunisie</b> — meubles + effets + 1 voiture &lt;3 ans, plafond 15 000 D</li>
+    <li><b>Agences de presse internationales</b> — outils de travail, mobilier, voiture, plafonds mensuels</li>
+  </ul>`,
+ cap:"La deuxième famille organise quatre avantages ciblés : le régime des dons, pour les envois sans caractère commercial vers des organismes caritatifs ; le régime des voitures pour personnes handicapées, avec un véhicule incessible pendant cinq ans ; le régime des étrangers s'installant en Tunisie, avec un plafond de quinze mille dinars pour les meubles et effets personnels ; et le régime des agences de presse internationales."},
+
+{mod:8, kicker:"C. Code d'investissement", html:`
+  <h2 class="title">Le Code d'investissement (loi 71/2016, loi 8/2017)</h2>
+  <ul class="bullets">
+    <li><b>Avantages communs</b> : équipements sans équivalent local → exo. droits + TVA 7% (système « sened »)</li>
+    <li><b>Entreprises totalement exportatrices</b> : 0% droits (services) ou exo. totale (industrielles)</li>
+    <li><b>Cadres étrangers</b> : exo. totale effets + 1 voiture — demande sous 183 jours</li>
+    <li><b>Avantages sectoriels</b> : agriculture/pêche, santé, éducation → exo. + suspension TVA</li>
+  </ul>`,
+ cap:"La troisième famille, le Code d'investissement, prévoit d'abord des avantages communs pour les équipements sans équivalent local, automatiques via le système sened. Les entreprises totalement exportatrices bénéficient d'un taux de zéro pourcent ou d'une exonération totale selon leur nature. Les cadres étrangers de ces entreprises bénéficient aussi d'une exonération sur leurs effets personnels. Enfin, des avantages sectoriels couvrent l'agriculture, la santé et l'éducation."},
+
+{mod:8, kicker:"Cession des équipements", html:`
+  <h2 class="title">Que se passe-t-il en cas de cession ?</h2>
+  <table class="mtable">
+    <tr><th>Avant 5 ans</th><th>Après 5 ans</th></tr>
+    <tr><td>Autorisation du chef de bureau + paiement des droits/taxes sur la valeur au jour de la cession</td><td>Cession libre, sans autorisation ni paiement</td></tr>
+  </table>
+  <div class="badge">Fin du Module 8 — Avantages fiscaux</div>`,
+ cap:"Un principe commun régit la cession des équipements ayant bénéficié d'un avantage : avant cinq ans, elle nécessite une autorisation du chef de bureau des douanes et le paiement des droits et taxes sur la valeur au jour de la cession. Passé ce délai de cinq ans, la cession devient libre. Ceci conclut le module sur les avantages fiscaux douaniers."},
+
+{mod:8, kicker:"Conclusion générale", html:`
+  <h1 class="title">Bonne préparation pour votre examen !</h1>
+  <div class="sub">Les 8 modules sont couverts. Utilisez le menu ci-dessous pour revoir un module précis, ou le mode replay pour une révision complète.</div>
+  <div class="modlist" style="margin-top:12px;justify-content:flex-start;">
+    <span>1 · Éthique</span><span>2 · Organisation</span><span>3 · Fiscalité</span><span>4 · Tarif</span>
+    <span>5 · Valeur</span><span>6 · Origine</span><span>7 · Régimes</span><span>8 · Avantages fiscaux</span>
+  </div>
+  <div class="badge" style="margin-top:10px;">Merci d'avoir suivi cette révision complète</div>`,
+ cap:"Voilà, les huit modules de votre examen oral sont couverts. Pour chaque module, ayez le réflexe : une définition claire, les références légales, et un exemple chiffré. Repérez les pièges signalés en rouge dans ce cours : ce sont souvent des points sur lesquels reviennent les examinateurs. Bonne préparation, et bonne chance pour votre examen oral des dix-sept et dix-huit août !"},
+];
+
+/* ---------------- Player engine ---------------- */
+const stage=document.getElementById('stage');
+const captionEl=document.getElementById('caption').querySelector('span');
+const fill=document.getElementById('fill');
+const dotsEl=document.getElementById('dots');
+const sceneNoEl=document.getElementById('sceneNo');
+const sceneTotEl=document.getElementById('sceneTot');
+const playBtn=document.getElementById('playBtn');
+const soundBtn=document.getElementById('soundBtn');
+const musicBtn=document.getElementById('musicBtn');
+const speedBtn=document.getElementById('speedBtn');
+const overlay=document.getElementById('overlay');
+const startBtn=document.getElementById('startBtn');
+const ttsNote=document.getElementById('ttsNote');
+const modtag=document.getElementById('modtag');
+const menuEl=document.getElementById('menu');
+
+const MODNAMES={1:"Éthique",2:"Organisation",3:"Fiscalité",4:"Tarif",5:"Valeur",6:"Origine",7:"Régimes",8:"Avantages fiscaux"};
+
+const total=scenes.length;
+sceneTotEl.textContent=total;
+scenes.forEach(s=>{ s.est=Math.max(4500, 3000 + s.cap.length*78); });
+
+scenes.forEach((s,i)=>{
+  const d=document.createElement('div'); d.className='scene'; d.dataset.i=i;
+  d.innerHTML=(s.kicker?`<div class="kicker">${s.kicker}</div>`:'')+s.html;
+  stage.appendChild(d);
+  const dot=document.createElement('div'); dot.className='dot'+(s.chapter?' chapterdot':''); dot.dataset.i=i;
+  dot.title=s.kicker||'';
+  dot.onclick=()=>{ jump(i); };
+  dotsEl.appendChild(dot);
+});
+const sceneEls=[...stage.querySelectorAll('.scene')];
+const dotEls=[...dotsEl.querySelectorAll('.dot')];
+
+/* Module quick-jump menu */
+const firstIdxOfMod={};
+scenes.forEach((s,i)=>{ if(s.chapter && !(s.mod in firstIdxOfMod)) firstIdxOfMod[s.mod]=i; });
+Object.keys(firstIdxOfMod).sort((a,b)=>a-b).forEach(m=>{
+  const b=document.createElement('button'); b.className='menubtn'; b.dataset.mod=m;
+  b.textContent=m+'. '+MODNAMES[m];
+  b.onclick=()=>{ jump(firstIdxOfMod[m]); paused=false; playBtn.textContent='⏸'; };
+  menuEl.appendChild(b);
+});
+const menuBtns=[...menuEl.querySelectorAll('.menubtn')];
+
+let cur=-1, paused=false, soundOn=false, musicOn=false, rafId=null, sceneStart=0, fallbackTimer=null;
+let rate=0.9; const rateCycle=[0.8,0.9,1.0,1.1];
+const TTS=('speechSynthesis' in window);
+if(!TTS){ soundOn=false; soundBtn.classList.add('off'); soundBtn.disabled=true;
+  ttsNote.textContent="(Synthèse vocale indisponible — la leçon se joue sans voix, avec la musique et l'avance automatique.)"; }
+
+let voiceFR=null;
+function pickVoice(){
+  if(!TTS) return;
+  const vs=speechSynthesis.getVoices();
+  voiceFR = vs.find(v=>/fr-FR|fr_FR/.test(v.lang) && /Google|Microsoft/i.test(v.name)) ||
+            vs.find(v=>v.lang && v.lang.startsWith('fr')) || null;
+}
+if(TTS){ speechSynthesis.onvoiceschanged = pickVoice; pickVoice(); }
+
+/* --- Musique d'ambiance simple via WebAudio --- */
+let actx=null, musicNodes=[];
+function startMusic(){
+  return;
+  try{
+    if(!actx) actx = new (window.AudioContext||window.webkitAudioContext)();
+    stopMusic();
+    const notes=[130.81,164.81,196.00,164.81];
+    const master = actx.createGain(); master.gain.value=0.032; master.connect(actx.destination);
+    notes.forEach((f,idx)=>{
+      const o=actx.createOscillator(); const g=actx.createGain();
+      o.type='sine'; o.frequency.value=f;
+      g.gain.value=0; o.connect(g); g.connect(master);
+      o.start();
+      const now=actx.currentTime;
+      for(let t=0;t<400;t++){
+        const start=now+idx*2+t*8;
+        g.gain.setTargetAtTime(0.6,start,0.8);
+        g.gain.setTargetAtTime(0.0,start+3.2,1.2);
+      }
+      musicNodes.push(o,g);
+    });
+  }catch(e){}
+}
+function stopMusic(){
+  musicNodes.forEach(n=>{ try{n.stop&&n.stop();}catch(e){} try{n.disconnect();}catch(e){} });
+  musicNodes=[];
+}
+musicBtn.onclick=()=>{
+  musicOn=!musicOn; musicBtn.classList.toggle('off',!musicOn);
+  if(musicOn) startMusic(); else stopMusic();
+};
+
+function speak(text){
+  return;
+  try{ speechSynthesis.cancel(); }catch(e){}
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='fr-FR'; u.rate=rate; u.pitch=1.0; if(voiceFR) u.voice=voiceFR;
+  speechSynthesis.speak(u);
+}
+
+function renderDots(){ dotEls.forEach((d,i)=> d.classList.toggle('active', i===cur)); sceneNoEl.textContent=cur+1; }
+function renderMenu(){
+  const m=scenes[cur].mod;
+  menuBtns.forEach(b=> b.classList.toggle('active', Number(b.dataset.mod)===m));
+  modtag.textContent='Module '+m+'/8 · '+MODNAMES[m];
+}
+
+function playScene(i){
+  if(i<0||i>=total) return;
+  if(fallbackTimer) clearTimeout(fallbackTimer);
+  sceneEls.forEach(e=>e.classList.remove('show'));
+  cur=i; sceneEls[i].classList.add('show');
+  captionEl.textContent = scenes[i].cap;
+  renderDots(); renderMenu();
+  speak(scenes[i].cap);
+  sceneStart = performance.now();
+  animateBar(scenes[i].est);
+  fallbackTimer = setTimeout(()=>{ if(!paused) next(); }, scenes[i].est / rate);
+}
+
+function animateBar(dur){
+  const start=performance.now();
+  if(rafId) cancelAnimationFrame(rafId);
+  function step(now){
+    const elapsed=(now-start)*rate;
+    const pct=Math.min(100, (elapsed/dur)*100);
+    fill.style.width=pct+'%';
+    if(pct<100 && !paused) rafId=requestAnimationFrame(step);
+  }
+  rafId=requestAnimationFrame(step);
+}
+
+function next(){ if(cur<total-1) playScene(cur+1); else { paused=true; playBtn.textContent='▶'; } }
+function prev(){ if(cur>0) playScene(cur-1); }
+function jump(i){ playScene(i); paused=false; playBtn.textContent='⏸'; }
+
+playBtn.onclick=()=>{
+  paused=!paused; playBtn.textContent = paused ? '▶':'⏸';
+  if(paused){ if(TTS) speechSynthesis.pause(); if(rafId) cancelAnimationFrame(rafId); if(fallbackTimer) clearTimeout(fallbackTimer); }
+  else{ if(TTS && speechSynthesis.paused) speechSynthesis.resume(); animateBar(scenes[cur].est);
+    fallbackTimer=setTimeout(()=>{ if(!paused) next(); }, scenes[cur].est/rate); }
+};
+document.getElementById('prevBtn').onclick=prev;
+document.getElementById('nextBtn').onclick=next;
+document.getElementById('replayBtn').onclick=()=>jump(0);
+speedBtn.onclick=()=>{
+  const idx=rateCycle.indexOf(rate); rate=rateCycle[(idx+1)%rateCycle.length];
+  speedBtn.textContent='×'+rate.toFixed(1);
+  if(!paused) speak(scenes[cur].cap);
+};
+soundBtn.onclick=()=>{
+  soundOn=!soundOn; soundBtn.classList.toggle('off',!soundOn); soundBtn.textContent = soundOn?'🔊':'🔇';
+  if(!soundOn && TTS){ try{speechSynthesis.cancel();}catch(e){} }
+  if(soundOn && !paused){ speak(scenes[cur].cap); }
+};
+
+document.getElementById('player').addEventListener('click', e=>{
+  if(e.target.closest('.controls') || e.target.closest('.overlay') || e.target.closest('.menu')) return;
+  playBtn.click();
+});
+document.addEventListener('keydown', e=>{
+  if(!overlay.classList.contains('hidden')) return;
+  if(e.code==='Space'){ e.preventDefault(); playBtn.click(); }
+  if(e.code==='ArrowRight') next();
+  if(e.code==='ArrowLeft') prev();
+});
+
+startBtn.onclick=()=>{
+  overlay.classList.add('hidden');
+  paused=false;
+  playBtn.textContent='⏸';
+  playScene(0);
+};
+</script>
+</body>
+</html>
