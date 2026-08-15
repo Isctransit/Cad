@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Valeur—Flashcards CAD 2026</title>
+<style>
+:root{
+  --navy:#15407a; --navy-dark:#0d2c57; --gold:#b0832e; --gold-light:#d9ac5c;
+  --light-blue:#e9f1f9; --bg:#f4f7fb; --card-bg:#ffffff; --text:#16233a; --muted:#5a6b85;
+  --border:#d7e2ef; --danger:#a5432f; --radius:16px;
+}
+[data-theme="dark"]{
+  --bg:#0b1420; --card-bg:#132238; --text:#eaf1fb; --muted:#9db1cc;
+  --light-blue:#152a44; --border:#22385a;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{
+  margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg); color:var(--text); padding-bottom:env(safe-area-inset-bottom);
+  transition:background .25s,color .25s;
+}
+header{
+  background:linear-gradient(135deg,var(--navy),var(--navy-dark));
+  color:#fff; padding:16px 16px calc(14px + env(safe-area-inset-top)) 16px;
+  padding-top:calc(16px + env(safe-area-inset-top));
+  position:sticky; top:0; z-index:20; box-shadow:0 2px 10px rgba(0,0,0,.15);
+}
+header .row{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+header h1{margin:0; font-size:17px; font-weight:700; letter-spacing:.2px;}
+header .sub{font-size:11.5px; color:var(--gold-light); margin-top:2px; font-weight:600;}
+.iconbtn{
+  background:rgba(255,255,255,.12); border:none; color:#fff; width:36px; height:36px;
+  border-radius:10px; font-size:16px; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.iconbtn:active{background:rgba(255,255,255,.25);}
+.tabs{display:flex; gap:8px; padding:10px 14px; overflow-x:auto; background:var(--card-bg); border-bottom:1px solid var(--border); position:sticky; top:calc(64px + env(safe-area-inset-top)); z-index:19;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{
+  flex-shrink:0; padding:8px 14px; border-radius:20px; font-size:13px; font-weight:600;
+  background:var(--light-blue); color:var(--navy); border:1px solid transparent; white-space:nowrap;
+}
+[data-theme="dark"] .tab{color:#bcd3ee;}
+.tab.active{background:var(--gold); color:#fff;}
+main{padding:16px; max-width:640px; margin:0 auto;}
+.progressWrap{display:flex; align-items:center; gap:10px; margin-bottom:14px; font-size:12.5px; color:var(--muted); font-weight:600;}
+.progressBar{flex:1; height:6px; background:var(--light-blue); border-radius:4px; overflow:hidden;}
+.progressFill{height:100%; background:linear-gradient(90deg,var(--gold),var(--gold-light)); transition:width .3s;}
+.scene{perspective:1400px; height:340px; margin-bottom:16px;}
+.card{
+  position:relative; width:100%; height:100%; transform-style:preserve-3d;
+  transition:transform .5s cubic-bezier(.4,.2,.2,1); cursor:pointer;
+}
+.card.flipped{transform:rotateY(180deg);}
+.face{
+  position:absolute; inset:0; backface-visibility:hidden; border-radius:var(--radius);
+  padding:24px; display:flex; flex-direction:column; box-shadow:0 8px 24px rgba(21,64,122,.14);
+  border:1px solid var(--border); background:var(--card-bg); overflow-y:auto;
+}
+.face.back{transform:rotateY(180deg); background:linear-gradient(160deg,var(--navy),var(--navy-dark)); color:#fff; border:none;}
+.face .tag{
+  align-self:flex-start; font-size:10.5px; font-weight:700; letter-spacing:.4px; text-transform:uppercase;
+  background:var(--light-blue); color:var(--navy); padding:4px 10px; border-radius:20px; margin-bottom:14px;
+}
+.face.back .tag{background:rgba(255,255,255,.15); color:var(--gold-light);}
+.face .label{font-size:11px; font-weight:700; color:var(--gold); letter-spacing:.5px; text-transform:uppercase; margin-bottom:8px;}
+.face.back .label{color:var(--gold-light);}
+.face .content{font-size:16.5px; line-height:1.5; font-weight:600; flex:1; display:flex; align-items:center;}
+.face.back .content{font-size:15px; font-weight:500;}
+.hint{text-align:center; font-size:11.5px; color:var(--muted); margin-top:-6px; margin-bottom:18px;}
+.controls{display:flex; gap:10px; margin-bottom:22px;}
+.btn{
+  flex:1; padding:14px; border-radius:12px; border:none; font-size:14.5px; font-weight:700;
+  display:flex; align-items:center; justify-content:center; gap:6px;
+}
+.btn.prev{background:var(--light-blue); color:var(--navy);}
+[data-theme="dark"] .btn.prev{color:#cfe0f5;}
+.btn.next{background:var(--navy); color:#fff;}
+.btn.shuffle{background:var(--gold); color:#fff; flex:0 0 auto; width:52px;}
+.searchWrap{display:flex; align-items:center; background:var(--card-bg); border:1px solid var(--border); border-radius:12px; padding:10px 12px; margin-bottom:14px; gap:8px;}
+.searchWrap input{border:none; outline:none; background:transparent; font-size:14.5px; width:100%; color:var(--text);}
+.listView .item{
+  background:var(--card-bg); border:1px solid var(--border); border-radius:12px; padding:14px; margin-bottom:10px;
+}
+.listView .item .tag{display:inline-block; font-size:10px; font-weight:700; color:var(--navy); background:var(--light-blue); padding:3px 8px; border-radius:20px; margin-bottom:8px; text-transform:uppercase;}
+.listView .item .q{font-weight:700; font-size:14.5px; margin-bottom:6px;}
+.listView .item .a{font-size:13.5px; color:var(--muted); line-height:1.5;}
+.empty{text-align:center; color:var(--muted); padding:60px 20px; font-size:14px;}
+footer{text-align:center; font-size:11px; color:var(--muted); padding:22px 16px 30px;}
+.modeToggle{display:flex; background:var(--light-blue); border-radius:10px; padding:3px; gap:3px;}
+.modeToggle button{flex:1; border:none; background:transparent; padding:7px 10px; border-radius:8px; font-size:12.5px; font-weight:700; color:var(--navy);}
+.modeToggle button.active{background:var(--gold); color:#fff;}
+[data-theme="dark"] .modeToggle button{color:#bcd3ee;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="row">
+    <div>
+      <h1>La Valeur en Douane</h1>
+      <div class="sub">Flashcards de révision · CAD 2026</div>
+    </div>
+    <div style="display:flex; gap:8px;">
+      <button class="iconbtn" id="themeBtn" title="Mode sombre">🌙</button>
+    </div>
+  </div>
+</header>
+
+<div class="tabs" id="tabs"></div>
+
+<main>
+  <div style="margin-bottom:14px;">
+    <div class="modeToggle">
+      <button id="modeCards" class="active">🃏 Cartes</button>
+      <button id="modeList">📋 Liste</button>
+    </div>
+  </div>
+
+  <div id="cardsView">
+    <div class="progressWrap">
+      <span id="progressLabel">1 / 1</span>
+      <div class="progressBar"><div class="progressFill" id="progressFill"></div></div>
+      <span id="scoreLabel"></span>
+    </div>
+
+    <div class="scene">
+      <div class="card" id="card">
+        <div class="face front">
+          <span class="tag" id="tagFront">—</span>
+          <span class="label">Question</span>
+          <div class="content" id="frontContent">—</div>
+        </div>
+        <div class="face back">
+          <span class="tag" id="tagBack">—</span>
+          <span class="label">Réponse</span>
+          <div class="content" id="backContent">—</div>
+        </div>
+      </div>
+    </div>
+    <div class="hint">Touchez la carte pour retourner</div>
+
+    <div class="controls">
+      <button class="btn prev" id="prevBtn">← Précédent</button>
+      <button class="btn shuffle" id="shuffleBtn" title="Mélanger">🔀</button>
+      <button class="btn next" id="nextBtn">Suivant →</button>
+    </div>
+  </div>
+
+  <div id="listView" class="listView" style="display:none;">
+    <div class="searchWrap">
+      <span>🔎</span>
+      <input type="text" id="searchInput" placeholder="Rechercher un terme, un article...">
+    </div>
+    <div id="listItems"></div>
+  </div>
+</main>
+
+<footer>Reguigui Mokhtar — Formation CAD Tunisie 2026 · École Nationale des Douanes</footer>
+
+<script>
+const CARDS = [
+// ===== PARTIE I — LA NOTION DE LA VALEUR EN DOUANE =====
+{p:"I", q:"Définition légale de la valeur en douane ?", a:"Valeur des marchandises retenue pour percevoir les droits de douane ad valorem à l'importation — c'est une assiette de calcul (art. 15.a Accord OMC / art. 22-1-a Code tunisien)."},
+{p:"I", q:"Les 3 intérêts de la valeur en douane ?", a:"Fiscal : assiette DD/DC/TVA. Économique : instrument de politique commerciale. Statistique : base des statistiques du commerce extérieur."},
+{p:"I", q:"Les 3 types de droits de douane ?", a:"Ad valorem (% de la valeur, majorité des pays), spécifiques (coût par unité de mesure), composites (combinaison des deux)."},
+{p:"I", q:"Quel type de droit dépend de la valeur en douane ?", a:"Seuls les droits ad valorem. Une erreur de valeur se répercute aussi sur la TVA calculée en cascade."},
+{p:"I", q:"DVB vs OMC — différence de conception ?", a:"DVB (Bruxelles) : conception théorique, prix « normal » supposé, non observé. OMC : conception positive, valeur transactionnelle réelle et vérifiable."},
+{p:"PIÈGE", q:"Piège classique DVB / OMC ?", a:"Confondre les deux notions : DVB = prix normal supposé (théorique). OMC = prix réellement payé (positif, vérifiable)."},
+{p:"I", q:"Les 3 principes du système OMC ?", a:"Système positif, uniforme et neutre ; conforme à la réalité commerciale, pas de valeurs arbitraires ou fictives ; la valeur transactionnelle est la méthode de base."},
+{p:"I", q:"1947 — que se passe-t-il ?", a:"Article VII du GATT : pose les principes de l'évaluation en douane."},
+{p:"I", q:"1950 puis 1953 ?", a:"1950 : Convention de Bruxelles sur la valeur en douane. 1953 : entrée en application de la Définition de la Valeur de Bruxelles (DVB)."},
+{p:"I", q:"1973-1979 puis 1981 ?", a:"Tokyo Round (1973-79) : adoption du Code du GATT sur l'évaluation. 1981 : entrée en vigueur de ce Code."},
+{p:"I", q:"1986-1993 puis 1994 ?", a:"Uruguay Round (1986-93). 1994 : Accord OMC sur l'évaluation en douane — système actuellement en vigueur."},
+{p:"I", q:"Quelle loi tunisienne introduit le système OMC ?", a:"Loi n° 2001-92 du 07/08/2001, en vigueur depuis septembre 2001."},
+{p:"I", q:"Quel est le cadre légal tunisien actuel ?", a:"Loi n° 2008-34 du 02/06/2008, qui abroge le dispositif antérieur — art. 22 à 35 du Code des douanes."},
+{p:"I", q:"Quel texte fixe les modalités d'application ?", a:"Arrêté du ministre des Finances du 28/01/2009 — modalités d'application des articles 22 à 35."},
+{p:"I", q:"Structure de l'Accord OMC — Partie I ?", a:"Art. 1 à 8 : règles d'évaluation. Art. 9 à 17 : conversion monétaire, renseignements confidentiels, droit d'appel, publication."},
+{p:"I", q:"Structure de l'Accord OMC — Parties II, III, IV ?", a:"II (art.18-19) : administration, consultation, règlement des différends. III (art.20) : traitement spécial et différencié. IV (art.21-24) : réserves, obligations des membres, examen annuel."},
+{p:"I", q:"Position de la Tunisie sur les réserves ?", a:"Bénéficie des délais de grâce (art. 20 + Annexe III) ; aucune réserve sur l'art. 4 (inversion des méthodes) ni sur l'art. 5§2 (super-déductive pour marchandises ouvrées)."},
+{p:"I", q:"Règle sur l'ordre des 6 méthodes ?", a:"Ordre strict et impératif : on ne passe à la méthode suivante qu'après avoir écarté la précédente."},
+{p:"PIÈGE", q:"Seule exception à l'ordre impératif des méthodes ?", a:"L'importateur peut demander l'inversion des méthodes 4 (déductive, art.27) et 5 (calculée, art.28) — art. 24 du Code. Aucune autre permutation n'est admise."},
+
+// ===== PARTIE II — MÉTHODE 1 : VALEUR TRANSACTIONNELLE =====
+{p:"II", q:"Base légale de la méthode 1 ?", a:"Art. 23 du Code tunisien / Article premier de l'Accord OMC, à lire conjointement avec l'article 8 (ajustements)."},
+{p:"II", q:"Qu'est-ce que le PEPP ?", a:"Le Prix Effectivement Payé ou à Payer — point de départ de la valeur, corrigé par les articles 30 et 31 (jamais une valeur brute acceptée telle quelle)."},
+{p:"II", q:"Caractéristiques du paiement (PEPP) ?", a:"Pas nécessairement en argent (lettres de crédit, instruments négociables) ; direct ou indirect — un paiement à un tiers pour éteindre une obligation du vendeur fait partie du PEPP (§7 Annexe III)."},
+{p:"II", q:"Activités menées par l'acheteur pour son propre compte ?", a:"Ne sont pas un paiement indirect au vendeur, même si celui-ci en profite ; leur coût n'est pas ajouté (Note interprétative de l'article premier)."},
+{p:"II", q:"Que suppose « vendues pour l'exportation » ?", a:"Un transfert effectif à l'échelon international vers la Tunisie (Avis consultatif 14.1). C'est la destination des marchandises qui compte, pas la nationalité des parties."},
+{p:"PIÈGE", q:"Série de ventes successives — quel prix retenir ?", a:"Le prix de la DERNIÈRE vente avant l'introduction en Tunisie (Commentaire 22.1). Le « first sale » (première vente) est toujours écarté."},
+{p:"II", q:"Situations sans vente où la méthode 1 est exclue ?", a:"Livraisons gratuites (cadeaux, échantillons), consignation, location-vente, prêt ; importations par intermédiaires n'achetant pas ou par succursales ; déchets destinés à destruction, troc, opérations compensées (Avis consultatif 1.1)."},
+{p:"II", q:"Les 4 conditions cumulatives d'acceptation (art. 23) ?", a:"1) Pas de restriction à la cession/utilisation par l'acheteur (hors exceptions légales). 2) Vente/prix non subordonnés à une condition dont la valeur n'est pas déterminable. 3) Aucun produit de revente ne revient au vendeur (sauf ajustement art.30-31). 4) Acheteur et vendeur non liés, ou lien sans influence sur le prix."},
+{p:"II", q:"3 exemples de conditions à valeur non déterminable (condition 2) ?", a:"Prix subordonné à l'achat d'autres marchandises en quantités déterminées ; prix dépendant du prix de revente d'autres marchandises au vendeur ; prix établi sur un mode de paiement sans rapport avec les marchandises importées."},
+{p:"PIÈGE", q:"« Parties liées = rejet automatique » — vrai ou faux ?", a:"FAUX. Le seul fait d'être liés ne suffit pas ; il faut établir que le lien a influencé le prix (art. 23 §2)."},
+{p:"II", q:"Traitement des 3 types de rabais ?", a:"Escompte au comptant : accepté (ex. 5% sous 10 jours). Rabais de quantité : accepté si l'offre est honnête et raisonnable. Rabais rétroactif : traité comme un crédit, prudence sur le caractère rétroactif."},
+{p:"II", q:"Frais exclus de la valeur si distincts du prix ?", a:"Construction/installation/montage/entretien/assistance technique après importation ; transport après importation ; droits et taxes du pays d'importation (Note interprétative de l'article premier)."},
+{p:"PIÈGE", q:"Le mot qui piège sur les frais exclus ?", a:"« Distincts ». S'ils ne sont pas individualisés dans la facture, ces frais restent inclus dans la valeur en douane."},
+{p:"II", q:"Vente flash — traitement ?", a:"Le prix réduit d'une vente promotionnelle éphémère est accepté comme base pour la méthode 1 (Avis consultatif 23.1). Prudence pour les méthodes 2 et 3 : conditions rarement reproductibles ailleurs."},
+
+// ===== PARTIE III — AJUSTEMENTS DU PRIX =====
+{p:"III", q:"Correspondance articles ajustements ?", a:"Art. 8 de l'Accord OMC = art. 30 (adjonctions) + art. 31 (exclusions) du Code des douanes tunisien."},
+{p:"III", q:"Sur quelle base s'établit la valeur en douane ?", a:"Base CAF : Coût, Assurance et Fret jusqu'au point d'introduction des marchandises en Tunisie."},
+{p:"III", q:"Caractère de la liste de l'article 30 ?", a:"Exhaustive — un élément non listé à l'article 30 n'est jamais ajouté au prix."},
+{p:"III", q:"Les 6 éléments ajoutés au prix (art. 30) ?", a:"1) Commissions et courtages (sauf commission d'achat). 2) Coût des contenants et emballages. 3) Apports fournis par l'acheteur (matières, outillage, plans réalisés hors Tunisie). 4) Redevances et droits de licence. 5) Produit de revente revenant au vendeur. 6) Transport, manutention et assurance jusqu'au point d'introduction (CAF)."},
+{p:"III", q:"Les 5 éléments exclus si distincts (art. 31) ?", a:"1) Transport après l'arrivée au point d'introduction. 2) Construction/installation/montage/entretien/assistance technique après importation. 3) Droit de reproduction des marchandises en Tunisie. 4) Commissions d'achat. 5) Droits et taxes à l'importation en Tunisie."},
+{p:"PIÈGE", q:"Commission d'achat vs commission de vente ?", a:"Commission d'achat (représente l'acheteur) : EXCLUE de la valeur. Commission de vente (liée au vendeur) : INCLUSE dans la valeur."},
+{p:"PIÈGE", q:"Transport jusqu'à la frontière vs transport intérieur ?", a:"Transport jusqu'au point d'introduction en Tunisie : INCLUS dans la valeur. Transport intérieur postérieur au point d'introduction : EXCLU."},
+
+// ===== PARTIE IV — LES 5 MÉTHODES DE SUBSTITUTION =====
+{p:"IV", q:"Méthode 2 — base légale et principe ?", a:"Art. 25 du Code / Art. 2 de l'Accord OMC. On retient la valeur transactionnelle de marchandises identiques déjà acceptée."},
+{p:"IV", q:"3 conditions cumulatives (méthodes 2 et 3) ?", a:"Marchandises identiques (ou similaires), vendues pour l'exportation vers la Tunisie, exportées au même moment ou à peu près que les marchandises à évaluer."},
+{p:"IV", q:"Définition de « marchandises identiques » ?", a:"Les mêmes à tous égards : caractéristiques physiques, qualité, réputation. Différences mineures d'aspect ignorées. Même pays de production, priorité au même producteur."},
+{p:"IV", q:"Pluralité de valeurs identiques/similaires constatées ?", a:"On retient toujours la valeur transactionnelle la plus BASSE pour déterminer la valeur en douane."},
+{p:"IV", q:"Méthode 3 — base légale et principe ?", a:"Art. 26 du Code / Art. 3 de l'Accord OMC. Joue uniquement si ni la méthode 1 ni la méthode 2 ne peuvent être retenues."},
+{p:"IV", q:"Définition de « marchandises similaires » ?", a:"Sans être les mêmes à tous égards : caractéristiques et composants semblables, mêmes fonctions, commercialement interchangeables. Facteurs : qualité, réputation, marque."},
+{p:"IV", q:"Distinction identiques / similaires ?", a:"Identiques : les mêmes à tous égards, interchangeabilité implicite. Similaires : caractéristiques semblables + condition expresse d'interchangeabilité commerciale."},
+{p:"IV", q:"Marque différente à réputation distincte — qualification ?", a:"Jamais identiques. Similaires seulement si l'interchangeabilité commerciale tient malgré la différence de marque."},
+{p:"IV", q:"Fausse marque / contrefaçon — qualification ?", a:"Ni identiques ni similaires : on descend la hiérarchie (art. 27, puis 28, puis 29). En amont, retenue ou saisie possible au titre de la propriété intellectuelle."},
+{p:"IV", q:"Méthode 4 — base légale et principe ?", a:"Art. 27 du Code / Art. 5 de l'Accord OMC. Méthode déductive : on part du prix de revente en Tunisie et on déduit les éléments postérieurs à l'importation."},
+{p:"IV", q:"Étape 1 de la méthode déductive — quel prix retenir ?", a:"Le prix unitaire de la plus grande quantité agrégée vendue en l'état, à des personnes non liées, au premier niveau commercial suivant l'importation, à des prix représentatifs."},
+{p:"IV", q:"Exemple : ventes 40u@100, 30u@90, 15u@100, 50u@95, 25u@105, 35u@90, 5u@100 — quel prix retenir ?", a:"90 : c'est le prix auquel la plus grande quantité totale (30+35=65 unités) a été vendue. On ne retient ni le prix le plus élevé (105), ni la première vente."},
+{p:"IV", q:"4 cas de recours à des identiques/similaires (méthode déductive) ?", a:"Pas de revente des marchandises à évaluer ; revente hors du délai de 90 jours ; revente à un acheteur lié ; prix unitaire non significatif."},
+{p:"IV", q:"Étape 2 — les 4 déductions (art. 27 §1-a) ?", a:"1) Commissions/marges (bénéfices et frais généraux) et charges supportées en Tunisie. 2) Transport, assurance, frais connexes en Tunisie après importation. 3) Éléments CAF de l'art. 30§1-e, le cas échéant. 4) Droits de douane et taxes dues en Tunisie."},
+{p:"IV", q:"Méthode super-déductive (art. 5.2 Accord OMC) ?", a:"Si rien n'est vendu en l'état, on part du prix après ouvraison/transformation (sur demande de l'importateur), en déduisant en plus la valeur ajoutée par cette transformation. Aucune réserve tunisienne sur cette option."},
+{p:"PIÈGE", q:"Pièges classiques de la méthode déductive ?", a:"Retenir le prix le plus élevé ou la première vente au lieu de la plus grande quantité agrégée ; oublier de déduire droits, taxes et frais internes ; retenir une vente à une personne liée."},
+{p:"IV", q:"Méthode 5 — base légale et composition ?", a:"Art. 28 du Code / Art. 6 de l'Accord OMC. Valeur calculée = (a) coût des matières et de fabrication + (b) bénéfices et frais généraux du pays d'exportation + (c) éléments CAF (art. 30§1-e)."},
+{p:"IV", q:"Pourquoi la méthode 5 est-elle rarement applicable ?", a:"Les données proviennent de la comptabilité du producteur étranger, que la douane tunisienne ne peut pas contraindre à communiquer."},
+{p:"IV", q:"Qui peut demander l'inversion des méthodes 4 et 5 ?", a:"L'importateur, à sa demande (art. 24 du Code / art. 4 de l'Accord OMC)."},
+{p:"IV", q:"Méthode 6 — base légale et principe ?", a:"Art. 29 du Code / Art. 7 de l'Accord OMC. Dernier recours : moyens raisonnables, données disponibles en Tunisie, après échec des méthodes 1 à 5."},
+{p:"IV", q:"Les 7 bases interdites à l'article 29 ?", a:"a) prix de vente en Tunisie de marchandises produites en Tunisie ; b) système retenant la plus élevée de 2 valeurs ; c) prix marché intérieur du pays d'exportation ; d) coût de production hors valeurs calculées art.28 ; e) prix à l'export vers un pays tiers ; f) valeurs minimales ; g) valeurs arbitraires ou fictives."},
+{p:"PIÈGE", q:"Peut-on appliquer directement l'article 29 ?", a:"Non — il faut d'abord épuiser, dans l'ordre, les méthodes 1 à 5. La douane ne « fixe » jamais librement la valeur."},
+
+// ===== SYNTHÈSE / PIÈGES TRANSVERSAUX =====
+{p:"PIÈGE", q:"Déductive vs calculée — quelle différence de logique ?", a:"Déductive (méthode 4) : on DÉDUIT, on part du prix de revente, marges du pays d'IMPORTATION. Calculée (méthode 5) : on ADDITIONNE, on part du coût de production, marges du pays d'EXPORTATION."},
+{p:"SYNTHÈSE", q:"Tableau récapitulatif des 6 méthodes (Code tunisien / Accord OMC) ?", a:"1. Transactionnelle : art.23 / art.1. 2. Identiques : art.25 / art.2. 3. Similaires : art.26 / art.3. 4. Déductive : art.27 / art.5. 5. Calculée : art.28 / art.6. 6. Dernier recours : art.29 / art.7."},
+{p:"II", q:"Consignation, troc, prêt — quelle méthode s'applique ?", a:"Aucune vente n'a lieu → la méthode 1 est exclue d'emblée (Avis consultatif 1.1). On passe aux méthodes de substitution."},
+{p:"III", q:"Quand les redevances/droits de licence sont-ils ajoutés au prix ?", a:"Quand l'acheteur est tenu de les acquitter, directement ou indirectement, comme condition de la vente, et qu'ils ne sont pas déjà inclus dans le PEPP (art. 30)."},
+{p:"I", q:"Que définit l'article 22 du Code des douanes ?", a:"Les définitions clés : valeur en douane, marchandises produites/identiques/similaires, personnes liées (8 critères), commission d'achat."},
+{p:"I", q:"Que prévoit l'article 33 du Code des douanes ?", a:"La conversion monétaire : le taux de change appliqué est celui en vigueur à la date d'enregistrement de la déclaration en détail."},
+{p:"I", q:"Que prévoient les articles 34 et 35 du Code ?", a:"Art. 34 : obligation de fournir factures/documents ; confidentialité stricte des informations fournies. Art. 35 : la douane peut demander des justificatifs complémentaires en cas de doute raisonnable sur la valeur déclarée."},
+];
+
+const PARTIES = [
+  {key:"all", label:"Tout"},
+  {key:"I", label:"Partie I"},
+  {key:"II", label:"Partie II"},
+  {key:"III", label:"Partie III"},
+  {key:"IV", label:"Partie IV"},
+  {key:"PIÈGE", label:"Pièges"},
+  {key:"SYNTHÈSE", label:"Synthèse"},
+];
+
+let state = { filter:"all", deck:[], idx:0, flipped:false, mode:"cards", seen:new Set() };
+
+function buildDeck(){
+  state.deck = state.filter==="all" ? CARDS.slice() : CARDS.filter(c=>c.p===state.filter);
+  state.idx = 0; state.flipped = false;
+  renderCard(); renderList();
+}
+
+function tabLabel(p){
+  const m = {I:"Partie I", II:"Partie II", III:"Partie III", IV:"Partie IV", "PIÈGE":"Piège", "SYNTHÈSE":"Synthèse"};
+  return m[p] || p;
+}
+
+function renderTabs(){
+  const el = document.getElementById('tabs');
+  el.innerHTML = "";
+  PARTIES.forEach(p=>{
+    const b = document.createElement('button');
+    b.className = 'tab' + (state.filter===p.key ? ' active':'');
+    b.textContent = p.label;
+    b.onclick = ()=>{ state.filter = p.key; renderTabs(); buildDeck(); };
+    el.appendChild(b);
+  });
+}
+
+function renderCard(){
+  const total = state.deck.length;
+  document.getElementById('progressLabel').textContent = total? (state.idx+1)+" / "+total : "0 / 0";
+  document.getElementById('progressFill').style.width = total? ((state.idx+1)/total*100)+"%":"0%";
+  document.getElementById('scoreLabel').textContent = state.seen.size + " vues";
+  const card = document.getElementById('card');
+  card.classList.toggle('flipped', state.flipped);
+  if(!total){
+    document.getElementById('frontContent').textContent = "Aucune carte";
+    document.getElementById('backContent').textContent = "";
+    document.getElementById('tagFront').textContent = "—";
+    document.getElementById('tagBack').textContent = "—";
+    return;
+  }
+  const c = state.deck[state.idx];
+  document.getElementById('tagFront').textContent = tabLabel(c.p);
+  document.getElementById('tagBack').textContent = tabLabel(c.p);
+  document.getElementById('frontContent').textContent = c.q;
+  document.getElementById('backContent').textContent = c.a;
+}
+
+function renderList(){
+  const box = document.getElementById('listItems');
+  const search = (document.getElementById('searchInput').value||"").toLowerCase();
+  const items = state.deck.filter(c => !search || c.q.toLowerCase().includes(search) || c.a.toLowerCase().includes(search));
+  if(!items.length){ box.innerHTML = '<div class="empty">Aucun résultat</div>'; return; }
+  box.innerHTML = items.map(c => `
+    <div class="item">
+      <span class="tag">${tabLabel(c.p)}</span>
+      <div class="q">${c.q}</div>
+      <div class="a">${c.a}</div>
+    </div>`).join('');
+}
+
+document.getElementById('card').addEventListener('click', ()=>{
+  state.flipped = !state.flipped;
+  if(state.deck[state.idx]) state.seen.add(state.deck[state.idx].q);
+  renderCard();
+});
+document.getElementById('nextBtn').onclick = ()=>{
+  if(!state.deck.length) return;
+  state.idx = (state.idx+1) % state.deck.length; state.flipped=false; renderCard();
+};
+document.getElementById('prevBtn').onclick = ()=>{
+  if(!state.deck.length) return;
+  state.idx = (state.idx-1+state.deck.length) % state.deck.length; state.flipped=false; renderCard();
+};
+document.getElementById('shuffleBtn').onclick = ()=>{
+  for(let i=state.deck.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [state.deck[i],state.deck[j]]=[state.deck[j],state.deck[i]]; }
+  state.idx=0; state.flipped=false; renderCard();
+};
+document.getElementById('searchInput').addEventListener('input', renderList);
+
+document.getElementById('modeCards').onclick = ()=>{
+  state.mode='cards';
+  document.getElementById('modeCards').classList.add('active');
+  document.getElementById('modeList').classList.remove('active');
+  document.getElementById('cardsView').style.display='block';
+  document.getElementById('listView').style.display='none';
+};
+document.getElementById('modeList').onclick = ()=>{
+  state.mode='list';
+  document.getElementById('modeList').classList.add('active');
+  document.getElementById('modeCards').classList.remove('active');
+  document.getElementById('cardsView').style.display='none';
+  document.getElementById('listView').style.display='block';
+  renderList();
+};
+
+const themeBtn = document.getElementById('themeBtn');
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  themeBtn.textContent = t==='dark' ? '☀️' : '🌙';
+}
+let currentTheme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+applyTheme(currentTheme);
+themeBtn.onclick = ()=>{ currentTheme = currentTheme==='dark' ? 'light' : 'dark'; applyTheme(currentTheme); };
+
+renderTabs();
+buildDeck();
+</script>
+</body>
+</html>
