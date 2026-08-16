@@ -19,7 +19,7 @@ def recherche():
         if mot.lower() in p["designation"].lower():
             resultats.append(p)
 
-    return f"{len(resultats)} résultat(s) trouvé(s) pour '{mot}'"
+    return render_template("resultats.html", mot=mot, resultats=resultats)
 
 if __name__ == "__main__":
     app.run(debug=True)
