@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import json
 
 with open("data.json", encoding="utf-8") as f:
@@ -9,6 +9,10 @@ app = Flask(__name__)
 @app.route("/")
 def accueil():
     return render_template("index.html")
+
+@app.route("/recherche")
+def recherche():
+    mot = request.args.get("q", "")
 
 if __name__ == "__main__":
     app.run(debug=True)
