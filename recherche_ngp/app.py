@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 import json
 
 with open("data.json", encoding="utf-8") as f:
@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def accueil():
-    return "Bonjour !"
+    return render_template("index.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
