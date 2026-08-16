@@ -14,5 +14,12 @@ def accueil():
 def recherche():
     mot = request.args.get("q", "")
 
+    resultats = []
+    for p in donnees["produits"]:
+        if mot.lower() in p["designation"].lower():
+            resultats.append(p)
+
+    return f"{len(resultats)} résultat(s) trouvé(s) pour '{mot}'"
+
 if __name__ == "__main__":
     app.run(debug=True)
