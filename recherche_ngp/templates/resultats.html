@@ -8,5 +8,10 @@
     <p><a href="/">← Nouvelle recherche</a></p>
     <h1>Résultats pour "{{ mot }}"</h1>
     <p>{{ nombre }} résultat(s) trouvé(s)</p>
+    <ul>
+    {% for p in resultats %}
+        <li><strong>{{ p.ngp }}</strong> — {{ p.designation }} (DD {{ p.dd }}%, TVA {{ p.tva }}%)</li>
+    {% endfor %}
+    </ul>
 </body>
 </html>
