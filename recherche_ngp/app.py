@@ -13,10 +13,15 @@ def accueil():
 @app.route("/recherche")
 def recherche():
     mot = request.args.get("q", "")
+    mode_code = mot.isdigit() and mot != ""
 
     resultats = []
     for p in donnees["produits"]:
-        if mot.lower() in p["designation"].lower():
+        if mode_code:
+            trouve = p["ngp"].startswith(mot)
+        else:
+            trouve = mot.lower() in p["designation"].lower()
+        if trouve:
             resultats.append(p)
 
     nombre = len(resultats)
