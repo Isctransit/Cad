@@ -1,5 +1,14 @@
 from flask import Flask, render_template, request
 import json
+import unicodedata
+
+def normaliser(texte):
+    texte = unicodedata.normalize("NFD", texte)
+    resultat = ""
+    for c in texte:
+        if not unicodedata.combining(c):
+            resultat += c
+    return resultat.lower()
 
 with open("data.json", encoding="utf-8") as f:
     donnees = json.load(f)
@@ -20,7 +29,7 @@ def recherche():
         if mode_code:
             trouve = p["ngp"].startswith(mot)
         else:
-            trouve = mot.lower() in p["designation"].lower()
+            trouve = normaliser(mot) in normaliser(p["designation"])
         if trouve:
             resultats.append(p)
 
