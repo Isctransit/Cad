@@ -24,12 +24,21 @@ def recherche():
     mot = request.args.get("q", "")
     mode_code = mot.isdigit() and mot != ""
 
+    termes = []
+    for morceau in mot.split(","):
+        morceau = morceau.strip()
+        if morceau:
+            termes.append(morceau)
+
     resultats = []
     for p in donnees["produits"]:
         if mode_code:
             trouve = p["ngp"].startswith(mot)
         else:
-            trouve = normaliser(mot) in normaliser(p["designation"])
+            trouve = True
+            for t in termes:
+                if normaliser(t) not in normaliser(p["designation"]):
+                    trouve = False
         if trouve:
             resultats.append(p)
 
