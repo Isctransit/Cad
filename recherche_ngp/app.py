@@ -22,7 +22,14 @@ def accueil():
 @app.route("/recherche")
 def recherche():
     mot = request.args.get("q", "")
-    mode_code = mot.isdigit() and mot != ""
+    mode = request.args.get("mode", "")
+
+    if mode == "code":
+        mode_code = True
+    elif mode == "mot":
+        mode_code = False
+    else:
+        mode_code = mot.isdigit() and mot != ""
 
     termes = []
     for morceau in mot.split(","):

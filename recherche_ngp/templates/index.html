@@ -8,6 +8,8 @@
 <body>
     <h1>Recherche NGP</h1>
     <form method="get" action="/recherche">
+        <label><input type="radio" name="mode" value="mot" checked> Par mot-clé</label>
+        <label><input type="radio" name="mode" value="code"> Par code</label>
         <input type="text" name="q" placeholder="Rechercher un produit...">
         <button type="submit">Chercher</button>
     </form>
