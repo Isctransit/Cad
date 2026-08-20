@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request
 import json
+import os
 import unicodedata
+
+DOSSIER = os.path.dirname(os.path.abspath(__file__))
 
 def normaliser(texte):
     texte = unicodedata.normalize("NFD", texte)
@@ -10,7 +13,7 @@ def normaliser(texte):
             resultat += c
     return resultat.lower()
 
-with open("data.json", encoding="utf-8") as f:
+with open(os.path.join(DOSSIER, "data.json"), encoding="utf-8") as f:
     donnees = json.load(f)
 
 app = Flask(__name__)
