@@ -136,6 +136,24 @@
     });
   }
 
+  /* Galerie : masque les photos absentes, et la section si aucune photo */
+  const galSection = document.querySelector("#galerie");
+  if (galSection) {
+    const items = galSection.querySelectorAll(".gallery-item");
+    function checkGallery() {
+      const visible = galSection.querySelectorAll(".gallery-item:not([hidden])").length;
+      if (!visible) galSection.hidden = true;
+    }
+    let pending = items.length;
+    items.forEach((item) => {
+      const img = item.querySelector("img");
+      const fail = () => { item.hidden = true; if (--pending <= 0) checkGallery(); };
+      const ok = () => { if (--pending <= 0) checkGallery(); };
+      if (img.complete) { img.naturalWidth ? ok() : fail(); }
+      else { img.addEventListener("load", ok); img.addEventListener("error", fail); }
+    });
+  }
+
   /* Footer year */
   const yearEl = document.querySelector("#year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();

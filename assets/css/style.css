@@ -23,7 +23,11 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+  scroll-padding-top: 100px;
+}
 
 body {
   margin: 0;
@@ -591,34 +595,6 @@ nav.main-nav a:hover::after, nav.main-nav a.active::after { width: 100%; }
 }
 .stat-block span { color: var(--text-2); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; }
 
-/* Testimonials */
-.testi-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 24px;
-}
-.testi-card {
-  background: var(--bg-2);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 30px 26px;
-}
-.testi-stars { display: flex; gap: 4px; margin-bottom: 18px; color: var(--gold); }
-.testi-stars svg { width: 16px; height: 16px; }
-.testi-card p.quote { color: var(--text-1); font-size: 0.98rem; font-style: italic; }
-.testi-person { display: flex; align-items: center; gap: 12px; margin-top: 20px; }
-.testi-avatar {
-  width: 44px; height: 44px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--bg-3), var(--bg-2));
-  border: 1px solid var(--line-strong);
-  display: flex; align-items: center; justify-content: center;
-  font-family: "Playfair Display", serif;
-  color: var(--gold);
-  font-weight: 700;
-}
-.testi-person b { display: block; color: var(--text-0); font-size: 0.92rem; }
-.testi-person span { font-size: 0.8rem; color: var(--text-2); }
 
 /* Quote / Devis CTA band */
 .quote-band {
@@ -830,3 +806,35 @@ footer {
   .logo { font-size: 1.2rem; gap: 12px; }
   .logo small { font-size: 0.6rem; }
 }
+
+/* Galerie navires & conteneurs */
+.gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.gallery-item { margin: 0; position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: var(--bg-2); aspect-ratio: 4 / 3; }
+.gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s var(--ease); }
+.gallery-item:hover img { transform: scale(1.05); }
+.gallery-item figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 28px 16px 12px; font-size: 0.85rem; font-weight: 600; color: var(--text-0); background: linear-gradient(transparent, rgba(5, 7, 13, 0.85)); }
+@media (max-width: 900px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+
+/* Navigation page par page */
+main > section {
+  min-height: calc(100vh - 100px);
+  min-height: calc(100dvh - 100px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+main > section > .container { width: 100%; }
+main > section.section { padding-top: 56px; padding-bottom: 56px; }
+footer { scroll-snap-align: end; }
+@media (max-width: 640px) {
+  html { scroll-padding-top: 84px; }
+  main > section { scroll-snap-stop: normal; min-height: calc(100vh - 84px); min-height: calc(100dvh - 84px); }
+  main > section.section { padding-top: 40px; padding-bottom: 40px; }
+  .gallery-grid { gap: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+[hidden] { display: none !important; }
