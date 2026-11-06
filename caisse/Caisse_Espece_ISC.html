@@ -95,7 +95,7 @@ footer{text-align:center;color:var(--mu);font-size:11px;padding:10px}
 <div id="pw2w" style="display:none"><label>Confirmer le code</label><input id="pw2" type="password" autocomplete="new-password"></div>
 <button class="b gold full" id="lkB">Ouvrir la caisse</button><div class="err" id="lkE"></div></form></div></div>
 <header><div class="logo">ISC</div><div><h1>Caisse Espèce</h1><div class="sub" id="agentSub">Version mobile autonome</div></div>
-<div class="r noprint"><button class="ib" onclick="quitter()" title="Quitter / changer d'agent">🔒</button><button class="ib" onclick="go('charger')" title="Charger des fichiers Excel">📥</button><button class="ib" onclick="go('outils')" title="Outils">⚙️</button></div></header>
+<div class="r noprint"><button class="ib" style="background:#b3261e" onclick="go('cloture')" title="Clôture de journée">🏁</button><button class="ib" onclick="quitter()" title="Quitter / changer d'agent">🔒</button><button class="ib" onclick="go('charger')" title="Charger des fichiers Excel">📥</button><button class="ib" onclick="go('outils')" title="Outils">⚙️</button></div></header>
 <main id="app"></main>
 <div class="toast" id="toast"></div>
 <div id="modal"><div class="mb" id="mb"></div></div>
@@ -114,7 +114,7 @@ footer{text-align:center;color:var(--mu);font-size:11px;padding:10px}
    (IndexedDB). Échanges : Excel état caisse (compatible V36) et
    sauvegarde complète JSON.  Conçu par Mokhtar Reguigui — ISC/STT
    ════════════════════════════════════════════════════════════════════ */
-const VERSION="Mobile 2.0";
+const VERSION="Mobile 2.1";
 const SUPP_REP=12, SUPP_C10=10;
 const JOURS=["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
 const DEFAULT_SERVICES=[["DDM", "Déclaration détaillée des marchandises", 9], ["TCE AP", "Titre de commerce extérieur avec paiement (code 33)", 14], ["TCE SP", "Titre de commerce extérieur sans paiement (code 93)", 14], ["FDE", "Facture définitive à l'exportation (code 22)", 14], ["AT", "Document d'admission temporaire — régime suspensif (code 39)", 14], ["VISA", "Visa", 15], ["BS", "Bon de sortie", 7], ["DCT", "Contrôle technique", 14], ["INOR", "INORPI — certificat de conformité aux normes", 15], ["ONA", "Contrôle de l'Office national de l'artisanat", 15], ["DAE", "Déclaration simplifiée d'autorisation d'exportation", 8], ["ASS", "Assurance — prix variable selon le total facture", 0], ["PRIV", "Privilège", 10]];
@@ -143,6 +143,9 @@ async function nouvelAgent(nom,role,code){const salt=crypto.getRandomValues(new 
 async function ouvrirAgent(a,code){const kek=await deriveKey(code,ub64(a.salt));return decBytes(kek,a.cle)}
 async function coffre(){return{v:2,alg:"AES-256-GCM / PBKDF2-SHA256 / DEK par agent",iter:ITER,agents:AGENTS,data:await seal(S,DEK)}}
 const estGerant=()=>AG&&AG.role==="gerant";
+const EMAIL_GERANT="mokhtar.reguigui@gmail.com";
+const codeCtl=(num,svcId)=>(String(num).trim()+((svc(svcId)||{}).code||"").replace(/ /g,"")).toLowerCase();
+const estClos=j=>!!(S&&S.meta.clotures&&S.meta.clotures[j]);
 function normalise(){S.meta=S.meta||{};if(S.services)DEFAULT_SERVICES.forEach(([c,l,p])=>{const s=S.services.find(x=>x.code===c);if(s)s.lib=l;else S.services.push({id:(S.meta.seq=(S.meta.seq||1)+1)-1,code:c,lib:l,tarif:p,actif:1})});if(S.services){const ap=S.services.find(x=>x.code==="TCE AP");if(ap)S.services.filter(x=>["TCE SP","FDE","AT"].includes(x.code)&&!+x.tarif).forEach(x=>x.tarif=ap.tarif)}if(S.services){const o=S.services.find(x=>x.code==="TCE"),n=S.services.find(x=>x.code==="TCE AP");if(o&&n){(S.ops||[]).forEach(op=>{if(op.svcId===o.id)op.svcId=n.id});(S.tarifs||[]).forEach(tf=>{if(tf.svcId===o.id&&!S.tarifs.some(x=>x.decId===tf.decId&&x.svcId===n.id))tf.svcId=n.id});S.tarifs=(S.tarifs||[]).filter(tf=>tf.svcId!==o.id);if(o.tarif)n.tarif=o.tarif;S.services=S.services.filter(x=>x!==o);(S.audit=S.audit||[]).unshift({quand:nowIso(),action:"FUSION_SERVICE",detail:"TCE → TCE AP"})}}["declarants","clients","services","tarifs","reps","ops","feries","anomalies","audit"].forEach(k=>S[k]=S[k]||[]);
   if(!S.meta.seq)S.meta.seq=Math.max(1,...S.ops.map(o=>o.id+1),...S.declarants.map(d=>d.id+1),...S.clients.map(c=>c.id+1),...S.services.map(s=>s.id+1));delete S.meta.pin;S.tarifs.forEach(x=>{if(x.sr===undefined)x.sr=null;if(x.sp===undefined)x.sp=null})}
 let saveTimer=null,saving=Promise.resolve();
@@ -232,6 +235,7 @@ V.accueil=()=>{
   const parSvc={};opsM.forEach(o=>{const c=(svc(o.svcId)||{}).code||"?";parSvc[c]=parSvc[c]||{nb:0,t:0};parSvc[c].nb++;parSvc[c].t+=+o.paye||0});
   return `<h2>🏠 Tableau de bord</h2>
   ${!S.ops.length&&!S.declarants.length?`<div class="card" style="border-color:var(--gold)"><b>Bienvenue 👋</b><p class="mu">Commencez par ajouter vos déclarants (☰ Plus → Déclarants) ou importez votre base clients / un état caisse Excel exporté du PC (⚙️ Outils).</p></div>`:""}
+  ${estClos(t)?`<div class="card" style="background:var(--kobg);color:var(--ko);font-weight:700" onclick="go('cloture')">🔒 Journée du jour clôturée ›</div>`:`<div class="card" style="color:var(--navy);font-weight:700" onclick="go('cloture')">🏁 En fin de journée : Clôture de journée ›</div>`}
   ${att?`<div class="card" style="background:var(--kobg);color:var(--ko);font-weight:700" onclick="go('declarants')">⚠ ${att} déclarant(s) en attente de validation ›</div>`:""}
   ${an?`<div class="card" style="background:var(--lb);color:var(--navy);font-weight:700" onclick="go('anomalies')">🔎 ${an} tentative(s) de double encaissement ›</div>`:""}
   <div class="stats"><div class="stat o"><div class="l">Caisse du ${frDate(last)}</div><div class="v">${f3(jour)}</div></div>
@@ -245,7 +249,9 @@ V.accueil=()=>{
    A date/heure système · B date saisie · C date encaissement · D N° dossier (5 chiffres) · E type · F client
    · G MF (auto) · H déclarant (auto) · I prix total · J répertoire · K prise en charge · L payé
    · M reste à payer · N non payé · O observation · P agent (automatique) */
-V.saisie=()=>`<h2>＋ Saisie caisse</h2><p class="mu" style="margin-top:-6px">Agent : <b style="color:var(--gold)">${esc(AG.nom)}</b> (colonne P, automatique)</p>
+V.saisie=()=>`<h2>＋ Saisie caisse</h2><p class="mu" style="margin-top:-6px">Agent : <b style="color:var(--gold)">${esc(AG.nom)}</b> (colonne Q, automatique)</p>
+${estClos(today())?`<div class="card" style="background:var(--kobg);color:var(--ko);font-weight:700">🔒 Journée du jour clôturée — saisie bloquée${estGerant()?" (gérant : autorisée)":""}.</div>`:""}
+<div class="card mu" style="font-size:12.5px">🔑 <b>Code de contrôle</b> = N° dossier + type (ex. <b>55234ddm</b>, <b>55234tceap</b>). Un code déjà saisi : seulement un <b>paiement à la date du jour</b> s'il reste dû ; rien s'il est soldé.</div>
 <div class="step" id="s1"><div class="st"><b>1</b> — Dossier <span class="mu">B · C · D · E</span></div>
  <div class="row"><div><label>B · Date saisie</label><input id="dop" type="date" value="${today()}"></div><div><label>C · Encaissement</label><input id="dreg" type="date" value="${today()}"></div></div>
  <div class="row"><div><label>D · N° dossier (5 chiffres)</label><input id="num" inputmode="numeric" maxlength="5" placeholder="25333" autocomplete="off"></div>
@@ -303,10 +309,10 @@ async function go1(){const n=$("num").value.trim();if(!/^\d{5}$/.test(n)){toast(
     $("svc").value=s.id;$("svcIn").value=s.code+" — "+s.lib;$("svcIn").classList.add("ok")}
   SA.H=dossierInfo($("svc").value,n);const h=$("hist");
   if(SA.H){const H=SA.H,solde=H.reste<=.0005;h.style.display="block";h.style.background=solde?"var(--kobg)":"var(--wabg)";h.style.color=solde?"var(--ko)":"var(--wa)";
-    h.textContent=(solde?"⛔ Dossier déjà payé intégralement":"⚠ Paiement complémentaire")+` — prix ${f3(H.du)}, payé ${f3(H.paye)}, reste ${f3(H.reste)} (${H.cli}, ${H.dates.join(", ")})`;
+    const cc=codeCtl(n,$("svc").value);h.textContent=(solde?`⛔ Dossier déjà saisi — code ${cc} soldé : aucune saisie ni modification possible`:`⚠ Dossier déjà saisi — code ${cc} : ajout d'un paiement uniquement, à la date du jour`)+` (prix ${f3(H.du)}, payé ${f3(H.paye)}, reste ${f3(H.reste)} — ${H.cli}, ${H.dates.join(", ")})`;
     if(solde){SA.H=null;return}
     const c=findCliMf(H.mf);if(c)setCli(c);$("prix").value=(+H.du).toFixed(3);$("rep").value=H.rep||"";$("pec").value=H.pec?H.rep:"";
-    ["cli","prix","rep","pec"].forEach(id=>{$(id).readOnly=true;$(id).classList.add("ro")});unlockS("s2");unlockS("s3");majPx();unlockS("s4");$("paye").value=(+H.reste).toFixed(3);calc();sauverBrouillon();return $("paye").focus()}
+    $("dreg").value=today();["cli","prix","rep","pec","dreg"].forEach(id=>{$(id).readOnly=true;$(id).classList.add("ro")});unlockS("s2");unlockS("s3");majPx();unlockS("s4");$("paye").value=(+H.reste).toFixed(3);calc();sauverBrouillon();return $("paye").focus()}
   h.style.display="none";unlockS("s2");sauverBrouillon();$("cli").focus()}
 async function go2(){
   if(!SA.mf){const saisi=$("cli").value.trim();if(!saisi){toast("Client obligatoire",false);return bad($("cli"))}
@@ -342,11 +348,17 @@ function calc(){const prix=+$("prix").value||0,fac=$("fac").checked,p=fac?0:(+$(
 function go4(){const c=calc();if(!$("fac").checked&&$("paye").value==="")return bad($("paye"));if(c.p>c.prix-c.deja+.001){toast("Le montant payé dépasse le reste dû",false);return bad($("paye"))}
   const it=[["B · Date saisie",frDate($("dop").value)],["C · Encaissement",frDate($("dreg").value)],["D · Dossier",$("num").value],["E · Type",$("svcIn").value],["F · Client",$("cli").value],["G · MF",$("mfv").value],["H · Déclarant",$("decv").value],["I · Prix total",f3(c.prix)+" DT"]];
   if(isDDM())it.push(["J · Répertoire",$("rep").value||"—"],["K · Prise en charge",$("pec").value||"—"]);
-  it.push(["L · Payé",$("fac").checked?"0,000 (FAC)":f3(c.p)+" DT"],[$("fac").checked?"N · Non payé":"M · Reste à payer",f3(c.reste)+" DT"],["P · Agent",AG.nom]);
+  it.push(["P · Code contrôle",codeCtl($("num").value,$("svc").value)]);
+  it.push(["L · Payé",$("fac").checked?"0,000 (FAC)":f3(c.p)+" DT"],[$("fac").checked?"N · Non payé":"M · Reste à payer",f3(c.reste)+" DT"],["Q · Agent",AG.nom]);
   $("rv").innerHTML=`<div class="list">${it.map(([k,v])=>`<div class="it"><div class="s">${k}</div><div class="t" style="text-align:right">${esc(v)}</div></div>`).join("")}</div>`;
   unlockS("s5");sauverBrouillon();$("s5").scrollIntoView({behavior:"smooth",block:"center"})}
 function valider(){const numero=$("num").value.trim(),svcId=+$("svc").value,c=findCliMf(SA.mf);if(!c)return toast("Client obligatoire",false);
-  const d=dec(c.decId),fac=$("fac").checked,paye=fac?0:(+$("paye").value||0),date=$("dreg").value,code=(svc(svcId)||{}).code;
+  const d=dec(c.decId),fac=$("fac").checked,paye=fac?0:(+$("paye").value||0),code=(svc(svcId)||{}).code,cc=codeCtl(numero,svcId);
+  let date=$("dreg").value;
+  if(SA.H){date=today();if(paye<=0)return toast(`Dossier déjà saisi (${cc}) : seul un paiement peut être ajouté`,false)}
+  {const ex=dossierOps(svcId,numero);if(ex.length){const du=Math.max(...ex.map(o=>+o.total)),dj=ex.reduce((a,o)=>a+(+o.paye||0),0);
+    if(dj>=du-.0005){anomalie("SAISIE",cc,date,d.nom,code,numero,paye,"Dossier déjà saisi et soldé");save();return toast(`⛔ Dossier déjà saisi — ${cc} soldé`,false)}}}
+  if(estClos(date)&&!estGerant())return toast(`⛔ Journée du ${frDate(date)} clôturée : saisie impossible`,false);
   let prix=+$("prix").value,rep="",pec=0,tarif=getTarif(d.id,svcId),sr=0,sp=0;
   if(SA.H){const f=dossierOps(svcId,numero).sort((a,b)=>b.total-a.total)[0];prix=+f.total;rep=f.rep;pec=f.c10;tarif=f.tarif;sr=f.sRep;sp=f.sC10}
   else if(code==="DDM"){const P=tarifsDDM(d.id,svcId);tarif=P.t;if(Math.abs(prix-(P.t+P.r))<.001){rep=addRep($("rep").value);sr=P.r}else if(Math.abs(prix-(P.t+P.r+P.p))<.001){rep=addRep($("rep").value);pec=1;sr=P.r;sp=P.p}}
@@ -355,9 +367,9 @@ function valider(){const numero=$("num").value.trim(),svcId=+$("svc").value,c=fi
   const reste=Math.max(prix-paye,0);
   S.ops.push({id:nid(),num:numero,decId:d.id,clientId:c.id,mf:c.mf,svcId,rep:rep||"",c10:pec,dateOp:$("dop").value,date,tarif,sRep:sr,sC10:sp,total:prix,paye,reste,
     statut:fac?"FAC":(reste<=.0005?"PAYE":"RESTE_A_PAYER"),obs:$("obs").value.trim(),created:nowIso(),agent:AG.nom});
-  recalc(svcId,numero);delete S.meta.brouillon;save();toast(`✅ ${k.cle} enregistré — ${f3(paye)} DT. ${k.message}`);go("saisie")}
+  recalc(svcId,numero);delete S.meta.brouillon;save();toast(`✅ ${cc} enregistré — ${f3(paye)} DT. ${SA.H?"Paiement ajouté au dossier déjà saisi.":"Nouveau dossier."}`);go("saisie")}
 function opsList(ops){return ops.map(o=>{const s=svc(o.svcId)||{},d=dec(o.decId)||{},[r,c]=repAff(o);
-  return `<div class="it" onclick="go('operation',{id:${o.id}})"><div class="t">${esc(s.code)}${esc(o.num)} · ${esc(d.nom)}</div><div class="a">${f3(o.paye)}</div>
+  return `<div class="it" onclick="go('operation',{id:${o.id}})"><div class="t">${esc(codeCtl(o.num,o.svcId))} · ${esc(d.nom)}</div><div class="a">${f3(o.paye)}</div>
   <div class="s">${frDate(o.date)}${o.clientId&&cli(o.clientId)?" · "+esc(cli(o.clientId).rs):""}${r?" · Rép "+esc(r):""}${c?" · PEC "+esc(c):""}${o.reste>0?" · reste "+f3(o.reste):""}${o.agent?" · "+esc(o.agent):""}</div><div><span class="tag ${o.statut}">${o.statut==="RESTE_A_PAYER"?"RESTE":o.statut}</span></div></div>`}).join("")||`<p class="mu">Aucune opération.</p>`}
 function ac(inp,list,data,label,pick){let cur=[],idx=-1;
   const show=()=>{const q=inp.value.trim().toLowerCase();cur=(q?data.filter(d=>label(d).toLowerCase().includes(q)):data).slice(0,40);
@@ -396,9 +408,9 @@ V.journal=()=>{const dates=[...new Set(S.ops.map(o=>o.date))].sort().reverse();
   <div class="stats"><div class="stat o"><div class="l">Encaissé</div><div class="v">${f3(tot("paye"))}</div></div><div class="stat"><div class="l">Opérations</div><div class="v">${ops.length}</div></div>
   <div class="stat"><div class="l">Prix total</div><div class="v">${f3(tot("total"))}</div></div><div class="stat r"><div class="l">Reste</div><div class="v">${f3(tot("reste"))}</div></div></div>
   <div class="seg noprint"><button class="${VUE_J==="liste"?"on":""}" onclick="VUE_J='liste';render()">Liste</button><button class="${VUE_J==="table"?"on":""}" onclick="VUE_J='table';render()">Tableau</button></div>
-  ${VUE_J==="liste"?`<div class="list">${opsList(ops)}</div>`:`<div class="tw"><table><thead><tr><th>A · Système</th><th>B · Saisie</th><th>C · Encaiss.</th><th>D · Dossier</th><th>E</th><th>F · Client</th><th>G · MF</th><th>H · Déclarant</th><th class="n">I · Prix</th><th>J · Rép.</th><th>K · PEC</th><th class="n">L · Payé</th><th class="n">M · Reste</th><th class="n">N · Non payé</th><th>O · Obs.</th><th>P · Agent</th></tr></thead><tbody>
-  ${ops.map(o=>{const[r,c]=repAff(o),fac=o.statut==="FAC"&&!o.paye;return `<tr onclick="go('operation',{id:${o.id}})"><td>${esc((o.created||"").replace("T"," ").slice(5,16))}</td><td>${frDate(o.dateOp||o.date)}</td><td>${frDate(o.date)}</td><td><b>${esc(o.num)}</b></td><td>${esc((svc(o.svcId)||{}).code)}</td><td>${esc((cli(o.clientId)||{}).rs||"")}</td><td>${esc(o.mf)}</td><td>${esc((dec(o.decId)||{}).nom)}</td><td class="n">${f3(o.total)}</td><td>${esc(r)}</td><td>${esc(c)}</td><td class="n">${fac?'<span class="tag FAC">FAC</span>':f3(o.paye)}</td><td class="n">${o.paye&&o.reste?f3(o.reste):""}</td><td class="n">${!o.paye&&o.reste?`<b style="color:var(--ko)">${f3(o.reste)}</b>`:""}</td><td>${esc(o.obs||"")}</td><td>${esc(o.agent||"")}</td></tr>`}).join("")}</tbody>
-  <tfoot><tr><td colspan="8">TOTAL</td><td class="n">${f3(tot("total"))}</td><td></td><td></td><td class="n">${f3(tot("paye"))}</td><td class="n">${f3(ops.filter(o=>o.paye).reduce((a,o)=>a+(+o.reste||0),0))}</td><td class="n">${f3(ops.filter(o=>!o.paye).reduce((a,o)=>a+(+o.reste||0),0))}</td><td colspan="2"></td></tr></tfoot></table></div>`}`};
+  ${VUE_J==="liste"?`<div class="list">${opsList(ops)}</div>`:`<div class="tw"><table><thead><tr><th>A · Système</th><th>B · Saisie</th><th>C · Encaiss.</th><th>D · Dossier</th><th>E</th><th>F · Client</th><th>G · MF</th><th>H · Déclarant</th><th class="n">I · Prix</th><th>J · Rép.</th><th>K · PEC</th><th class="n">L · Payé</th><th class="n">M · Reste</th><th class="n">N · Non payé</th><th>O · Obs.</th><th>P · Code</th><th>Q · Agent</th></tr></thead><tbody>
+  ${ops.map(o=>{const[r,c]=repAff(o),fac=o.statut==="FAC"&&!o.paye;return `<tr onclick="go('operation',{id:${o.id}})"><td>${esc((o.created||"").replace("T"," ").slice(5,16))}</td><td>${frDate(o.dateOp||o.date)}</td><td>${frDate(o.date)}</td><td><b>${esc(o.num)}</b></td><td>${esc((svc(o.svcId)||{}).code)}</td><td>${esc((cli(o.clientId)||{}).rs||"")}</td><td>${esc(o.mf)}</td><td>${esc((dec(o.decId)||{}).nom)}</td><td class="n">${f3(o.total)}</td><td>${esc(r)}</td><td>${esc(c)}</td><td class="n">${fac?'<span class="tag FAC">FAC</span>':f3(o.paye)}</td><td class="n">${o.paye&&o.reste?f3(o.reste):""}</td><td class="n">${!o.paye&&o.reste?`<b style="color:var(--ko)">${f3(o.reste)}</b>`:""}</td><td>${esc(o.obs||"")}</td><td><b>${esc(codeCtl(o.num,o.svcId))}</b></td><td>${esc(o.agent||"")}</td></tr>`}).join("")}</tbody>
+  <tfoot><tr><td colspan="8">TOTAL</td><td class="n">${f3(tot("total"))}</td><td></td><td></td><td class="n">${f3(tot("paye"))}</td><td class="n">${f3(ops.filter(o=>o.paye).reduce((a,o)=>a+(+o.reste||0),0))}</td><td class="n">${f3(ops.filter(o=>!o.paye).reduce((a,o)=>a+(+o.reste||0),0))}</td><td colspan="3"></td></tr></tfoot></table></div>`}`};
 let VUE_J="liste",JOUR_OPS=[],JOUR_LBL="";
 
 /* ───────────── OPÉRATION (correction / suppression) ───────────── */
@@ -410,11 +422,13 @@ V.operation=()=>{const o=S.ops.find(x=>x.id==ARGS.id);if(!o)return`<p>Opération
   <label>Observation</label><input id="e_obs" value="${esc(o.obs)}"><label>Motif de la correction (obligatoire)</label><input id="e_motif">
   <button class="b ok full" onclick="corriger(${o.id})">Enregistrer la correction</button><button class="b ko full" onclick="supprimer(${o.id})">🗑 Supprimer l'opération</button><button class="b lite full" onclick="history.length;go('journal',{date:'${o.date}'})">Retour</button></div>
   <h3>Historique du dossier</h3><div class="list">${opsList(hist)}</div>`};
-function corriger(id){const o=S.ops.find(x=>x.id==id),motif=$("e_motif").value.trim();if(!motif)return bad($("e_motif"));
+function verrouOp(o){if(estGerant())return null;if(estClos(o.date))return `Journée du ${frDate(o.date)} clôturée : modification réservée au gérant`;
+  const ex=dossierOps(o.svcId,o.num),du=Math.max(...ex.map(x=>+x.total)),dj=ex.reduce((a,x)=>a+(+x.paye||0),0);return dj>=du-.0005?`Dossier ${codeCtl(o.num,o.svcId)} soldé : modification impossible (réservée au gérant)`:null}
+function corriger(id){const o=S.ops.find(x=>x.id==id),motif=$("e_motif").value.trim();{const v=verrouOp(o);if(v)return toast("⛔ "+v,false)}if(!motif)return bad($("e_motif"));
   const paye=+$("e_paye").value||0,total=+$("e_total").value||0,k=controle(o.num,o.svcId,total,paye,o.id);if(!k.ok)return toast("⛔ "+k.message,false);
   audit("CORRECTION",`${k.cle} du ${o.date} : payé ${o.paye}→${paye}, dû ${o.total}→${total}, date →${$("e_date").value}. Motif : ${motif}`);
   Object.assign(o,{paye,total,date:$("e_date").value||o.date,obs:$("e_obs").value.trim()});if(!(o.statut==="FAC"&&paye===0))o.statut="RESTE_A_PAYER";recalc(o.svcId,o.num);save();toast("Opération corrigée");go("journal",{date:o.date})}
-function supprimer(id){const o=S.ops.find(x=>x.id==id),motif=$("e_motif").value.trim();if(!motif){toast("Indiquez le motif de suppression",false);return bad($("e_motif"))}
+function supprimer(id){const o=S.ops.find(x=>x.id==id),motif=$("e_motif").value.trim();{const v=verrouOp(o);if(v)return toast("⛔ "+v,false)}if(!motif){toast("Indiquez le motif de suppression",false);return bad($("e_motif"))}
   if(!confirm("Supprimer définitivement cette opération ?"))return;audit("SUPPRESSION",`${cle(o.svcId,o.num)} du ${o.date}, payé ${o.paye}. Motif : ${motif}`);
   S.ops=S.ops.filter(x=>x.id!=id);recalc(o.svcId,o.num);save();toast("Opération supprimée");go("journal",{date:o.date})}
 
@@ -438,6 +452,7 @@ V.recap=()=>{const mois=ARGS.mois||today().slice(0,7),[y,m]=mois.split("-").map(
 
 /* ───────────── PLUS (menu) ───────────── */
 V.plus=()=>`<h2>☰ Menu</h2><div class="menu">
+<a onclick="go('cloture')" style="border-color:var(--ko)"><span>🏁</span><b>Clôture de journée</b><i>${estClos(today())?"🔒 clôturée":"ouverte"} ›</i></a>
 <a onclick="go('recap')"><span>📅</span>Récapitulatif mensuel<i>›</i></a>
 <a onclick="go('declarants')"><span>👥</span>Déclarants<i>${S.declarants.filter(d=>!d.valide).length?"⚠ "+S.declarants.filter(d=>!d.valide).length:""} ›</i></a>
 <a onclick="go('clients')"><span>🏢</span>Clients<i>${S.clients.length} ›</i></a>
@@ -511,6 +526,28 @@ function toggleTarif(d,s){if(!estGerant())return toast("Réservé au gérant",fa
 function delTarif(d,s){if(!estGerant())return toast("Réservé au gérant",false);if(!confirm("Supprimer cette convention ? Le tarif de base s'appliquera."))return;const x=S.tarifs.find(t=>t.decId===d&&t.svcId===s);
   audit("CONVENTION_PRIX",`${dec(d).nom} / ${svc(s).code} (${f3(x.t)} DT) : supprimée`);S.tarifs=S.tarifs.filter(t=>t!==x);save();render()}
 
+/* ───────────── CLÔTURE DE JOURNÉE ───────────── */
+V.cloture=()=>{const j=ARGS.jour||today(),ops=S.ops.filter(o=>o.date===j).sort((a,b)=>a.id-b.id),cl=(S.meta.clotures||{})[j];
+  const p=ops.reduce((a,o)=>a+(+o.paye||0),0),r=ops.reduce((a,o)=>a+(+o.reste||0),0),pa={};ops.forEach(o=>{const k=o.agent||"?";pa[k]=(pa[k]||0)+(+o.paye||0)});
+  return `<h2>🏁 Clôture de journée</h2><div class="card"><label>Journée</label><input type="date" value="${j}" onchange="go('cloture',{jour:this.value})"></div>
+  <div class="stats"><div class="stat o"><div class="l">Encaissé</div><div class="v">${f3(p)}</div></div><div class="stat"><div class="l">Opérations</div><div class="v">${ops.length}</div></div>
+  <div class="stat r"><div class="l">Reste / non payé</div><div class="v">${f3(r)}</div></div><div class="stat g"><div class="l">Par agent</div><div style="font-size:12.5px">${Object.entries(pa).map(([a,v])=>`<b>${esc(a)}</b> ${f3(v)}`).join("<br>")||"—"}</div></div></div>
+  ${cl?`<div class="card" style="border:2px solid var(--ko)"><b style="color:var(--ko)">🔒 Journée clôturée</b><p class="mu">Le ${esc(cl.le.replace("T"," ").slice(0,16))} par <b>${esc(cl.par)}</b> — ${cl.nb} op., ${f3(cl.total)} DT. Plus aucune saisie ni modification (sauf gérant).</p>
+    <button class="b gold full" onclick="envoyerCloture('${j}')">📧 Envoyer l'état à ${EMAIL_GERANT}</button>${estGerant()?`<button class="b ko full" onclick="rouvrir('${j}')">🔓 Rouvrir (gérant)</button>`:""}</div>`
+  :`<div class="card" style="border:2px solid var(--gold)"><p>En clôturant : la journée est <b>verrouillée</b>, puis l'état Excel (colonnes A à Q) s'ouvre dans <b>Mail</b> pour l'envoi à <b>${EMAIL_GERANT}</b>.</p>
+    <button class="b ko full" style="font-size:17px;padding:14px" onclick="cloturer('${j}')">🔒 Clôturer la journée</button></div>`}
+  <h3>Opérations</h3><div class="list">${opsList(ops)}</div>
+  <h3>Journées clôturées</h3><div class="list">${Object.entries(S.meta.clotures||{}).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,60).map(([k,c])=>`<div class="it" onclick="go('cloture',{jour:'${k}'})"><div class="t">${frDate(k)}</div><div class="a">${f3(c.total)}</div><div class="s">${c.nb} op. · par ${esc(c.par)}</div></div>`).join("")||'<p class="mu">Aucune.</p>'}</div>`};
+async function cloturer(j){if(estClos(j))return;if(!confirm(`Clôturer la journée du ${frDate(j)} ?\n\nPlus aucune saisie ni modification ne sera possible (sauf gérant).\nL'état Excel sera préparé pour ${EMAIL_GERANT}.`))return;
+  const ops=S.ops.filter(o=>o.date===j);S.meta.clotures=S.meta.clotures||{};S.meta.clotures[j]={le:nowIso(),par:AG.nom,nb:ops.length,total:ops.reduce((a,o)=>a+(+o.paye||0),0)};
+  audit("CLOTURE",`Journée ${j} clôturée par ${AG.nom} — ${ops.length} op., ${f3(S.meta.clotures[j].total)} DT`);save();render();await envoyerCloture(j)}
+async function envoyerCloture(j){const ops=S.ops.filter(o=>o.date===j).sort((a,b)=>a.id-b.id);
+  try{await navigator.clipboard.writeText(EMAIL_GERANT)}catch(e){}
+  toast(`Choisissez « Mail » — adresse ${EMAIL_GERANT} copiée, collez-la dans « À »`);
+  if(!ops.length){location.href=`mailto:${EMAIL_GERANT}?subject=${encodeURIComponent("ISC Caisse — clôture du "+frDate(j))}&body=${encodeURIComponent("Journée clôturée sans opération.")}`;return}
+  await exportOps(ops,`etat_caisse_${j}_cloture`)}
+function rouvrir(j){if(!estGerant())return;const m=prompt("Motif de réouverture :");if(!m)return;delete S.meta.clotures[j];audit("REOUVERTURE",`Journée ${j} rouverte par ${AG.nom} — ${m}`);save();render()}
+
 /* ───────────── AGENTS (gérant) ───────────── */
 V.agents=()=>`<h2>👥 Agents et codes</h2><p class="mu">Chaque agent ouvre la caisse avec <b>son propre code</b> ; son nom est inscrit automatiquement (colonne P). En quittant son poste, il appuie sur 🔒 : l'agent suivant reprend exactement au même endroit.</p>
 <div class="list">${AGENTS.map(a=>`<div class="it"><div class="t">${esc(a.nom)} ${a.id===AG.id?'<span class="tag PAYE">connecté</span>':""}</div><div class="mu">${a.role==="gerant"?"gérant":"agent"}</div>
@@ -549,9 +586,9 @@ const TYPES=[
   aide:"Col. A = Code (DDM, TCE…) · col. B = Libellé · col. C = Prix de base en DT. Un code existant voit son prix mis à jour.",
   ex:[["DDM","Déclaration douanière",9],["TCE","Titre commerce extérieur",14]],
   data:()=>S.services.slice().sort((a,b)=>a.code.localeCompare(b.code)).map(s=>[s.code,s.lib,+s.tarif])},
- {k:"caisse",ic:"💰",titre:"État caisse",fichier:"etat_caisse.xlsx",cols:["date heure systeme","date saisie","date encaissement","N°dossier","type","client","MF","nom declarant","prix total","repertoire","prise en charge","paye","reste a payer","non paye","observation","agent"],
+ {k:"caisse",ic:"💰",titre:"État caisse",fichier:"etat_caisse.xlsx",cols:["date heure systeme","date saisie","date encaissement","N°dossier","type","client","MF","nom declarant","prix total","repertoire","prise en charge","paye","reste a payer","non paye","observation","code controle","agent"],
   aide:"Feuille de caisse colonnes A à P (même format que l'export du PC). Ré-importer le même fichier met à jour sans doublon.",
-  ex:[["",frDate(today()),frDate(today()),"25333","DDM","SOCIETE EXEMPLE","1234567A","ahmed",31,"12345","12345",31,"","","",""]],data:null}];
+  ex:[["",frDate(today()),frDate(today()),"25333","DDM","SOCIETE EXEMPLE","1234567A","ahmed",31,"12345","12345",31,"","","","25333ddm",""]],data:null}];
 V.charger=()=>`<h2>📥 Charger des fichiers Excel</h2>
 <p class="mu">Choisissez le type de fichier, puis le fichier .xlsx (depuis Fichiers, iCloud, WhatsApp…). « Modèle » donne un fichier vide au bon format.</p>
 ${TYPES.map(T=>`<div class="card"><h3 style="margin-top:0">${T.ic} ${T.titre}</h3><p class="mu">${T.aide}</p>
@@ -601,9 +638,9 @@ function importJSON(f){if(!f)return;const r=new FileReader();r.onload=async()=>{
 function exportJournal(){exportOps(JOUR_OPS,"etat_caisse_"+JOUR_LBL)}
 function exportPeriode(){const du=$("x_du").value,au=$("x_au").value;exportOps(S.ops.filter(o=>o.date>=du&&o.date<=au).sort((a,b)=>a.date.localeCompare(b.date)||a.id-b.id),`etat_caisse_${du}_${au}`)}
 function exportOps(ops,nom){if(!ops.length)return toast("Aucune opération à exporter",false);
-  const head=["date heure systeme","date saisie","date encaissement","N°dossier","type","client","MF","nom declarant","prix total","repertoire","prise en charge","paye","reste a payer","non paye","observation","agent"];
-  const rows=ops.map(o=>{const[r,c]=repAff(o),fac=o.statut==="FAC"&&!o.paye;return[(o.created||"").replace("T"," ").slice(0,16),frDate(o.dateOp||o.date),frDate(o.date),o.num,(svc(o.svcId)||{}).code||"",(cli(o.clientId)||{}).rs||"",o.mf||"",(dec(o.decId)||{}).nom||"",+o.total,r,c,fac?"FAC":+o.paye,o.paye&&o.reste?+o.reste:"",!o.paye&&o.reste?+o.reste:"",o.obs||"",o.agent||""]});
-  partager(xlsxBlob([head,...rows],16),nom+".xlsx")}
+  const head=["date heure systeme","date saisie","date encaissement","N°dossier","type","client","MF","nom declarant","prix total","repertoire","prise en charge","paye","reste a payer","non paye","observation","code controle","agent"];
+  const rows=ops.map(o=>{const[r,c]=repAff(o),fac=o.statut==="FAC"&&!o.paye;return[(o.created||"").replace("T"," ").slice(0,16),frDate(o.dateOp||o.date),frDate(o.date),o.num,(svc(o.svcId)||{}).code||"",(cli(o.clientId)||{}).rs||"",o.mf||"",(dec(o.decId)||{}).nom||"",+o.total,r,c,fac?"FAC":+o.paye,o.paye&&o.reste?+o.reste:"",!o.paye&&o.reste?+o.reste:"",o.obs||"",codeCtl(o.num,o.svcId),o.agent||""]});
+  return partager(xlsxBlob([head,...rows],17),nom+".xlsx")}
 const crcT=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c}return t})();
 const crc32=b=>{let c=~0;for(let i=0;i<b.length;i++)c=crcT[(c^b[i])&255]^(c>>>8);return(~c)>>>0};
 function zipStore(files){const enc=new TextEncoder(),parts=[],cd=[];let off=0;
@@ -617,7 +654,7 @@ function zipStore(files){const enc=new TextEncoder(),parts=[],cd=[];let off=0;
 function xlsxBlob(rows,ncol){const x=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])).replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g,"");
   const col=i=>{let s="";i++;while(i){const m=(i-1)%26;s=String.fromCharCode(65+m)+s;i=Math.floor((i-1)/26)}return s};
   const sheet=rows.map((r,ri)=>`<row r="${ri+1}">${r.map((v,ci)=>{const ref=col(ci)+(ri+1);if(typeof v==="number")return `<c r="${ref}" s="${ri?2:1}"><v>${v}</v></c>`;return `<c r="${ref}" t="inlineStr"${ri?"":' s="1"'}><is><t xml:space="preserve">${x(v)}</t></is></c>`}).join("")}</row>`).join("");
-  const widths=(ncol===3?[34,18,24]:ncol===16?[17,12,12,10,8,28,13,18,11,11,11,11,11,11,26,14]:ncol?[14,20,11,14,8,8,8,12,12]:[13,22,11,14,26,7,8,8,12,12,12,15,30]).map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join("");
+  const widths=(ncol===3?[34,18,24]:ncol===17?[17,12,12,10,8,28,13,18,11,11,11,11,11,11,26,14,14]:ncol?[14,20,11,14,8,8,8,12,12]:[13,22,11,14,26,7,8,8,12,12,12,15,30]).map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join("");
   return zipStore([
    ["[Content_Types].xml",'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>'],
    ["_rels/.rels",'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'],
@@ -663,7 +700,7 @@ function importCaisse(rows){
   let imp=0,maj=0,ign=0;const det=[],dates=new Set();
   rows.slice(h+1).forEach((r,i)=>{const L=h+i+2,g=k=>C[k]>=0?r[C[k]]:null;if(!r.some(v=>v!==null&&v!==undefined&&String(v).trim()!==""))return;
     const date=toIso(g("date")),dn=String(g("dec")??"").trim().toLowerCase().replace(/\s+/g," "),numero=String(g("num")??"").trim().replace(/\.0$/,""),mf=cleanMf(g("mf")),code=normService(g("type"));
-    if(!date||!dn||!numero||!code){ign++;return}dates.add(date);
+    if(!date||!dn||!numero||!code){ign++;return}if(estClos(date)&&!estGerant()){det.push(`Ligne ${L} : journée du ${frDate(date)} clôturée — ignorée`);ign++;return}dates.add(date);
     const pr=g("paye"),npr=g("np"),fac=String(pr??"").toLowerCase()==="fac"||String(npr??"").toLowerCase()==="fac",paye=fac?0:num(pr);
     if(paye===null){det.push(`Ligne ${L} : montant payé non numérique (${numero})`);return}
     const[d,cr]=getOrCreateDec(dn,0);if(cr)det.push(`Ligne ${L} : déclarant nouveau « ${dn} » — en attente de validation`);
