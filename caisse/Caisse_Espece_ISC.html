@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ISC Caisse">
+<meta name="theme-color" content="#15407a">
+<title>ISC Caisse Espèce — Mobile</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,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">
+<link rel="manifest" href="manifest.json">
+<style>
+:root{--navy:#15407a;--navy2:#0d2c57;--gold:#b0832e;--gold2:#d9ac5c;--lb:#e9f1f9;--bg:#f4f7fb;--card:#fff;
+--bd:#d3dfec;--tx:#16233a;--mu:#5a6b85;--ok:#1e7a46;--okbg:#e3f4ea;--ko:#b3261e;--kobg:#fde8e6;--wa:#9a6400;--wabg:#fff4dc}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+header{position:sticky;top:0;z-index:20;background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+header .logo{width:34px;height:34px;border-radius:9px;background:#fff;color:var(--navy);font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;border-bottom:3px solid var(--gold)}
+header h1{font-size:16px;margin:0;font-weight:700}header .sub{font-size:11px;color:var(--gold2);font-weight:600}
+header .r{margin-left:auto;display:flex;gap:6px}
+.ib{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:9px;min-width:36px;height:36px;font-size:16px;padding:0 8px}
+main{padding:14px 12px calc(84px + env(safe-area-inset-bottom));max-width:1100px;margin:auto}
+nav.tabs{position:fixed;bottom:0;left:0;right:0;z-index:30;background:#fff;border-top:1px solid var(--bd);display:flex;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -2px 10px rgba(0,0,0,.06)}
+nav.tabs button{flex:1;border:0;background:none;padding:7px 2px 6px;font-size:10.5px;font-weight:600;color:var(--mu);display:flex;flex-direction:column;align-items:center;gap:1px}
+nav.tabs button b{font-size:20px;line-height:1.1;font-weight:400}
+nav.tabs button.on{color:var(--navy)}nav.tabs button.on b{transform:scale(1.1)}
+nav.tabs button.main{color:var(--gold)}nav.tabs button.main b{background:var(--gold);border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-top:-18px;box-shadow:0 4px 10px rgba(176,131,46,.5)}
+h2{color:var(--navy);font-size:19px;margin:2px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--gold)}
+h3{color:var(--navy);font-size:15.5px;margin:14px 0 8px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px 14px;margin-bottom:12px;box-shadow:0 2px 8px rgba(21,64,122,.05)}
+label{display:block;font-size:12.5px;font-weight:700;color:var(--navy);margin:9px 0 4px}
+input,select,textarea{font:inherit;font-size:16px;width:100%;padding:10px 11px;border:1px solid #b6c5d8;border-radius:9px;background:#fff;color:var(--tx);-webkit-appearance:none;appearance:none}
+select{background-image:linear-gradient(45deg,transparent 50%,var(--navy) 50%),linear-gradient(135deg,var(--navy) 50%,transparent 50%);background-position:calc(100% - 16px) 50%,calc(100% - 11px) 50%;background-size:5px 5px;background-repeat:no-repeat;padding-right:28px}
+input[type=checkbox]{width:22px;height:22px;vertical-align:middle;-webkit-appearance:checkbox;appearance:auto;margin:0 6px 0 0}
+input:focus,select:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(21,64,122,.15)}
+input.ok{background:#eefaf2;border-color:#7cc49a}input.bad{border:2px solid var(--ko)}
+.chk{display:flex;align-items:center;font-weight:700;color:var(--navy);margin-top:12px;font-size:14px}
+button.b,a.b{font:inherit;font-weight:700;font-size:15px;border:0;border-radius:10px;padding:11px 16px;background:var(--navy);color:#fff;text-decoration:none;display:inline-block;text-align:center}
+.b.gold{background:var(--gold)}.b.ok{background:var(--ok)}.b.ko{background:var(--ko)}.b.lite{background:var(--lb);color:var(--navy)}.b.sm{padding:6px 10px;font-size:13px;border-radius:8px}
+.b.full{width:100%;margin-top:10px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(min-width:760px){.row.w{grid-template-columns:repeat(4,1fr)}}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}@media(min-width:760px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat{background:#fff;border:1px solid var(--bd);border-left:4px solid var(--navy);border-radius:11px;padding:10px 12px}
+.stat .l{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--mu);font-weight:700}.stat .v{font-size:19px;font-weight:800;color:var(--navy);margin-top:2px}
+.stat.g{border-left-color:var(--gold)}.stat.g .v{color:var(--gold)}.stat.r{border-left-color:var(--ko)}.stat.r .v{color:var(--ko)}.stat.o{border-left-color:var(--ok)}.stat.o .v{color:var(--ok)}
+.mu{color:var(--mu);font-size:12.5px}
+.tag{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;white-space:nowrap}
+.PAYE{background:var(--okbg);color:var(--ok)}.RESTE_A_PAYER{background:var(--kobg);color:var(--ko)}.FAC{background:var(--wabg);color:var(--wa)}.ATT{background:var(--kobg);color:var(--ko)}
+.list .it{background:#fff;border:1px solid var(--bd);border-radius:11px;padding:10px 12px;margin-bottom:8px;display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center}
+.list .it .t{font-weight:700}.list .it .a{font-weight:800;color:var(--navy);text-align:right;font-variant-numeric:tabular-nums}
+.list .it .s{font-size:12.5px;color:var(--mu)}
+.tw{overflow:auto;border:1px solid var(--bd);border-radius:10px;background:#fff;max-height:65vh}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{position:sticky;top:0;background:var(--navy);color:#fff;text-align:left;padding:7px 8px;font-weight:600;white-space:nowrap}
+td{padding:7px 8px;border-bottom:1px solid #e7edf5;white-space:nowrap}tbody tr:nth-child(even) td{background:#f7fafd}
+tfoot td{background:var(--lb);font-weight:800;color:var(--navy)}
+.n{text-align:right;font-variant-numeric:tabular-nums}
+.step{border:1px solid var(--bd);border-radius:12px;padding:12px 14px;margin-bottom:10px;background:#fff}
+.step.lock{opacity:.4;pointer-events:none;background:#f6f8fb}.step .st{font-weight:800;color:var(--navy)}.step .st b{color:var(--gold)}
+.calc{background:var(--lb);border-radius:10px;padding:10px 12px;margin-top:10px;font-size:14px;line-height:1.7}.calc b{color:var(--navy)}
+.hist{margin-top:10px;padding:10px 12px;border-radius:10px;font-weight:600;font-size:13.5px}
+.review{border:2px solid var(--gold);background:#fffaf0}
+.ac{position:relative}.acl{display:none;position:absolute;z-index:40;left:0;right:0;background:#fff;border:1px solid var(--bd);max-height:240px;overflow:auto;border-radius:0 0 10px 10px;box-shadow:0 10px 20px rgba(0,0,0,.15)}
+.acl div{padding:11px 12px;border-bottom:1px solid #eef2f7}.acl div:active,.acl div.on{background:#fff3c8}
+.toast{position:fixed;left:12px;right:12px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:60;padding:12px 14px;border-radius:11px;font-weight:700;box-shadow:0 8px 20px rgba(0,0,0,.2);display:none}
+.toast.ok{background:var(--ok);color:#fff}.toast.ko{background:var(--ko);color:#fff}
+.menu a{display:flex;align-items:center;gap:10px;padding:13px 14px;background:#fff;border:1px solid var(--bd);border-radius:11px;margin-bottom:8px;text-decoration:none;color:var(--tx);font-weight:600}
+.menu a span{font-size:20px}.menu a i{margin-left:auto;color:var(--mu);font-style:normal}
+.seg{display:flex;background:var(--lb);border-radius:10px;padding:3px;gap:3px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;padding:8px;border-radius:8px;font:inherit;font-weight:700;font-size:13.5px;color:var(--navy)}
+.seg button.on{background:var(--gold);color:#fff}
+#lock{position:fixed;inset:0;z-index:100;background:linear-gradient(135deg,var(--navy),var(--navy2));display:none;align-items:center;justify-content:center;flex-direction:column;color:#fff;gap:14px}
+#lock .box{background:#fff;color:var(--tx);border-radius:16px;padding:22px 20px;width:min(360px,90vw);border-top:5px solid var(--gold);box-shadow:0 20px 50px rgba(0,0,0,.35)}#lock h3{margin:0 0 4px;text-align:center}#lock .mu{text-align:center}#lock .err{color:var(--ko);font-weight:700;text-align:center;min-height:20px;margin-top:8px}
+footer{text-align:center;color:var(--mu);font-size:11px;padding:10px}
+@media print{header,nav.tabs,.noprint{display:none!important}main{padding:0}.tw{max-height:none}}
+</style>
+</head>
+<body>
+<div id="lock" style="display:flex"><div style="font-size:40px">🔒</div><div class="box"><h3 id="lkT">ISC Caisse Espèce</h3><div class="mu" id="lkM">Chargement…</div>
+<form id="lkF" onsubmit="event.preventDefault();lockSubmit()" style="display:none"><input type="text" name="username" value="caisse" autocomplete="username" style="display:none">
+<label>Mot de passe</label><input id="pw1" type="password" autocomplete="current-password">
+<div id="pw2w" style="display:none"><label>Confirmer le mot de passe</label><input id="pw2" type="password" autocomplete="new-password"></div>
+<button class="b gold full" id="lkB">Déverrouiller</button><div class="err" id="lkE"></div></form></div></div>
+<header><div class="logo">ISC</div><div><h1>Caisse Espèce</h1><div class="sub">Version mobile autonome</div></div>
+<div class="r noprint"><button class="ib" onclick="go('outils')" title="Outils">⚙️</button></div></header>
+<main id="app"></main>
+<div class="toast" id="toast"></div>
+<nav class="tabs noprint">
+ <button data-v="accueil" onclick="go('accueil')"><b>🏠</b>Accueil</button>
+ <button data-v="journal" onclick="go('journal')"><b>📋</b>Journal</button>
+ <button data-v="saisie" class="main" onclick="go('saisie')"><b>＋</b>Saisie</button>
+ <button data-v="impayes" onclick="go('impayes')"><b>⚠️</b>Impayés</button>
+ <button data-v="plus" onclick="go('plus')"><b>☰</b>Plus</button>
+</nav>
+<script>
+"use strict";
+/* ════════════════════════════════════════════════════════════════════
+   ISC — Gestion Caisse Espèce — VERSION HTML AUTONOME (iPhone / PC)
+   Mêmes règles que la V36 Flask. Données stockées dans l'appareil
+   (IndexedDB). Échanges : Excel état caisse (compatible V36) et
+   sauvegarde complète JSON.  Conçu par Mokhtar Reguigui — ISC/STT
+   ════════════════════════════════════════════════════════════════════ */
+const VERSION="Mobile 1.0";
+const SUPP_REP=12, SUPP_C10=10;
+const JOURS=["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
+const DEFAULT_SERVICES=[["DDM","Déclaration douanière",9],["TCE","Titre commerce extérieur",14],["DCT","DCT",14],["OBL","Obligation",15],["VISA","Visa export",15],["INOR","INORPI",15],["BS","Bon de sortie",7],["ONA","ONA",15],["DAE","DAE",8],["ASS","Assurance variable",0],["FDE","Frais divers export",0]];
+
+/* ───────────── Stockage CHIFFRÉ (IndexedDB + AES-256-GCM) ─────────────
+   Les données ne sont jamais écrites en clair : clé dérivée du mot de passe
+   (PBKDF2-SHA256, 250 000 itérations, sel aléatoire). Mot de passe jamais stocké. */
+let S=null,CK=null,SALT=null;
+const DBN="isc_caisse_mobile",VKEY="coffre",OLDKEY="etat",ITER=250000;
+const TE=new TextEncoder(),TD=new TextDecoder();
+const b64=u=>{let s="";const a=new Uint8Array(u);for(let i=0;i<a.length;i+=0x8000)s+=String.fromCharCode(...a.subarray(i,i+0x8000));return btoa(s)};
+const ub64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+function idb(){return new Promise((res,rej)=>{if(!window.indexedDB)return rej(new Error("IndexedDB indisponible"));const r=indexedDB.open(DBN,1);r.onupgradeneeded=()=>r.result.createObjectStore("kv");r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+async function kvGet(k){const db=await idb();return new Promise((res,rej)=>{const q=db.transaction("kv").objectStore("kv").get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)})}
+async function kvPut(k,v){const db=await idb();return new Promise((res,rej)=>{const tx=db.transaction("kv","readwrite");v===undefined?tx.objectStore("kv").delete(k):tx.objectStore("kv").put(v,k);tx.oncomplete=res;tx.onerror=()=>rej(tx.error)})}
+async function deriveKey(pw,salt){const base=await crypto.subtle.importKey("raw",TE.encode(pw),"PBKDF2",false,["deriveKey"]);
+  return crypto.subtle.deriveKey({name:"PBKDF2",salt,iterations:ITER,hash:"SHA-256"},base,{name:"AES-GCM",length:256},false,["encrypt","decrypt"])}
+async function seal(obj,key,salt){const iv=crypto.getRandomValues(new Uint8Array(12));
+  const ct=await crypto.subtle.encrypt({name:"AES-GCM",iv},key,TE.encode(JSON.stringify(obj)));return{v:1,alg:"AES-256-GCM/PBKDF2-SHA256",iter:ITER,salt:b64(salt),iv:b64(iv),ct:b64(ct)}}
+async function unseal(box,key){const pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:ub64(box.iv)},key,ub64(box.ct));return JSON.parse(TD.decode(pt))}
+function normalise(){S.meta=S.meta||{};["declarants","clients","services","tarifs","reps","ops","feries","anomalies","audit"].forEach(k=>S[k]=S[k]||[]);
+  if(!S.meta.seq)S.meta.seq=Math.max(1,...S.ops.map(o=>o.id+1),...S.declarants.map(d=>d.id+1),...S.clients.map(c=>c.id+1),...S.services.map(s=>s.id+1));delete S.meta.pin}
+let saveTimer=null,saving=Promise.resolve();
+function save(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>{saving=saving.then(async()=>{
+  try{await kvPut(VKEY,await seal(S,CK,SALT))}catch(e){toast("⚠ Enregistrement impossible : exportez une sauvegarde",false)}})},120)}
+function fresh(){const s={declarants:[],clients:[],services:[],tarifs:[],reps:[],ops:[],feries:[],anomalies:[],audit:[],meta:{seq:1,created:nowIso()}};
+  DEFAULT_SERVICES.forEach(([c,l,t])=>s.services.push({id:s.meta.seq++,code:c,lib:l,tarif:t,actif:1}));return s}
+const nid=()=>S.meta.seq++;
+
+/* ───────────── Utilitaires ───────────── */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const f3=v=>(+v||0).toLocaleString("fr-FR",{minimumFractionDigits:3,maximumFractionDigits:3});
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+function nowIso(){const d=new Date();return today()+"T"+d.toTimeString().slice(0,8)}
+const norm=s=>String(s??"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]/g,"");
+const cleanMf=s=>String(s??"").toUpperCase().replace(/\s/g,"");
+const mfKey=s=>cleanMf(s).replace(/^0+/,"");
+function normService(v){const t=String(v??"").toUpperCase().replace(/[.\s]/g,"");return({ASSUR:"ASS",ASSURANCE:"ASS",AASUR:"ASS",OBLIGATION:"OBL",INORPI:"INOR",BONSORTIE:"BS",BONDESORTIE:"BS",VISAEXPORT:"VISA"})[t]||t}
+const num=v=>{if(v===null||v===undefined||v==="")return null;if(typeof v==="number")return v;const n=parseFloat(String(v).replace(/\s/g,"").replace(",","."));return isNaN(n)?null:n};
+function toIso(v){if(v===null||v===undefined||v==="")return null;
+  if(typeof v==="number"&&v>20000&&v<80000){const d=new Date(Math.round((v-25569)*86400000));return d.toISOString().slice(0,10)}
+  const s=String(v).trim();let m;
+  if(m=s.match(/^(\d{4})-(\d{2})-(\d{2})/))return `${m[1]}-${m[2]}-${m[3]}`;
+  if(m=s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})$/)){let y=m[3].length===2?"20"+m[3]:m[3];return `${y}-${m[2].padStart(2,"0")}-${m[1].padStart(2,"0")}`}
+  return null}
+const frDate=iso=>iso?iso.slice(8,10)+"/"+iso.slice(5,7)+"/"+iso.slice(0,4):"";
+function toast(msg,ok=true){const t=$("toast");t.textContent=msg;t.className="toast "+(ok?"ok":"ko");t.style.display="block";clearTimeout(t._h);t._h=setTimeout(()=>t.style.display="none",ok?2600:4500)}
+function audit(action,detail){S.audit.unshift({quand:nowIso(),action,detail});if(S.audit.length>1000)S.audit.length=1000}
+
+/* ───────────── Référentiels ───────────── */
+const dec=id=>S.declarants.find(d=>d.id==id);
+const svc=id=>S.services.find(s=>s.id==id);
+const svcByCode=c=>S.services.find(s=>s.code===c);
+const cli=id=>S.clients.find(c=>c.id==id);
+function findDec(nom){const n=String(nom??"").trim().toLowerCase();if(!n)return null;return S.declarants.find(d=>d.nom===n||(d.code&&d.code.toUpperCase()===n.toUpperCase()))}
+function getOrCreateDec(nom,valide=1){const d=findDec(nom);if(d)return[d,false];const x={id:nid(),nom:String(nom).trim().toLowerCase(),code:"",tel:"",valide,actif:1};S.declarants.push(x);return[x,true]}
+function getOrCreateSvc(code){code=normService(code);if(!code)return null;let s=svcByCode(code);if(!s){s={id:nid(),code,lib:code,tarif:0,actif:1};S.services.push(s)}return s}
+function findCliMf(mf){const k=mfKey(mf);return k?S.clients.find(c=>mfKey(c.mf)===k):null}
+function addRep(n){n=String(n??"").trim().replace(/\.0$/,"");if(!/^\d{5}$/.test(n))return null;if(!S.reps.includes(n))S.reps.push(n);return n}
+function getTarif(decId,svcId){const t=S.tarifs.find(t=>t.decId==decId&&t.svcId==svcId);if(t)return +t.t;const s=svc(svcId);return s?+s.tarif:0}
+
+/* ───────────── Règles métier (identiques V36) ───────────── */
+function calculer(decId,svcId,rep,c10,paye){
+  const code=(svc(svcId)||{}).code,t=getTarif(decId,svcId);paye=+paye||0;let sr=0,sc=0;
+  if(code==="DDM"){let has=!!rep||!!c10;
+    if(!has&&Math.abs(paye-(t+SUPP_REP))<.001)has=true;
+    if(!has&&Math.abs(paye-(t+SUPP_REP+SUPP_C10))<.001){has=true;c10=true}
+    if(has){sr=SUPP_REP;if(c10)sc=SUPP_C10}}
+  const total=Math.max(t+sr+sc,paye);
+  return{tarif:t,sRep:sr,sC10:sc,total,reste:Math.max(total-paye,0),c10:c10?1:0}}
+const dossierOps=(svcId,numero,exclude)=>S.ops.filter(o=>o.svcId==svcId&&o.num===String(numero).trim()&&o.id!==exclude);
+const cle=(svcId,numero)=>((svc(svcId)||{}).code||"")+String(numero).trim();
+function controle(numero,svcId,total,paye,exclude){
+  const rows=dossierOps(svcId,numero,exclude),k=cle(svcId,numero);
+  const deja=rows.reduce((a,o)=>a+(+o.paye||0),0),ref=Math.max(total||0,...rows.map(o=>+o.total||0)),nouv=deja+(+paye||0);
+  if(rows.length&&ref>0&&deja>=ref-.001)return{ok:false,cle:k,niveau:"BLOQUE",ref,message:`Double encaissement bloqué : ${k} est déjà payé intégralement (${f3(deja)} DT).`};
+  if(rows.length&&ref>0&&nouv>ref+.001)return{ok:false,cle:k,niveau:"BLOQUE",ref,message:`Trop-perçu bloqué : ${k} — payé ${f3(deja)}, dû ${f3(ref)}, reste ${f3(ref-deja)} DT.`};
+  if(rows.length){const s=nouv>=ref-.001;return{ok:true,cle:k,niveau:s?"ACCEPTE_SOLDE":"ACCEPTE_PARTIEL",ref,message:s?`Paiement final pour ${k}.`:`Paiement partiel ${k} : ${f3(nouv)}/${f3(ref)} DT.`}}
+  return{ok:true,cle:k,niveau:"NOUVEAU",ref:Math.max(ref,total),message:`Nouveau dossier ${k}.`}}
+function heriter(svcId,numero,m,paye,dateExclue){
+  const rows=dossierOps(svcId,numero).filter(o=>!dateExclue||o.date!==dateExclue);if(!rows.length)return m;
+  const f=rows.slice().sort((a,b)=>b.total-a.total||a.id-b.id)[0];
+  return{...m,total:Math.max(+f.total,paye),c10:f.c10,sRep:f.sRep,sC10:f.sC10,tarif:f.tarif,rep:f.rep,clientId:f.clientId,mf:f.mf,reste:Math.max(+f.total-paye,0)}}
+function recalc(svcId,numero){
+  const rows=dossierOps(svcId,numero).sort((a,b)=>(a.date||"").localeCompare(b.date||"")||a.id-b.id);if(!rows.length)return;
+  const ref=Math.max(...rows.map(o=>+o.total||0)),paye=rows.reduce((a,o)=>a+(+o.paye||0),0),reste=Math.max(ref-paye,0);
+  const st=reste<=.0005?"PAYE":(paye===0&&rows.some(o=>o.statut==="FAC")?"FAC":"RESTE_A_PAYER");
+  const last=rows[rows.length-1].id;rows.forEach(o=>{o.reste=o.id===last?reste:0;o.statut=st})}
+function anomalie(source,k,date,decNom,code,numero,montant,motif){S.anomalies.unshift({id:nid(),quand:nowIso(),source,cle:k,date,dec:decNom,svc:code,num:numero,montant,motif,statut:"A_VERIFIER"})}
+function repAff(o){const s=svc(o.svcId);let r=o.rep||"",c="";if(s&&s.code==="DDM"){if(!r&&o.sRep)r="REP";if(o.c10||o.sC10)c=r||"REP"}return[r,c]}
+
+/* ───────────── Navigation ───────────── */
+let VIEW="accueil",ARGS={};
+function go(v,args){VIEW=v;ARGS=args||{};document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));render();window.scrollTo(0,0)}
+function render(){const f=V[VIEW]||V.accueil;$("app").innerHTML=f()+`<footer>ISC / STT — Caisse Espèce ${VERSION} · Conçu par Mokhtar Reguigui</footer>`;(A[VIEW]||(()=>{}))()}
+const V={},A={};
+
+/* ───────────── ACCUEIL ───────────── */
+V.accueil=()=>{
+  const t=today(),mois=t.slice(0,7);
+  const last=S.ops.filter(o=>o.paye>0).map(o=>o.date).sort().pop()||t;
+  const sum=(arr,k)=>arr.reduce((a,o)=>a+(+o[k]||0),0);
+  const jour=sum(S.ops.filter(o=>o.date===last),"paye"),opsM=S.ops.filter(o=>(o.date||"").startsWith(mois));
+  const imp=S.ops.filter(o=>o.statut==="RESTE_A_PAYER"&&o.reste>0),fac=S.ops.filter(o=>o.statut==="FAC"&&o.reste>0);
+  const att=S.declarants.filter(d=>!d.valide).length,an=S.anomalies.filter(a=>a.statut==="A_VERIFIER").length;
+  const parSvc={};opsM.forEach(o=>{const c=(svc(o.svcId)||{}).code||"?";parSvc[c]=parSvc[c]||{nb:0,t:0};parSvc[c].nb++;parSvc[c].t+=+o.paye||0});
+  return `<h2>🏠 Tableau de bord</h2>
+  ${!S.ops.length&&!S.declarants.length?`<div class="card" style="border-color:var(--gold)"><b>Bienvenue 👋</b><p class="mu">Commencez par ajouter vos déclarants (☰ Plus → Déclarants) ou importez votre base clients / un état caisse Excel exporté du PC (⚙️ Outils).</p></div>`:""}
+  ${att?`<div class="card" style="background:var(--kobg);color:var(--ko);font-weight:700" onclick="go('declarants')">⚠ ${att} déclarant(s) en attente de validation ›</div>`:""}
+  ${an?`<div class="card" style="background:var(--lb);color:var(--navy);font-weight:700" onclick="go('anomalies')">🔎 ${an} tentative(s) de double encaissement ›</div>`:""}
+  <div class="stats"><div class="stat o"><div class="l">Caisse du ${frDate(last)}</div><div class="v">${f3(jour)}</div></div>
+  <div class="stat"><div class="l">Encaissé ${mois}</div><div class="v">${f3(sum(opsM,"paye"))}</div><div class="mu">${opsM.length} opérations</div></div>
+  <div class="stat r"><div class="l">Impayés</div><div class="v">${f3(sum(imp,"reste"))}</div><div class="mu">${imp.length} dossier(s)</div></div>
+  <div class="stat g"><div class="l">FAC</div><div class="v">${f3(sum(fac,"reste"))}</div><div class="mu">${fac.length} dossier(s)</div></div></div>
+  <h3>Encaissé par service — ${mois}</h3><div class="list">${Object.entries(parSvc).sort((a,b)=>b[1].t-a[1].t).map(([c,v])=>`<div class="it"><div class="t">${esc(c)}</div><div class="a">${f3(v.t)}</div><div class="s">${v.nb} opération(s)</div></div>`).join("")||`<p class="mu">Aucune opération ce mois.</p>`}</div>
+  <a class="b gold full" onclick="go('saisie')">＋ Nouvelle saisie</a>`};
+
+/* ───────────── SAISIE ───────────── */
+V.saisie=()=>`<h2>＋ Saisie caisse</h2>
+<div class="step" id="s1"><div class="st"><b>1</b> — Dossier et déclarant</div>
+ <label>N° dossier</label><input id="num" inputmode="numeric" maxlength="6" placeholder="ex : 25333" autocomplete="off">
+ <label>Déclarant</label><div class="ac"><input id="dec" placeholder="Nom ou code…" autocomplete="off"><div class="acl" id="decl"></div></div>
+ <button class="b full" onclick="go1()">Confirmer</button></div>
+<div class="step lock" id="s2"><div class="st"><b>2</b> — Service et client</div>
+ <label>Service</label><select id="svc"><option value="">— choisir —</option>${S.services.filter(s=>s.actif).sort((a,b)=>a.code.localeCompare(b.code)).map(s=>`<option value="${s.id}">${esc(s.code)} — ${esc(s.lib)}</option>`).join("")}</select>
+ <label>MF client (optionnel)</label><div class="ac"><input id="mf" placeholder="MF ou nom du client" autocomplete="off"><div class="acl" id="mfl"></div></div><div class="mu" id="cliInfo"></div>
+ <div class="hist" id="hist" style="display:none"></div>
+ <button class="b full" onclick="go2()">Confirmer</button></div>
+<div class="step lock" id="s3" style="display:none"><div class="st"><b>3</b> — Répertoire / case 10 (DDM)</div>
+ <label>N° répertoire (5 chiffres, vide = sans)</label><div class="ac"><input id="rep" inputmode="numeric" maxlength="5" placeholder="Sans répertoire" autocomplete="off"><div class="acl" id="repl"></div></div>
+ <label class="chk"><input type="checkbox" id="c10"> Case 10</label>
+ <button class="b full" onclick="go3()">Confirmer</button></div>
+<div class="step lock" id="s4"><div class="st"><b>4</b> — Paiement</div>
+ <div class="row"><div><label>Montant payé (DT)</label><input id="paye" type="number" inputmode="decimal" step="0.001" min="0"></div>
+ <div><label>Date</label><input id="dreg" type="date" value="${today()}"></div></div>
+ <label class="chk"><input type="checkbox" id="fac"> FAC (facturé, non encaissé)</label>
+ <label>Observation</label><input id="obs">
+ <div class="calc" id="calc"></div>
+ <button class="b full" onclick="go4()">Contrôler</button></div>
+<div class="step lock review" id="s5"><div class="st"><b>5</b> — Dernier contrôle</div><div id="rv"></div>
+ <button class="b ok full" onclick="valider()">✅ Valider l'encaissement</button><button class="b lite full" onclick="go('saisie')">Annuler</button></div>
+<h3>Aujourd'hui</h3><div class="list">${opsList(S.ops.filter(o=>o.date===today()).sort((a,b)=>b.id-a.id))}</div>`;
+let SA={};
+A.saisie=()=>{
+  SA={decId:null,H:null};
+  const decs=S.declarants.filter(d=>d.actif&&d.valide).sort((a,b)=>a.nom.localeCompare(b.nom));
+  ac($("dec"),$("decl"),decs,d=>d.nom+(d.code?" ("+d.code+")":""),d=>{SA.decId=d?d.id:null;if(d)$("dec").value=d.nom;$("dec").classList.toggle("ok",!!d)});
+  ac($("mf"),$("mfl"),S.clients.filter(c=>c.actif!==0),c=>c.mf+" — "+c.rs,c=>{if(c)$("mf").value=c.mf;cliInfo()});
+  ac($("rep"),$("repl"),S.reps.slice().sort().map(n=>({n})),r=>r.n,r=>{if(r)$("rep").value=r.n;calc()});
+  ["paye","c10","fac","rep"].forEach(id=>$(id).addEventListener("input",calc));
+  $("svc").addEventListener("change",()=>{["s3","s4","s5"].forEach(lockS);SA.H=null});
+  $("mf").addEventListener("change",cliInfo);
+  $("num").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();$("dec").focus()}});
+};
+function opsList(ops){return ops.map(o=>{const s=svc(o.svcId)||{},d=dec(o.decId)||{},[r,c]=repAff(o);
+  return `<div class="it" onclick="go('operation',{id:${o.id}})"><div class="t">${esc(s.code)}${esc(o.num)} · ${esc(d.nom)}</div><div class="a">${f3(o.paye)}</div>
+  <div class="s">${frDate(o.date)}${r?" · Rép "+esc(r):""}${c?" · C10":""}${o.reste>0?" · reste "+f3(o.reste):""}</div><div><span class="tag ${o.statut}">${o.statut==="RESTE_A_PAYER"?"RESTE":o.statut}</span></div></div>`}).join("")||`<p class="mu">Aucune opération.</p>`}
+function ac(inp,list,data,label,pick){let cur=[],idx=-1;
+  const show=()=>{const q=inp.value.trim().toLowerCase();cur=(q?data.filter(d=>label(d).toLowerCase().includes(q)):data).slice(0,40);
+    list.innerHTML=cur.map((d,i)=>`<div data-i="${i}">${esc(label(d))}</div>`).join("");list.style.display=cur.length?"block":"none";idx=-1};
+  list.addEventListener("pointerdown",e=>{const el=e.target.closest("[data-i]");if(!el)return;e.preventDefault();pick(cur[+el.dataset.i]);list.style.display="none"});
+  inp.addEventListener("input",()=>{pick(null);show();const q=inp.value.trim().toLowerCase(),ex=cur.filter(d=>label(d).toLowerCase()===q||label(d).toLowerCase().split(" (")[0]===q);
+    if(q&&ex.length===1){pick(ex[0]);list.style.display="none"}});inp.addEventListener("focus",show);
+  inp.addEventListener("blur",()=>setTimeout(()=>list.style.display="none",180));
+  inp.addEventListener("keydown",e=>{const n=list.children.length;if(e.key==="ArrowDown")idx=Math.min(idx+1,n-1);else if(e.key==="ArrowUp")idx=Math.max(idx-1,0);
+    else if(e.key==="Enter"&&idx>=0&&list.style.display==="block"){e.preventDefault();pick(cur[idx]);list.style.display="none";return}else return;
+    e.preventDefault();[...list.children].forEach((x,j)=>x.classList.toggle("on",j===idx))})}
+const unlockS=id=>$(id).classList.remove("lock"),lockS=id=>$(id).classList.add("lock");
+const bad=el=>{el.classList.add("bad");el.focus();setTimeout(()=>el.classList.remove("bad"),1600)};
+const isDDM=()=>((svc($("svc").value)||{}).code==="DDM");
+function cliInfo(){const v=$("mf").value;const c=findCliMf(v);$("cliInfo").textContent=v?(c?"✔ "+c.rs+(SA.decId&&c.decId!=SA.decId?" — ⚠ rattaché à un autre déclarant":""):"⚠ MF inconnu (enregistré tel quel)"):""}
+function calc(){if(!$("svc").value)return{};
+  const t=getTarif(SA.decId,$("svc").value),fac=$("fac").checked,p=fac?0:(+$("paye").value||0);
+  let rep=isDDM()&&(/^\d{5}$/.test($("rep").value.trim())||$("c10").checked),c10=isDDM()&&$("c10").checked;
+  if(isDDM()&&!rep&&Math.abs(p-(t+12))<.001)rep=true;if(isDDM()&&!rep&&Math.abs(p-(t+22))<.001){rep=true;c10=true}
+  let du=Math.max(t+(rep?12:0)+(c10?10:0),p);const H=SA.H;if(H&&H.nb)du=Math.max(du,H.du);
+  const deja=H&&H.nb?H.paye:0,reste=Math.max(du-deja-p,0);
+  $("calc").innerHTML=`Tarif <b>${f3(t)}</b>${isDDM()?` · Rép <b>${rep?"+12":"—"}</b> · C10 <b>${c10?"+10":"—"}</b>`:""}<br>Dû <b>${f3(du)} DT</b>${deja?` · déjà payé <b>${f3(deja)}</b>`:""}<br>Reste après saisie : <b style="color:${reste>0?"var(--ko)":"var(--ok)"}">${f3(reste)} DT</b>`;
+  if(!$("paye").value&&!fac)$("paye").placeholder=f3(Math.max(du-deja,0));
+  return{t,rep,c10,du,deja,reste,p}}
+function go1(){const n=$("num").value.trim();if(!/^\d{1,6}$/.test(n))return bad($("num"));const nom=$("dec").value.trim();if(!nom)return bad($("dec"));
+  if(!SA.decId){const d=findDec(nom);
+    if(d&&!d.valide){toast(`Déclarant « ${d.nom} » en attente de validation.`,false);return}
+    if(d){SA.decId=d.id}else{if(!confirm(`Déclarant « ${nom} » inconnu.\nIl sera créé EN ATTENTE de validation (Plus → Déclarants) et la saisie sera bloquée.`))return;
+      getOrCreateDec(nom,0);audit("DECLARANT_INCONNU",nom);save();toast(`« ${nom} » ajouté en attente de validation.`,false);return}}
+  unlockS("s2");$("svc").focus()}
+function go2(){if(!$("svc").value)return bad($("svc"));
+  const rows=dossierOps($("svc").value,$("num").value);const h=$("hist");
+  if(rows.length){const du=Math.max(...rows.map(o=>+o.total)),p=rows.reduce((a,o)=>a+(+o.paye||0),0);SA.H={nb:rows.length,du,paye:p};
+    const solde=du-p<=.0005;h.style.display="block";h.style.background=solde?"var(--kobg)":"var(--wabg)";h.style.color=solde?"var(--ko)":"var(--wa)";
+    h.textContent=(solde?"⛔ Dossier déjà payé intégralement":"⚠ Dossier connu")+` — ${rows.length} op., dû ${f3(du)}, payé ${f3(p)}, reste ${f3(du-p)} (${(dec(rows[0].decId)||{}).nom||""}, ${rows.map(o=>frDate(o.date)).join(", ")})`;
+    if(solde)return;
+    const f=rows[0];if(f.rep&&!$("rep").value)$("rep").value=f.rep;if(f.c10)$("c10").checked=true;if(f.mf&&!$("mf").value){$("mf").value=f.mf;cliInfo()}}
+  else{SA.H=null;h.style.display="none"}
+  $("s3").style.display=isDDM()?"block":"none";
+  if(isDDM()){unlockS("s3");$("rep").focus()}else{unlockS("s4");calc();$("paye").focus()}}
+function go3(){const v=$("rep").value.trim();if(v&&!/^\d{5}$/.test(v))return bad($("rep"));unlockS("s4");calc();$("paye").focus()}
+function go4(){const c=calc();if(!$("fac").checked&&$("paye").value==="")return bad($("paye"));if(!$("dreg").value)return bad($("dreg"));
+  const s=svc($("svc").value),d=dec(SA.decId),cl=findCliMf($("mf").value);
+  const it=[["Dossier",s.code+$("num").value.trim()],["Déclarant",d.nom],["Client",$("mf").value?($("mf").value+(cl?" — "+cl.rs:" (inconnu)")):"—"]];
+  if(isDDM())it.push(["Répertoire",c.rep?($("rep").value||"REP"):"Sans"],["Case 10",c.c10?"Oui":"Non"]);
+  it.push(["Montant payé",$("fac").checked?"FAC — 0,000":f3(c.p)+" DT"],["Montant dû",f3(c.du)+" DT"],["Reste",f3(c.reste)+" DT"],["Date",frDate($("dreg").value)]);
+  $("rv").innerHTML=`<div class="list">${it.map(([k,v])=>`<div class="it"><div class="s">${k}</div><div class="t" style="text-align:right">${esc(v)}</div></div>`).join("")}</div>`;
+  unlockS("s5");$("s5").scrollIntoView({behavior:"smooth",block:"center"})}
+function valider(){
+  const numero=$("num").value.trim(),svcId=+$("svc").value,d=dec(SA.decId),fac=$("fac").checked,paye=fac?0:(+$("paye").value||0),date=$("dreg").value;
+  if(paye<0)return toast("Montant négatif interdit",false);
+  let rep=isDDM()?addRep($("rep").value):null,c10=isDDM()&&$("c10").checked,mf=cleanMf($("mf").value),cl=findCliMf(mf);
+  let m=calculer(d.id,svcId,rep,c10,paye);m=heriter(svcId,numero,m,paye);if(m.rep)rep=m.rep;if(!cl&&m.clientId){cl=cli(m.clientId);mf=mf||m.mf||""}
+  const k=controle(numero,svcId,m.total,paye);
+  if(!k.ok){anomalie("SAISIE",k.cle,date,d.nom,svc(svcId).code,numero,paye,k.message);save();return toast("⛔ "+k.message,false)}
+  S.ops.push({id:nid(),num:numero,decId:d.id,clientId:cl?cl.id:null,mf,svcId,rep:rep||"",c10:m.c10,date,tarif:m.tarif,sRep:m.sRep,sC10:m.sC10,total:m.total,paye,reste:m.reste,statut:fac?"FAC":(m.reste<=0?"PAYE":"RESTE_A_PAYER"),obs:$("obs").value.trim(),created:nowIso()});
+  recalc(svcId,numero);save();toast(`✅ ${k.cle} enregistré — ${f3(paye)} DT. ${k.message}`);go("saisie")}
+
+/* ───────────── JOURNAL ───────────── */
+V.journal=()=>{const dates=[...new Set(S.ops.map(o=>o.date))].sort().reverse();
+  const J=ARGS.mois?{mois:ARGS.mois}:{date:ARGS.date||dates[0]||today()};
+  let ops=S.ops.filter(o=>J.mois?(o.date||"").startsWith(J.mois):o.date===J.date);
+  if(ARGS.q){const q=ARGS.q.toLowerCase();ops=ops.filter(o=>(o.num+" "+((dec(o.decId)||{}).nom||"")+" "+((svc(o.svcId)||{}).code||"")+" "+(o.mf||"")).toLowerCase().includes(q))}
+  ops.sort((a,b)=>(a.date||"").localeCompare(b.date||"")||a.id-b.id);JOUR_OPS=ops;JOUR_LBL=J.mois||J.date;
+  const tot=k=>ops.reduce((a,o)=>a+(+o[k]||0),0);
+  return `<h2>📋 Journal — ${J.mois?J.mois:frDate(J.date)}</h2>
+  <div class="card noprint"><div class="row"><div><label>Date</label><select onchange="go('journal',{date:this.value})"><option value="">—</option>${dates.slice(0,180).map(d=>`<option value="${d}" ${d===J.date?"selected":""}>${frDate(d)}</option>`).join("")}</select></div>
+  <div><label>ou mois</label><input type="month" value="${J.mois||""}" onchange="go('journal',{mois:this.value})"></div></div>
+  <label>Rechercher (dossier, déclarant, service, MF)</label><input value="${esc(ARGS.q||"")}" onchange="go('journal',{...ARGS,q:this.value})">
+  <div class="row" style="margin-top:10px"><button class="b gold" onclick="exportJournal()">📥 Excel</button><button class="b lite" onclick="print()">🖨 Imprimer</button></div></div>
+  <div class="stats"><div class="stat o"><div class="l">Encaissé</div><div class="v">${f3(tot("paye"))}</div></div><div class="stat"><div class="l">Opérations</div><div class="v">${ops.length}</div></div>
+  <div class="stat"><div class="l">Montant dû</div><div class="v">${f3(tot("total"))}</div></div><div class="stat r"><div class="l">Reste</div><div class="v">${f3(tot("reste"))}</div></div></div>
+  <div class="seg noprint"><button class="${VUE_J==="liste"?"on":""}" onclick="VUE_J='liste';render()">Liste</button><button class="${VUE_J==="table"?"on":""}" onclick="VUE_J='table';render()">Tableau</button></div>
+  ${VUE_J==="liste"?`<div class="list">${opsList(ops)}</div>`:`<div class="tw"><table><thead><tr><th>Date</th><th>Dossier</th><th>Déclarant</th><th>MF</th><th>Svc</th><th>Rép</th><th>C10</th><th class="n">Dû</th><th class="n">Payé</th><th class="n">Reste</th><th>Statut</th></tr></thead><tbody>
+  ${ops.map(o=>{const[r,c]=repAff(o);return `<tr onclick="go('operation',{id:${o.id}})"><td>${frDate(o.date)}</td><td><b>${esc(o.num)}</b></td><td>${esc((dec(o.decId)||{}).nom)}</td><td>${esc(o.mf)}</td><td>${esc((svc(o.svcId)||{}).code)}</td><td>${esc(r)}</td><td>${esc(c)}</td><td class="n">${f3(o.total)}</td><td class="n">${f3(o.paye)}</td><td class="n">${f3(o.reste)}</td><td><span class="tag ${o.statut}">${o.statut}</span></td></tr>`}).join("")}</tbody>
+  <tfoot><tr><td colspan="7">TOTAL</td><td class="n">${f3(tot("total"))}</td><td class="n">${f3(tot("paye"))}</td><td class="n">${f3(tot("reste"))}</td><td></td></tr></tfoot></table></div>`}`};
+let VUE_J="liste",JOUR_OPS=[],JOUR_LBL="";
+
+/* ───────────── OPÉRATION (correction / suppression) ───────────── */
+V.operation=()=>{const o=S.ops.find(x=>x.id==ARGS.id);if(!o)return`<p>Opération introuvable.</p>`;const s=svc(o.svcId)||{},d=dec(o.decId)||{};
+  const hist=dossierOps(o.svcId,o.num).sort((a,b)=>a.id-b.id);
+  return `<h2>✎ ${esc(s.code)}${esc(o.num)}</h2><div class="card"><div class="mu">${esc(d.nom)} · saisi le ${esc((o.created||"").replace("T"," ").slice(0,16))}</div>
+  <div class="row"><div><label>Date</label><input type="date" id="e_date" value="${o.date}"></div><div><label>Statut</label><div style="padding-top:10px"><span class="tag ${o.statut}">${o.statut}</span></div></div>
+  <div><label>Montant dû</label><input id="e_total" type="number" step="0.001" value="${(+o.total).toFixed(3)}"></div><div><label>Montant payé</label><input id="e_paye" type="number" step="0.001" value="${(+o.paye).toFixed(3)}"></div></div>
+  <label>Observation</label><input id="e_obs" value="${esc(o.obs)}"><label>Motif de la correction (obligatoire)</label><input id="e_motif">
+  <button class="b ok full" onclick="corriger(${o.id})">Enregistrer la correction</button><button class="b ko full" onclick="supprimer(${o.id})">🗑 Supprimer l'opération</button><button class="b lite full" onclick="history.length;go('journal',{date:'${o.date}'})">Retour</button></div>
+  <h3>Historique du dossier</h3><div class="list">${opsList(hist)}</div>`};
+function corriger(id){const o=S.ops.find(x=>x.id==id),motif=$("e_motif").value.trim();if(!motif)return bad($("e_motif"));
+  const paye=+$("e_paye").value||0,total=+$("e_total").value||0,k=controle(o.num,o.svcId,total,paye,o.id);if(!k.ok)return toast("⛔ "+k.message,false);
+  audit("CORRECTION",`${k.cle} du ${o.date} : payé ${o.paye}→${paye}, dû ${o.total}→${total}, date →${$("e_date").value}. Motif : ${motif}`);
+  Object.assign(o,{paye,total,date:$("e_date").value||o.date,obs:$("e_obs").value.trim()});if(!(o.statut==="FAC"&&paye===0))o.statut="RESTE_A_PAYER";recalc(o.svcId,o.num);save();toast("Opération corrigée");go("journal",{date:o.date})}
+function supprimer(id){const o=S.ops.find(x=>x.id==id),motif=$("e_motif").value.trim();if(!motif){toast("Indiquez le motif de suppression",false);return bad($("e_motif"))}
+  if(!confirm("Supprimer définitivement cette opération ?"))return;audit("SUPPRESSION",`${cle(o.svcId,o.num)} du ${o.date}, payé ${o.paye}. Motif : ${motif}`);
+  S.ops=S.ops.filter(x=>x.id!=id);recalc(o.svcId,o.num);save();toast("Opération supprimée");go("journal",{date:o.date})}
+
+/* ───────────── IMPAYÉS ───────────── */
+V.impayes=()=>{const rows=S.ops.filter(o=>o.reste>0).sort((a,b)=>a.statut.localeCompare(b.statut)||(a.date||"").localeCompare(b.date||""));
+  const by={};rows.forEach(o=>{const n=(dec(o.decId)||{}).nom||"?";by[n]=by[n]||{r:0,f:0,nb:0};by[n].nb++;if(o.statut==="FAC")by[n].f+=o.reste;else by[n].r+=o.reste});
+  return `<h2>⚠️ Impayés & FAC</h2><h3>Par déclarant</h3><div class="list">${Object.entries(by).sort((a,b)=>(b[1].r+b[1].f)-(a[1].r+a[1].f)).map(([n,v])=>`<div class="it"><div class="t">${esc(n)}</div><div class="a">${f3(v.r+v.f)}</div><div class="s">${v.nb} dossier(s) · reste ${f3(v.r)} · FAC ${f3(v.f)}</div></div>`).join("")||`<p class="mu">Aucun impayé 👍</p>`}</div>
+  <h3>Détail</h3><div class="list">${opsList(rows)}</div>`};
+
+/* ───────────── RÉCAP MENSUEL ───────────── */
+V.recap=()=>{const mois=ARGS.mois||today().slice(0,7),[y,m]=mois.split("-").map(Number),nb=new Date(y,m,0).getDate();
+  const ops=S.ops.filter(o=>(o.date||"").startsWith(mois)),fer=Object.fromEntries(S.feries.map(f=>[f.jour,f.lib]));let rows=[],tot=0,n=0;
+  for(let d=1;d<=nb;d++){const ds=`${mois}-${String(d).padStart(2,"0")}`,dt=new Date(y,m-1,d),o=ops.filter(x=>x.date===ds),p=o.reduce((a,x)=>a+(+x.paye||0),0);
+    if(dt.getDay()===0&&!o.length)continue;tot+=p;n+=o.length;rows.push(`<tr ${fer[ds]?'style="background:#fff4dc"':""} onclick="${o.length?`go('journal',{date:'${ds}'})`:""}"><td>${JOURS[dt.getDay()].slice(0,3)}</td><td>${frDate(ds)}${fer[ds]?" 🎉 "+esc(fer[ds]):""}</td><td class="n">${o.length||""}</td><td class="n"><b>${o.length?f3(p):""}</b></td></tr>`)}
+  const pm=new Date(y,m-2,1),nm=new Date(y,m,1),fm=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
+  const ps={};ops.forEach(o=>{const c=(svc(o.svcId)||{}).code;ps[c]=(ps[c]||0)+(+o.paye||0)});
+  return `<h2>📅 Récap ${mois}</h2><div class="row noprint" style="margin-bottom:10px"><button class="b lite" onclick="go('recap',{mois:'${fm(pm)}'})">◀ ${fm(pm)}</button><button class="b lite" onclick="go('recap',{mois:'${fm(nm)}'})">${fm(nm)} ▶</button></div>
+  <div class="stats"><div class="stat o"><div class="l">Total encaissé</div><div class="v">${f3(tot)}</div></div><div class="stat"><div class="l">Opérations</div><div class="v">${n}</div></div></div>
+  <div class="tw"><table><thead><tr><th>Jour</th><th>Date</th><th class="n">Ops</th><th class="n">Encaissé</th></tr></thead><tbody>${rows.join("")}</tbody><tfoot><tr><td colspan="2">TOTAL</td><td class="n">${n}</td><td class="n">${f3(tot)}</td></tr></tfoot></table></div>
+  <h3>Par service</h3><div class="list">${Object.entries(ps).sort((a,b)=>b[1]-a[1]).map(([c,v])=>`<div class="it"><div class="t">${esc(c)}</div><div class="a">${f3(v)}</div></div>`).join("")||'<p class="mu">—</p>'}</div>`};
+
+/* ───────────── PLUS (menu) ───────────── */
+V.plus=()=>`<h2>☰ Menu</h2><div class="menu">
+<a onclick="go('recap')"><span>📅</span>Récapitulatif mensuel<i>›</i></a>
+<a onclick="go('declarants')"><span>👥</span>Déclarants<i>${S.declarants.filter(d=>!d.valide).length?"⚠ "+S.declarants.filter(d=>!d.valide).length:""} ›</i></a>
+<a onclick="go('clients')"><span>🏢</span>Clients<i>${S.clients.length} ›</i></a>
+<a onclick="go('services')"><span>⚙️</span>Services & tarifs<i>›</i></a>
+<a onclick="go('repertoires')"><span>📁</span>Répertoires DDM<i>${S.reps.length} ›</i></a>
+<a onclick="go('anomalies')"><span>🔎</span>Anomalies doublons<i>${S.anomalies.filter(a=>a.statut==="A_VERIFIER").length||""} ›</i></a>
+<a onclick="go('outils')"><span>🧰</span>Import / export / sauvegarde<i>›</i></a>
+<a onclick="go('feries')"><span>🎉</span>Jours fériés<i>›</i></a>
+<a onclick="go('audit')"><span>📜</span>Journal d'audit<i>›</i></a></div>`;
+
+/* ───────────── DÉCLARANTS ───────────── */
+V.declarants=()=>{const rows=S.declarants.slice().sort((a,b)=>(a.valide-b.valide)||a.nom.localeCompare(b.nom));
+  return `<h2>👥 Déclarants (${rows.length})</h2><div class="card"><label>Nom</label><input id="d_nom"><div class="row"><div><label>Code</label><input id="d_code"></div><div><label>Téléphone</label><input id="d_tel" inputmode="tel"></div></div><button class="b ok full" onclick="addDec()">➕ Ajouter</button></div>
+  <div class="list">${rows.map(d=>{const nb=S.ops.filter(o=>o.decId===d.id).length;return `<div class="it"><div class="t">${esc(d.nom)} ${d.code?`<span class="mu">(${esc(d.code)})</span>`:""}</div>
+  <div>${!d.valide?`<button class="b sm ok" onclick="validDec(${d.id})">✅ Valider</button>`:d.actif?'<span class="tag PAYE">Actif</span>':'<span class="tag FAC">Inactif</span>'}</div>
+  <div class="s">${nb} opération(s)${d.tel?" · "+esc(d.tel):""}</div><div><button class="b sm lite" onclick="editDec(${d.id})">✎</button></div></div>`}).join("")}</div>`};
+function addDec(){const n=$("d_nom").value.trim().toLowerCase();if(!n)return bad($("d_nom"));if(findDec(n))return toast("Ce déclarant existe déjà",false);
+  S.declarants.push({id:nid(),nom:n,code:$("d_code").value.trim().toUpperCase(),tel:$("d_tel").value.trim(),valide:1,actif:1});save();toast("Déclarant ajouté");render()}
+function validDec(id){dec(id).valide=1;audit("VALIDATION_DECLARANT",dec(id).nom);save();render()}
+function editDec(id){const d=dec(id),nb=S.ops.filter(o=>o.decId===id).length;
+  const c=prompt(`Code de « ${d.nom} » :`,d.code||"");if(c===null)return;const t=prompt("Téléphone :",d.tel||"");if(t===null)return;
+  d.code=c.trim().toUpperCase();d.tel=t.trim();
+  if(confirm(d.actif?"Désactiver ce déclarant ? (Annuler = garder actif)":"Réactiver ce déclarant ?"))d.actif=d.actif?0:1;
+  if(!nb&&!S.clients.some(c=>c.decId===id)&&confirm("Aucune opération : supprimer ce déclarant ?")){S.declarants=S.declarants.filter(x=>x.id!==id);S.tarifs=S.tarifs.filter(t=>t.decId!==id)}
+  save();render()}
+
+/* ───────────── CLIENTS ───────────── */
+V.clients=()=>{const q=(ARGS.q||"").toLowerCase(),decs=S.declarants.filter(d=>d.actif).sort((a,b)=>a.nom.localeCompare(b.nom));
+  const rows=S.clients.filter(c=>!q||(c.rs+" "+c.mf+" "+((dec(c.decId)||{}).nom||"")).toLowerCase().includes(q.replace(/^0+/,""))).sort((a,b)=>a.rs.localeCompare(b.rs)).slice(0,300);
+  return `<h2>🏢 Clients (${S.clients.length})</h2><div class="card"><label>Raison sociale</label><input id="c_rs"><div class="row"><div><label>Matricule fiscal</label><input id="c_mf" autocapitalize="characters"></div><div><label>Téléphone</label><input id="c_tel" inputmode="tel"></div></div>
+  <label>Déclarant</label><select id="c_dec"><option value="">—</option>${decs.map(d=>`<option value="${d.id}">${esc(d.nom)}</option>`).join("")}</select><button class="b ok full" onclick="addCli()">➕ Ajouter</button></div>
+  <input placeholder="🔍 Rechercher nom, MF, déclarant…" value="${esc(ARGS.q||"")}" onchange="go('clients',{q:this.value})" style="margin-bottom:10px">
+  <div class="list">${rows.map(c=>`<div class="it" onclick="editCli(${c.id})"><div class="t">${esc(c.rs)}</div><div class="mu">${esc(c.mf)}</div><div class="s">${esc((dec(c.decId)||{}).nom||"")}${c.tel?" · "+esc(c.tel):""}</div></div>`).join("")||'<p class="mu">Aucun client.</p>'}</div>
+  <p class="mu">MF : les zéros de tête ne comptent pas (050212A = 50212A).</p>`};
+function addCli(){const rs=$("c_rs").value.trim(),mf=cleanMf($("c_mf").value),d=$("c_dec").value;if(!rs)return bad($("c_rs"));if(!mf)return bad($("c_mf"));if(!d)return bad($("c_dec"));
+  if(findCliMf(mf))return toast("Ce MF existe déjà",false);S.clients.push({id:nid(),rs,mf,decId:+d,tel:$("c_tel").value.trim(),actif:1});save();toast("Client ajouté");render()}
+function editCli(id){const c=cli(id);const rs=prompt("Raison sociale :",c.rs);if(rs===null)return;const t=prompt("Téléphone :",c.tel||"");if(t===null)return;c.rs=rs.trim()||c.rs;c.tel=t.trim();
+  if(confirm("Supprimer ce client ?")){if(S.ops.some(o=>o.clientId===id)){c.actif=0;toast("Client lié à des opérations : désactivé")}else S.clients=S.clients.filter(x=>x.id!==id)}save();render()}
+
+/* ───────────── SERVICES & TARIFS ───────────── */
+V.services=()=>{const decs=S.declarants.filter(d=>d.actif&&d.valide).sort((a,b)=>a.nom.localeCompare(b.nom)),svs=S.services.slice().sort((a,b)=>a.code.localeCompare(b.code));
+  return `<h2>⚙️ Services & tarifs</h2><h3>Tarifs de base</h3><div class="list">${svs.map(s=>`<div class="it" onclick="editSvc(${s.id})"><div class="t">${esc(s.code)} <span class="mu">${esc(s.lib)}</span></div><div class="a">${f3(s.tarif)}</div>${s.actif?"":'<div class="s">inactif</div>'}</div>`).join("")}</div>
+  <button class="b lite full" onclick="addSvc()">➕ Nouveau service</button>
+  <h3>Tarifs conventionnels</h3><div class="card"><label>Déclarant</label><select id="t_dec"><option value="">—</option>${decs.map(d=>`<option value="${d.id}">${esc(d.nom)}</option>`).join("")}</select>
+  <div class="row"><div><label>Service</label><select id="t_svc">${svs.map(s=>`<option value="${s.id}">${esc(s.code)}</option>`).join("")}</select></div><div><label>Tarif spécial</label><input id="t_val" type="number" inputmode="decimal" step="0.001"></div></div>
+  <button class="b ok full" onclick="addTarif()">💾 Enregistrer</button></div>
+  <div class="list">${S.tarifs.map(t=>`<div class="it" onclick="delTarif(${t.decId},${t.svcId})"><div class="t">${esc((dec(t.decId)||{}).nom)} · ${esc((svc(t.svcId)||{}).code)}</div><div class="a">${f3(t.t)}</div><div class="s">base ${f3((svc(t.svcId)||{}).tarif)} — toucher pour supprimer</div></div>`).join("")||'<p class="mu">Aucun : le tarif de base s\'applique.</p>'}</div>
+  <p class="mu">DDM : répertoire +12 DT, case 10 +10 DT. Tarif 0 (ASS…) : le montant payé fait foi.</p>`};
+function editSvc(id){const s=svc(id);const t=prompt(`Tarif de base ${s.code} (DT) :`,s.tarif);if(t===null)return;const v=num(t);if(v===null)return toast("Montant invalide",false);
+  const l=prompt("Libellé :",s.lib);if(l!==null)s.lib=l.trim()||s.lib;audit("TARIF_BASE",`${s.code} ${s.tarif}→${v}`);s.tarif=v;s.actif=confirm(`${s.code} actif ? (OK = actif)`)?1:0;save();render()}
+function addSvc(){const c=normService(prompt("Code du service (ex : DDM) :")||"");if(!c)return;if(svcByCode(c))return toast("Code déjà existant",false);
+  const l=prompt("Libellé :",c)||c,t=num(prompt("Tarif de base (DT) :","0"))||0;S.services.push({id:nid(),code:c,lib:l,tarif:t,actif:1});save();render()}
+function addTarif(){const d=+$("t_dec").value,s=+$("t_svc").value,v=num($("t_val").value);if(!d)return bad($("t_dec"));if(v===null)return bad($("t_val"));
+  const x=S.tarifs.find(t=>t.decId===d&&t.svcId===s);if(x)x.t=v;else S.tarifs.push({decId:d,svcId:s,t:v});save();toast("Tarif enregistré");render()}
+function delTarif(d,s){if(confirm("Supprimer ce tarif conventionnel ?")){S.tarifs=S.tarifs.filter(t=>!(t.decId===d&&t.svcId===s));save();render()}}
+
+/* ───────────── RÉPERTOIRES ───────────── */
+V.repertoires=()=>{const by={};S.ops.filter(o=>o.rep).forEach(o=>{(by[o.rep]=by[o.rep]||[]).push(o)});
+  return `<h2>📁 Répertoires DDM</h2><div class="card"><label>Nouveau répertoire (5 chiffres)</label><input id="r_n" inputmode="numeric" maxlength="5"><button class="b ok full" onclick="if(addRep($('r_n').value)){save();render()}else bad($('r_n'))">➕ Ajouter</button></div>
+  ${S.reps.slice().sort().map(r=>{const o=by[r]||[];const t=k=>o.reduce((a,x)=>a+(+x[k]||0),0);return `<div class="card"><b>📁 ${r}</b> <span class="mu">— ${o.length} dossier(s)${o.filter(x=>x.c10).length?" · "+o.filter(x=>x.c10).length+" case 10":""}</span><div class="mu">Dû ${f3(t("total"))} · Payé ${f3(t("paye"))} · Reste ${f3(t("reste"))}</div>${o.length?`<div class="list" style="margin-top:8px">${opsList(o)}</div>`:""}</div>`}).join("")||'<p class="mu">Aucun répertoire.</p>'}`};
+
+/* ───────────── ANOMALIES / FÉRIÉS / AUDIT ───────────── */
+V.anomalies=()=>`<h2>🔎 Anomalies doublons</h2><div class="list">${S.anomalies.map(a=>`<div class="it"><div class="t">${esc(a.cle)} · ${esc(a.dec)}</div><div>${a.statut==="A_VERIFIER"?`<button class="b sm gold" onclick="S.anomalies.find(x=>x.id==${a.id}).statut='TRAITEE';save();render()">Traitée</button>`:'<span class="tag PAYE">Traitée</span>'}</div><div class="s">${esc(a.quand.replace("T"," ").slice(0,16))} · ${esc(a.source)} · ${f3(a.montant)} DT<br>${esc(a.motif)}</div></div>`).join("")||'<p class="mu">Aucune anomalie.</p>'}</div>`;
+V.feries=()=>`<h2>🎉 Jours fériés</h2><div class="card"><div class="row"><div><label>Date</label><input type="date" id="f_d"></div><div><label>Libellé</label><input id="f_l"></div></div><button class="b ok full" onclick="if($('f_d').value){S.feries=S.feries.filter(f=>f.jour!==$('f_d').value);S.feries.push({jour:$('f_d').value,lib:$('f_l').value});save();render()}">➕ Ajouter</button></div>
+<div class="list">${S.feries.slice().sort((a,b)=>b.jour.localeCompare(a.jour)).map(f=>`<div class="it" onclick="if(confirm('Supprimer ?')){S.feries=S.feries.filter(x=>x.jour!=='${f.jour}');save();render()}"><div class="t">${frDate(f.jour)}</div><div class="s">${esc(f.lib)}</div></div>`).join("")}</div>`;
+V.audit=()=>`<h2>📜 Journal d'audit</h2><div class="list">${S.audit.slice(0,300).map(a=>`<div class="it"><div class="t">${esc(a.action)}</div><div class="mu">${esc(a.quand.replace("T"," ").slice(0,16))}</div><div class="s">${esc(a.detail)}</div></div>`).join("")||'<p class="mu">Vide.</p>'}</div>`;
+
+/* ───────────── OUTILS : import / export / sauvegarde / PIN ───────────── */
+V.outils=()=>{const last=S.meta.lastBackup;return `<h2>🧰 Import · Export · Sauvegarde</h2>
+<div class="card"><h3 style="margin-top:0">💾 Sauvegarde complète</h3><p class="mu">Fichier <b>chiffré</b> avec votre mot de passe actuel (illisible sans lui). À faire régulièrement et à garder dans Fichiers / iCloud. ${last?"Dernière : "+esc(last.replace("T"," ").slice(0,16)):"<b style='color:var(--ko)'>Aucune sauvegarde encore.</b>"}</p>
+<button class="b gold full" onclick="exportJSON()">📤 Exporter la sauvegarde (.json)</button>
+<label>Restaurer une sauvegarde</label><input type="file" accept=".json,application/json" onchange="importJSON(this.files[0]);this.value=''"></div>
+<div class="card"><h3 style="margin-top:0">📥 Import Excel (.xlsx)</h3><p class="mu">État caisse (colonnes : date reglement, nom declarant, N°dossier, MF, type, N°rep, case10, montant payé / FAC, non payé) — compatible avec l'export du PC. Ré-importer le même fichier met à jour sans doublon.</p>
+<label>État caisse</label><input type="file" accept=".xlsx" onchange="importXlsx(this.files[0],'caisse');this.value=''">
+<label>Base clients / déclarants (MF, déclarant, client)</label><input type="file" accept=".xlsx" onchange="importXlsx(this.files[0],'clients');this.value=''"><div id="impRes"></div></div>
+<div class="card"><h3 style="margin-top:0">📤 Export Excel</h3><p class="mu">Format état caisse, réimportable dans l'application PC (Outils → Imports). ⚠ Le fichier Excel n'est <b>pas chiffré</b> : ne le partagez qu'avec des personnes autorisées.</p>
+<div class="row"><div><label>Du</label><input type="date" id="x_du" value="${today().slice(0,8)}01"></div><div><label>Au</label><input type="date" id="x_au" value="${today()}"></div></div>
+<button class="b full" onclick="exportPeriode()">📥 Exporter la période</button></div>
+<div class="card"><h3 style="margin-top:0">🔒 Sécurité</h3><p class="mu">Données chiffrées (AES-256) sur cet appareil. Verrouillage automatique après 5 min d'inactivité ou 2 min en arrière-plan.</p>
+<button class="b lite full" onclick="changePw()">Changer le mot de passe</button><button class="b full" onclick="verrouiller()">🔒 Verrouiller maintenant</button></div>
+<div class="card"><h3 style="margin-top:0">ℹ️ Stockage</h3><p class="mu" id="stoInfo">${S.ops.length} opérations · ${S.declarants.length} déclarants · ${S.clients.length} clients</p>
+<button class="b ko full" onclick="resetAll()">⚠ Tout effacer</button></div>`};
+A.outils=async()=>{try{if(navigator.storage&&navigator.storage.estimate){const e=await navigator.storage.estimate();$("stoInfo").textContent+=` · ${(e.usage/1048576).toFixed(1)} Mo utilisés`;if(navigator.storage.persisted&&await navigator.storage.persisted())$("stoInfo").textContent+=" · stockage protégé ✔"}}catch(e){}};
+async function resetAll(){if(prompt("Tapez EFFACER pour supprimer toutes les données de cet appareil (y compris le mot de passe) :")!=="EFFACER")return;await kvPut(VKEY,undefined);await kvPut(OLDKEY,undefined);location.reload()}
+async function changePw(){const old=prompt("Mot de passe actuel :");if(old===null)return;
+  try{await unseal(await kvGet(VKEY),await deriveKey(old,SALT))}catch(e){return toast("Mot de passe actuel incorrect",false)}
+  const n=prompt("Nouveau mot de passe (8 caractères minimum) :");if(n===null)return;if(n.length<8)return toast("8 caractères minimum",false);
+  if(prompt("Confirmez le nouveau mot de passe :")!==n)return toast("Les mots de passe diffèrent",false);
+  SALT=crypto.getRandomValues(new Uint8Array(16));CK=await deriveKey(n,SALT);audit("MOT_DE_PASSE","changé");await kvPut(VKEY,await seal(S,CK,SALT));
+  toast("Mot de passe changé — refaites une sauvegarde");render()}
+function verrouiller(){S=null;CK=null;location.reload()}
+async function partager(blob,nom){
+  const file=new File([blob],nom,{type:blob.type});
+  if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:nom});return}catch(e){if(e.name==="AbortError")return}}
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=nom;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},3000)}
+async function exportJSON(){S.meta.lastBackup=nowIso();save();const box=await seal(S,CK,SALT);
+  partager(new Blob([JSON.stringify({app:"ISC_Caisse_Mobile",version:VERSION,date:nowIso(),chiffre:true,coffre:box})],{type:"application/json"}),`ISC_caisse_sauvegarde_${today()}.json`)}
+function importJSON(f){if(!f)return;const r=new FileReader();r.onload=async()=>{let j;try{j=JSON.parse(r.result)}catch(e){return toast("Fichier de sauvegarde invalide",false)}
+  let d;try{if(j.chiffre&&j.coffre){const pw=prompt("Mot de passe de cette sauvegarde :");if(pw===null)return;d=await unseal(j.coffre,await deriveKey(pw,ub64(j.coffre.salt)))}else d=j.data||j}
+  catch(e){return toast("Mot de passe de la sauvegarde incorrect",false)}
+  if(!d||!d.ops||!d.services)return toast("Fichier de sauvegarde invalide",false);
+  if(!confirm(`Restaurer la sauvegarde du ${(j.date||"?").slice(0,10)} (${d.ops.length} opérations) ?\nLes données actuelles de cet appareil seront REMPLACÉES.\n(Elles restent protégées par votre mot de passe actuel.)`))return;
+  S=d;normalise();audit("RESTAURATION",`sauvegarde du ${(j.date||"?").slice(0,10)}`);save();toast("Sauvegarde restaurée");go("accueil")};r.readAsText(f)}
+
+/* Export état caisse en vrai .xlsx (sans bibliothèque) */
+function exportJournal(){exportOps(JOUR_OPS,"etat_caisse_"+JOUR_LBL)}
+function exportPeriode(){const du=$("x_du").value,au=$("x_au").value;exportOps(S.ops.filter(o=>o.date>=du&&o.date<=au).sort((a,b)=>a.date.localeCompare(b.date)||a.id-b.id),`etat_caisse_${du}_${au}`)}
+function exportOps(ops,nom){if(!ops.length)return toast("Aucune opération à exporter",false);
+  const head=["date reglement","nom declarant","N°dossier","MF","client","type","N°rep","case10","montant dû","montant payé","non payé","statut","observation"];
+  const rows=ops.map(o=>{const[r,c]=repAff(o);return[frDate(o.date),(dec(o.decId)||{}).nom||"",o.num,o.mf||"",(cli(o.clientId)||{}).rs||"",(svc(o.svcId)||{}).code||"",r,c,+o.total,o.statut==="FAC"&&!o.paye?"FAC":+o.paye,+o.reste,o.statut,o.obs||""]});
+  partager(xlsxBlob([head,...rows]),nom+".xlsx")}
+const crcT=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c}return t})();
+const crc32=b=>{let c=~0;for(let i=0;i<b.length;i++)c=crcT[(c^b[i])&255]^(c>>>8);return(~c)>>>0};
+function zipStore(files){const enc=new TextEncoder(),parts=[],cd=[];let off=0;
+  for(const[name,str]of files){const n=enc.encode(name),d=enc.encode(str),crc=crc32(d);
+    const h=new DataView(new ArrayBuffer(30));h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x0800,true);h.setUint32(14,crc,true);h.setUint32(18,d.length,true);h.setUint32(22,d.length,true);h.setUint16(26,n.length,true);
+    parts.push(new Uint8Array(h.buffer),n,d);
+    const c=new DataView(new ArrayBuffer(46));c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint16(8,0x0800,true);c.setUint32(16,crc,true);c.setUint32(20,d.length,true);c.setUint32(24,d.length,true);c.setUint16(28,n.length,true);c.setUint32(42,off,true);
+    cd.push(new Uint8Array(c.buffer),n);off+=30+n.length+d.length}
+  const cdLen=cd.reduce((a,x)=>a+x.length,0),e=new DataView(new ArrayBuffer(22));e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cdLen,true);e.setUint32(16,off,true);
+  return new Blob([...parts,...cd,new Uint8Array(e.buffer)],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"})}
+function xlsxBlob(rows){const x=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])).replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g,"");
+  const col=i=>{let s="";i++;while(i){const m=(i-1)%26;s=String.fromCharCode(65+m)+s;i=Math.floor((i-1)/26)}return s};
+  const sheet=rows.map((r,ri)=>`<row r="${ri+1}">${r.map((v,ci)=>{const ref=col(ci)+(ri+1);if(typeof v==="number")return `<c r="${ref}" s="${ri?2:1}"><v>${v}</v></c>`;return `<c r="${ref}" t="inlineStr"${ri?"":' s="1"'}><is><t xml:space="preserve">${x(v)}</t></is></c>`}).join("")}</row>`).join("");
+  const widths=[13,22,11,14,26,7,8,8,12,12,12,15,30].map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join("");
+  return zipStore([
+   ["[Content_Types].xml",'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>'],
+   ["_rels/.rels",'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'],
+   ["xl/workbook.xml",'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="Etat caisse" sheetId="1" r:id="rId1"/></sheets></workbook>'],
+   ["xl/_rels/workbook.xml.rels",'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>'],
+   ["xl/styles.xml",'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="1"><numFmt numFmtId="164" formatCode="#,##0.000"/></numFmts><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF15407A"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="3"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/><xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>'],
+   ["xl/worksheets/sheet1.xml",`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><cols>${widths}</cols><sheetData>${sheet}</sheetData></worksheet>`]])}
+
+/* Lecture .xlsx (sans bibliothèque : zip + inflate natif du navigateur) */
+async function readXlsx(file){
+  const buf=new Uint8Array(await file.arrayBuffer()),dv=new DataView(buf.buffer);let e=buf.length-22;
+  while(e>=0&&dv.getUint32(e,true)!==0x06054b50)e--;if(e<0)throw new Error("Fichier .xlsx invalide");
+  const n=dv.getUint16(e+10,true);let p=dv.getUint32(e+16,true);const files={};
+  for(let i=0;i<n;i++){const meth=dv.getUint16(p+10,true),csz=dv.getUint32(p+20,true),nl=dv.getUint16(p+28,true),xl=dv.getUint16(p+30,true),cl=dv.getUint16(p+32,true),lo=dv.getUint32(p+42,true);
+    const name=new TextDecoder().decode(buf.subarray(p+46,p+46+nl));files[name]={meth,csz,lo};p+=46+nl+xl+cl}
+  async function get(name){const f=files[name];if(!f)return null;const nl=dv.getUint16(f.lo+26,true),xl=dv.getUint16(f.lo+28,true),d=buf.subarray(f.lo+30+nl+xl,f.lo+30+nl+xl+f.csz);
+    if(f.meth===0)return new TextDecoder().decode(d);
+    if(typeof DecompressionStream==="undefined")throw new Error("Navigateur trop ancien pour lire .xlsx (mettez iOS à jour)");
+    const s=new Blob([d]).stream().pipeThrough(new DecompressionStream("deflate-raw"));return await new Response(s).text()}
+  const P=s=>new DOMParser().parseFromString(s,"application/xml");
+  const ss=[];const sst=await get("xl/sharedStrings.xml");if(sst)P(sst).querySelectorAll("si").forEach(si=>ss.push([...si.getElementsByTagName("t")].map(t=>t.textContent).join("")));
+  let sheetPath="xl/worksheets/sheet1.xml";
+  try{const wb=P(await get("xl/workbook.xml")),rid=wb.getElementsByTagName("sheet")[0].getAttribute("r:id"),rels=P(await get("xl/_rels/workbook.xml.rels"));
+    const t=[...rels.getElementsByTagName("Relationship")].find(r=>r.getAttribute("Id")===rid).getAttribute("Target");sheetPath="xl/"+t.replace(/^\/?xl\//,"").replace(/^\//,"")}catch(e){}
+  const sh=P(await get(sheetPath)||await get("xl/worksheets/sheet1.xml"));const out=[];
+  const cidx=ref=>{const m=ref.match(/^[A-Z]+/)[0];let n=0;for(const c of m)n=n*26+c.charCodeAt(0)-64;return n-1};
+  sh.querySelectorAll("sheetData > row").forEach(r=>{const ri=+r.getAttribute("r")-1||out.length,row=[];
+    r.querySelectorAll("c").forEach(c=>{const t=c.getAttribute("t"),ref=c.getAttribute("r"),v=c.getElementsByTagName("v")[0];let val=null;
+      if(t==="s")val=ss[+v.textContent];else if(t==="inlineStr")val=[...c.getElementsByTagName("t")].map(x=>x.textContent).join("");else if(v){val=t==="str"||t==="b"?v.textContent:+v.textContent}
+      row[ref?cidx(ref):row.length]=val});out[ri]=row});
+  return out.map(r=>r||[])}
+async function importXlsx(file,type){if(!file)return;const res=$("impRes");res.innerHTML='<p class="mu">⏳ Lecture…</p>';
+  try{const rows=await readXlsx(file);const r=type==="caisse"?importCaisse(rows):importClients(rows);save();
+    res.innerHTML=`<div class="stats" style="margin-top:10px">${Object.entries(r).filter(([k])=>!k.startsWith("_")).map(([k,v])=>`<div class="stat ${k==="anomalies"&&v?"r":""}"><div class="l">${k}</div><div class="v">${v}</div></div>`).join("")}</div>${(r._details||[]).length?`<details open><summary><b>Anomalies</b></summary><ul class="mu">${r._details.map(d=>`<li>${esc(d)}</li>`).join("")}</ul></details>`:""}`;toast("Import terminé")}
+  catch(e){res.innerHTML=`<p style="color:var(--ko);font-weight:700">Import impossible : ${esc(e.message||e)}</p>`}}
+function importCaisse(rows){
+  let h=rows.findIndex(r=>{const k=new Set(r.map(norm));return["datereglement","nomdeclarant","ndossier","mf","type"].filter(x=>k.has(x)).length>=4});
+  if(h<0)throw new Error("en-tête introuvable : date reglement, nom declarant, N°dossier, MF, type");
+  const H=rows[h].map(norm),ix=(...n)=>{for(const x of n){const i=H.indexOf(x);if(i>=0)return i}return -1};
+  const C={date:ix("datereglement","daterglement","datecaisse","datepaiement"),dec:ix("nomdeclarant","declarant","nomdec","dec"),num:ix("ndossier","nodossier","numerodossier","numdossier","dossier"),mf:ix("mf","matriculefiscale","codedouane","codeclient"),type:ix("type","service","typedossier","typeservice"),rep:ix("nrep","norep","numerorep","repertoire","numrepertoire","nrepertoire"),c10:ix("case10","case","ncase10"),paye:ix("montantpaye","paye","payee","montantregle","regle"),np:ix("nonpaye","reste","resteapayer","montantnonpaye"),obs:ix("observation","observations","obs")};
+  const miss=["date","dec","num","type","paye"].filter(k=>C[k]<0);if(miss.length)throw new Error("colonnes manquantes : "+miss.join(", "));
+  let imp=0,maj=0,ign=0;const det=[],dates=new Set();
+  rows.slice(h+1).forEach((r,i)=>{const L=h+i+2,g=k=>C[k]>=0?r[C[k]]:null;if(!r.some(v=>v!==null&&v!==undefined&&String(v).trim()!==""))return;
+    const date=toIso(g("date")),dn=String(g("dec")??"").trim().toLowerCase().replace(/\s+/g," "),numero=String(g("num")??"").trim().replace(/\.0$/,""),mf=cleanMf(g("mf")),code=normService(g("type"));
+    if(!date||!dn||!numero||!code){ign++;return}dates.add(date);
+    const pr=g("paye"),npr=g("np"),fac=String(pr??"").toLowerCase()==="fac"||String(npr??"").toLowerCase()==="fac",paye=fac?0:num(pr);
+    if(paye===null){det.push(`Ligne ${L} : montant payé non numérique (${numero})`);return}
+    const[d,cr]=getOrCreateDec(dn,0);if(cr)det.push(`Ligne ${L} : déclarant nouveau « ${dn} » — en attente de validation`);
+    const s=getOrCreateSvc(code),cl=mf?findCliMf(mf):null;if(mf&&!cl)det.push(`Ligne ${L} : MF inconnu ${mf}`);else if(cl&&cl.decId!==d.id)det.push(`Ligne ${L} : MF ${mf} rattaché à un autre déclarant`);
+    let rep=code==="DDM"?addRep(g("rep")):null;const c10=code==="DDM"&&!["","0","false","non","null","undefined"].includes(String(g("c10")??"").trim().toLowerCase());
+    let m=calculer(d.id,s.id,rep,c10,paye);if(!fac&&num(npr))m.total=Math.max(m.total,paye+num(npr));m=heriter(s.id,numero,m,paye,date);rep=m.rep||rep;
+    const ex=S.ops.find(o=>o.num===numero&&o.svcId===s.id&&o.date===date&&o.decId===d.id&&Math.abs((+o.paye||0)-paye)<.001);
+    const k=controle(numero,s.id,m.total,paye,ex?ex.id:undefined);
+    if(!k.ok){det.push(`Ligne ${L} : ${k.message}`);anomalie("IMPORT",k.cle,date,dn,code,numero,paye,k.message);return}
+    const v={clientId:cl?cl.id:null,mf,rep:rep||"",c10:m.c10,tarif:m.tarif,sRep:m.sRep,sC10:m.sC10,total:m.total,paye,reste:fac?m.total:Math.max(m.total-paye,0),statut:fac?"FAC":(paye>=m.total-.001?"PAYE":"RESTE_A_PAYER"),obs:String(g("obs")??"").trim()||"Import état caisse"};
+    if(ex){Object.assign(ex,v);maj++}else{S.ops.push({id:nid(),num:numero,decId:d.id,svcId:s.id,date,created:nowIso(),...v});imp++}recalc(s.id,numero)});
+  audit("IMPORT_CAISSE",`${imp} ajoutées, ${maj} mises à jour, ${det.length} anomalies — ${[...dates].sort().join(", ")}`);
+  return{"lignes importées":imp,"lignes mises à jour":maj,"lignes ignorées":ign,"anomalies":det.length,_details:det.slice(0,200)}}
+function importClients(rows){let h=rows.findIndex(r=>r.map(norm).some(k=>["mf","codedouane","matriculefiscale"].includes(k)));if(h<0)h=0;
+  const H=rows[h].map(norm),ix=(...n)=>{for(const x of n){const i=H.indexOf(x);if(i>=0)return i}return -1};
+  const im=ix("codedouane","mf","matriculefiscale","matriculefiscal"),id=ix("declarant","nomdeclarant"),ic=ix("client","raisonsociale","societe","nomclient"),it=ix("telephone","tel");
+  if(im<0||id<0||ic<0)throw new Error("colonnes MF (ou Code douane), Déclarant et Client requises");
+  const st={"déclarants ajoutés":0,"clients ajoutés":0,"clients mis à jour":0,"lignes ignorées":0};
+  rows.slice(h+1).forEach(r=>{const mf=cleanMf(r[im]),dn=String(r[id]??"").trim().toLowerCase().replace(/\s+/g," "),rs=String(r[ic]??"").trim().replace(/\s+/g," ");
+    if(!mf||!dn||!rs){st["lignes ignorées"]++;return}const[d,cr]=getOrCreateDec(dn,1);if(cr)st["déclarants ajoutés"]++;
+    const c=findCliMf(mf),tel=it>=0?String(r[it]??"").trim():"";if(c){c.rs=rs;c.decId=d.id;if(tel)c.tel=tel;st["clients mis à jour"]++}else{S.clients.push({id:nid(),rs,mf,decId:d.id,tel,actif:1});st["clients ajoutés"]++}});
+  audit("IMPORT_CLIENTS",JSON.stringify(st));return st}
+
+/* ───────────── Démarrage : création / saisie du mot de passe ───────────── */
+let MODE=null,ESSAIS=0,BLOQUE=0,OLD_PLAIN=null;
+function lockUI(titre,msg,creation){$("lkT").textContent=titre;$("lkM").innerHTML=msg;$("lkF").style.display="block";$("pw2w").style.display=creation?"block":"none";
+  $("pw1").autocomplete=creation?"new-password":"current-password";$("lkB").textContent=creation?"Créer et chiffrer":"Déverrouiller";setTimeout(()=>$("pw1").focus(),200)}
+async function lockSubmit(){const pw=$("pw1").value,E=$("lkE");E.textContent="";
+  if(Date.now()<BLOQUE){E.textContent=`Trop d'essais — patientez ${Math.ceil((BLOQUE-Date.now())/1000)} s`;return}
+  $("lkB").disabled=true;$("lkB").textContent="⏳";
+  try{
+    if(MODE==="creer"){if(pw.length<8){E.textContent="8 caractères minimum";return}if(pw!==$("pw2").value){E.textContent="Les deux mots de passe diffèrent";return}
+      SALT=crypto.getRandomValues(new Uint8Array(16));CK=await deriveKey(pw,SALT);S=OLD_PLAIN||fresh();normalise();audit("CREATION_COFFRE",OLD_PLAIN?"données existantes chiffrées":"nouveau");
+      await kvPut(VKEY,await seal(S,CK,SALT));if(OLD_PLAIN){await kvPut(OLDKEY,undefined);try{localStorage.removeItem(DBN)}catch(e){}}OLD_PLAIN=null}
+    else{const box=await kvGet(VKEY);SALT=ub64(box.salt);const k=await deriveKey(pw,SALT);
+      try{S=await unseal(box,k)}catch(e){ESSAIS++;if(ESSAIS>=5){BLOQUE=Date.now()+30000*Math.pow(2,ESSAIS-5)}E.textContent="Mot de passe incorrect";$("pw1").value="";return}
+      CK=k;ESSAIS=0;normalise()}
+    $("pw1").value=$("pw2").value="";$("lock").style.display="none";go("accueil");armerVerrou();
+  }catch(e){E.textContent="Erreur : "+(e.message||e)}
+  finally{$("lkB").disabled=false;$("lkB").textContent=MODE==="creer"?"Créer et chiffrer":"Déverrouiller"}}
+function armerVerrou(){let t=Date.now(),cache=0;const act=()=>t=Date.now();["pointerdown","keydown","scroll"].forEach(e=>addEventListener(e,act,{passive:true}));
+  setInterval(()=>{if(CK&&Date.now()-t>5*60000)verrouiller()},15000);
+  document.addEventListener("visibilitychange",()=>{if(document.hidden)cache=Date.now();else if(CK&&cache&&Date.now()-cache>2*60000)verrouiller()})}
+(async()=>{
+  if(!window.crypto||!crypto.subtle){$("lkT").textContent="Connexion non sécurisée";$("lkM").innerHTML="Le chiffrement exige une page en <b>https://</b> (ou le fichier ouvert sur PC). Ouvrez l'adresse sécurisée de l'application.";return}
+  try{const box=await kvGet(VKEY);
+    if(box){MODE="ouvrir";lockUI("ISC Caisse Espèce","Saisissez votre mot de passe.",false)}
+    else{try{OLD_PLAIN=await kvGet(OLDKEY)}catch(e){}if(!OLD_PLAIN){try{OLD_PLAIN=JSON.parse(localStorage.getItem(DBN)||"null")}catch(e){}}
+      MODE="creer";lockUI("Créer votre mot de passe",(OLD_PLAIN?"<b>Des données non protégées existent : elles vont être chiffrées.</b><br>":"")+"8 caractères minimum. <b style='color:var(--ko)'>Sans ce mot de passe, les données sont irrécupérables</b> (même par le concepteur).",true)}
+    if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
+  }catch(e){$("lkM").textContent="Erreur de stockage : "+(e.message||e)}
+  if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("sw.js").catch(()=>{});
+})();
+</script>
+</body>
+</html>
