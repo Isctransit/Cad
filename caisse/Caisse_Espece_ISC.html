@@ -41,7 +41,7 @@ input.ok{background:#eefaf2;border-color:#7cc49a}input.bad{border:2px solid var(
 button.b,a.b{font:inherit;font-weight:700;font-size:15px;border:0;border-radius:10px;padding:11px 16px;background:var(--navy);color:#fff;text-decoration:none;display:inline-block;text-align:center}
 .b.gold{background:var(--gold)}.b.ok{background:var(--ok)}.b.ko{background:var(--ko)}.b.lite{background:var(--lb);color:var(--navy)}.b.sm{padding:6px 10px;font-size:13px;border-radius:8px}
 .b.full{width:100%;margin-top:10px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.row>div{min-width:0}input[type=date]{min-width:0;max-width:100%;font-size:15px;padding:10px 6px}.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 @media(min-width:760px){.row.w{grid-template-columns:repeat(4,1fr)}}
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}@media(min-width:760px){.stats{grid-template-columns:repeat(4,1fr)}}
 .stat{background:#fff;border:1px solid var(--bd);border-left:4px solid var(--navy);border-radius:11px;padding:10px 12px}
@@ -64,6 +64,7 @@ tfoot td{background:var(--lb);font-weight:800;color:var(--navy)}
 .calc{background:var(--lb);border-radius:10px;padding:10px 12px;margin-top:10px;font-size:14px;line-height:1.7}.calc b{color:var(--navy)}
 .hist{margin-top:10px;padding:10px 12px;border-radius:10px;font-weight:600;font-size:13.5px}
 .review{border:2px solid var(--gold);background:#fffaf0}
+.ro{background:#f2f5f9!important;color:var(--navy);font-weight:700}
 .ac{position:relative}.acl{display:none;position:absolute;z-index:40;left:0;right:0;background:#fff;border:1px solid var(--bd);max-height:240px;overflow:auto;border-radius:0 0 10px 10px;box-shadow:0 10px 20px rgba(0,0,0,.15)}
 .acl div{padding:11px 12px;border-bottom:1px solid #eef2f7}.acl div:active,.acl div.on{background:#fff3c8}
 .toast{position:fixed;left:12px;right:12px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:60;padding:12px 14px;border-radius:11px;font-weight:700;box-shadow:0 8px 20px rgba(0,0,0,.2);display:none}
@@ -74,7 +75,8 @@ tfoot td{background:var(--lb);font-weight:800;color:var(--navy)}
 .seg button{flex:1;border:0;background:none;padding:8px;border-radius:8px;font:inherit;font-weight:700;font-size:13.5px;color:var(--navy)}
 .seg button.on{background:var(--gold);color:#fff}
 #lock{position:fixed;inset:0;z-index:100;background:linear-gradient(135deg,var(--navy),var(--navy2));display:none;align-items:center;justify-content:center;flex-direction:column;color:#fff;gap:14px}
-#lock .box{background:#fff;color:var(--tx);border-radius:16px;padding:22px 20px;width:min(360px,90vw);border-top:5px solid var(--gold);box-shadow:0 20px 50px rgba(0,0,0,.35)}#lock h3{margin:0 0 4px;text-align:center}#lock .mu{text-align:center}#lock .err{color:var(--ko);font-weight:700;text-align:center;min-height:20px;margin-top:8px}
+#lock .box{background:#fff;color:var(--tx);border-radius:16px;padding:22px 20px;width:min(360px,90vw);border-top:5px solid var(--gold);box-shadow:0 20px 50px rgba(0,0,0,.35)}#lock h3{margin:0 0 4px;text-align:center}#lock .mu{text-align:center}.aglist{display:grid;grid-template-columns:1fr 1fr;gap:8px}.aglist label{margin:0;border:2px solid var(--bd);border-radius:10px;padding:10px;text-align:center;color:var(--navy)}.aglist input{display:none}.aglist input:checked+label{border-color:var(--gold);background:#fff8ea}.aglist small{display:block;color:var(--mu);font-weight:500;font-size:11px}
+#lock .err{color:var(--ko);font-weight:700;text-align:center;min-height:20px;margin-top:8px}
 #modal{position:fixed;inset:0;z-index:90;background:rgba(10,25,50,.55);display:none;align-items:flex-end;justify-content:center;padding:12px}
 #modal .mb{background:#fff;border-radius:16px;padding:16px;width:min(480px,100%);border-top:5px solid var(--gold);max-height:90vh;overflow:auto;margin-bottom:env(safe-area-inset-bottom)}
 @media(min-width:760px){#modal{align-items:center}}
@@ -85,12 +87,15 @@ footer{text-align:center;color:var(--mu);font-size:11px;padding:10px}
 </head>
 <body>
 <div id="lock" style="display:flex"><div style="font-size:40px">🔒</div><div class="box"><h3 id="lkT">ISC Caisse Espèce</h3><div class="mu" id="lkM">Chargement…</div>
-<form id="lkF" onsubmit="event.preventDefault();lockSubmit()" style="display:none"><input type="text" name="username" value="caisse" autocomplete="username" style="display:none">
-<label>Mot de passe</label><input id="pw1" type="password" autocomplete="current-password">
-<div id="pw2w" style="display:none"><label>Confirmer le mot de passe</label><input id="pw2" type="password" autocomplete="new-password"></div>
-<button class="b gold full" id="lkB">Déverrouiller</button><div class="err" id="lkE"></div></form></div></div>
-<header><div class="logo">ISC</div><div><h1>Caisse Espèce</h1><div class="sub">Version mobile autonome</div></div>
-<div class="r noprint"><button class="ib" onclick="go('charger')" title="Charger des fichiers Excel">📥</button><button class="ib" onclick="go('outils')" title="Outils">⚙️</button></div></header>
+<form id="lkF" onsubmit="event.preventDefault();lockSubmit()" style="display:none">
+<div id="agW" style="display:none"><label>Qui prend la caisse ?</label><div id="agList" class="aglist"></div></div>
+<div id="nomW" style="display:none"><label>Votre nom (gérant)</label><input id="nomG" autocomplete="name"></div>
+<input type="text" name="username" id="lkUser" autocomplete="username" style="display:none">
+<label id="pw1L">Code personnel</label><input id="pw1" type="password" autocomplete="current-password">
+<div id="pw2w" style="display:none"><label>Confirmer le code</label><input id="pw2" type="password" autocomplete="new-password"></div>
+<button class="b gold full" id="lkB">Ouvrir la caisse</button><div class="err" id="lkE"></div></form></div></div>
+<header><div class="logo">ISC</div><div><h1>Caisse Espèce</h1><div class="sub" id="agentSub">Version mobile autonome</div></div>
+<div class="r noprint"><button class="ib" onclick="quitter()" title="Quitter / changer d'agent">🔒</button><button class="ib" onclick="go('charger')" title="Charger des fichiers Excel">📥</button><button class="ib" onclick="go('outils')" title="Outils">⚙️</button></div></header>
 <main id="app"></main>
 <div class="toast" id="toast"></div>
 <div id="modal"><div class="mb" id="mb"></div></div>
@@ -109,15 +114,16 @@ footer{text-align:center;color:var(--mu);font-size:11px;padding:10px}
    (IndexedDB). Échanges : Excel état caisse (compatible V36) et
    sauvegarde complète JSON.  Conçu par Mokhtar Reguigui — ISC/STT
    ════════════════════════════════════════════════════════════════════ */
-const VERSION="Mobile 1.4";
+const VERSION="Mobile 2.0";
 const SUPP_REP=12, SUPP_C10=10;
 const JOURS=["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
 const DEFAULT_SERVICES=[["DDM", "Déclaration détaillée des marchandises", 9], ["TCE AP", "Titre de commerce extérieur avec paiement (code 33)", 14], ["TCE SP", "Titre de commerce extérieur sans paiement (code 93)", 14], ["FDE", "Facture définitive à l'exportation (code 22)", 14], ["AT", "Document d'admission temporaire — régime suspensif (code 39)", 14], ["VISA", "Visa", 15], ["BS", "Bon de sortie", 7], ["DCT", "Contrôle technique", 14], ["INOR", "INORPI — certificat de conformité aux normes", 15], ["ONA", "Contrôle de l'Office national de l'artisanat", 15], ["DAE", "Déclaration simplifiée d'autorisation d'exportation", 8], ["ASS", "Assurance — prix variable selon le total facture", 0], ["PRIV", "Privilège", 10]];
 
-/* ───────────── Stockage CHIFFRÉ (IndexedDB + AES-256-GCM) ─────────────
-   Les données ne sont jamais écrites en clair : clé dérivée du mot de passe
-   (PBKDF2-SHA256, 250 000 itérations, sel aléatoire). Mot de passe jamais stocké. */
-let S=null,CK=null,SALT=null;
+/* ───────────── Stockage CHIFFRÉ multi-agents (IndexedDB + AES-256-GCM) ─────────────
+   Une clé de données aléatoire (DEK) chiffre la caisse. Chaque agent possède son code personnel :
+   la DEK est « emballée » séparément avec la clé dérivée de chaque code (PBKDF2-SHA256, 250 000 it.).
+   Aucun code n'est stocké ; un agent supprimé ne peut plus ouvrir la caisse. */
+let S=null,DEK=null,DEKRAW=null,AGENTS=[],AG=null;
 const DBN="isc_caisse_mobile",VKEY="coffre",OLDKEY="etat",ITER=250000;
 const TE=new TextEncoder(),TD=new TextDecoder();
 const b64=u=>{let s="";const a=new Uint8Array(u);for(let i=0;i<a.length;i+=0x8000)s+=String.fromCharCode(...a.subarray(i,i+0x8000));return btoa(s)};
@@ -127,14 +133,21 @@ async function kvGet(k){const db=await idb();return new Promise((res,rej)=>{cons
 async function kvPut(k,v){const db=await idb();return new Promise((res,rej)=>{const tx=db.transaction("kv","readwrite");v===undefined?tx.objectStore("kv").delete(k):tx.objectStore("kv").put(v,k);tx.oncomplete=res;tx.onerror=()=>rej(tx.error)})}
 async function deriveKey(pw,salt){const base=await crypto.subtle.importKey("raw",TE.encode(pw),"PBKDF2",false,["deriveKey"]);
   return crypto.subtle.deriveKey({name:"PBKDF2",salt,iterations:ITER,hash:"SHA-256"},base,{name:"AES-GCM",length:256},false,["encrypt","decrypt"])}
-async function seal(obj,key,salt){const iv=crypto.getRandomValues(new Uint8Array(12));
-  const ct=await crypto.subtle.encrypt({name:"AES-GCM",iv},key,TE.encode(JSON.stringify(obj)));return{v:1,alg:"AES-256-GCM/PBKDF2-SHA256",iter:ITER,salt:b64(salt),iv:b64(iv),ct:b64(ct)}}
-async function unseal(box,key){const pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:ub64(box.iv)},key,ub64(box.ct));return JSON.parse(TD.decode(pt))}
+async function encBytes(key,bytes){const iv=crypto.getRandomValues(new Uint8Array(12));return{iv:b64(iv),ct:b64(await crypto.subtle.encrypt({name:"AES-GCM",iv},key,bytes))}}
+async function decBytes(key,box){return new Uint8Array(await crypto.subtle.decrypt({name:"AES-GCM",iv:ub64(box.iv)},key,ub64(box.ct)))}
+async function seal(obj,key){return encBytes(key,TE.encode(JSON.stringify(obj)))}
+async function unseal(box,key){return JSON.parse(TD.decode(await decBytes(key,box)))}
+const importDek=raw=>crypto.subtle.importKey("raw",raw,{name:"AES-GCM"},false,["encrypt","decrypt"]);
+async function nouvelAgent(nom,role,code){const salt=crypto.getRandomValues(new Uint8Array(16)),kek=await deriveKey(code,salt);
+  return{id:"a"+Date.now().toString(36)+Math.random().toString(36).slice(2,6),nom,role,salt:b64(salt),cle:await encBytes(kek,DEKRAW),cree:nowIso()}}
+async function ouvrirAgent(a,code){const kek=await deriveKey(code,ub64(a.salt));return decBytes(kek,a.cle)}
+async function coffre(){return{v:2,alg:"AES-256-GCM / PBKDF2-SHA256 / DEK par agent",iter:ITER,agents:AGENTS,data:await seal(S,DEK)}}
+const estGerant=()=>AG&&AG.role==="gerant";
 function normalise(){S.meta=S.meta||{};if(S.services)DEFAULT_SERVICES.forEach(([c,l,p])=>{const s=S.services.find(x=>x.code===c);if(s)s.lib=l;else S.services.push({id:(S.meta.seq=(S.meta.seq||1)+1)-1,code:c,lib:l,tarif:p,actif:1})});if(S.services){const ap=S.services.find(x=>x.code==="TCE AP");if(ap)S.services.filter(x=>["TCE SP","FDE","AT"].includes(x.code)&&!+x.tarif).forEach(x=>x.tarif=ap.tarif)}if(S.services){const o=S.services.find(x=>x.code==="TCE"),n=S.services.find(x=>x.code==="TCE AP");if(o&&n){(S.ops||[]).forEach(op=>{if(op.svcId===o.id)op.svcId=n.id});(S.tarifs||[]).forEach(tf=>{if(tf.svcId===o.id&&!S.tarifs.some(x=>x.decId===tf.decId&&x.svcId===n.id))tf.svcId=n.id});S.tarifs=(S.tarifs||[]).filter(tf=>tf.svcId!==o.id);if(o.tarif)n.tarif=o.tarif;S.services=S.services.filter(x=>x!==o);(S.audit=S.audit||[]).unshift({quand:nowIso(),action:"FUSION_SERVICE",detail:"TCE → TCE AP"})}}["declarants","clients","services","tarifs","reps","ops","feries","anomalies","audit"].forEach(k=>S[k]=S[k]||[]);
-  if(!S.meta.seq)S.meta.seq=Math.max(1,...S.ops.map(o=>o.id+1),...S.declarants.map(d=>d.id+1),...S.clients.map(c=>c.id+1),...S.services.map(s=>s.id+1));delete S.meta.pin}
+  if(!S.meta.seq)S.meta.seq=Math.max(1,...S.ops.map(o=>o.id+1),...S.declarants.map(d=>d.id+1),...S.clients.map(c=>c.id+1),...S.services.map(s=>s.id+1));delete S.meta.pin;S.tarifs.forEach(x=>{if(x.sr===undefined)x.sr=null;if(x.sp===undefined)x.sp=null})}
 let saveTimer=null,saving=Promise.resolve();
-function save(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>{saving=saving.then(async()=>{
-  try{await kvPut(VKEY,await seal(S,CK,SALT))}catch(e){toast("⚠ Enregistrement impossible : exportez une sauvegarde",false)}})},120)}
+function save(){if(!DEK)return;clearTimeout(saveTimer);saveTimer=setTimeout(()=>{saving=saving.then(async()=>{
+  try{await kvPut(VKEY,await coffre())}catch(e){toast("⚠ Enregistrement impossible : exportez une sauvegarde",false)}})},120)}
 function fresh(){const s={declarants:[],clients:[],services:[],tarifs:[],reps:[],ops:[],feries:[],anomalies:[],audit:[],meta:{seq:1,created:nowIso()}};
   DEFAULT_SERVICES.forEach(([c,l,t])=>s.services.push({id:s.meta.seq++,code:c,lib:l,tarif:t,actif:1}));return s}
 const nid=()=>S.meta.seq++;
@@ -174,11 +187,11 @@ function getTarif(decId,svcId){const t=S.tarifs.find(t=>t.decId==decId&&t.svcId=
 
 /* ───────────── Règles métier (identiques V36) ───────────── */
 function calculer(decId,svcId,rep,c10,paye){
-  const code=(svc(svcId)||{}).code,t=getTarif(decId,svcId);paye=+paye||0;let sr=0,sc=0;
-  if(code==="DDM"){let has=!!rep||!!c10;
-    if(!has&&Math.abs(paye-(t+SUPP_REP))<.001)has=true;
-    if(!has&&Math.abs(paye-(t+SUPP_REP+SUPP_C10))<.001){has=true;c10=true}
-    if(has){sr=SUPP_REP;if(c10)sc=SUPP_C10}}
+  const code=(svc(svcId)||{}).code;let t=getTarif(decId,svcId);paye=+paye||0;let sr=0,sc=0;
+  if(code==="DDM"){const P=tarifsDDM(decId,svcId);t=P.t;let has=!!rep||!!c10;
+    if(!has&&Math.abs(paye-(t+P.r))<.001)has=true;
+    if(!has&&Math.abs(paye-(t+P.r+P.p))<.001){has=true;c10=true}
+    if(has){sr=P.r;if(c10)sc=P.p}}
   const total=Math.max(t+sr+sc,paye);
   return{tarif:t,sRep:sr,sC10:sc,total,reste:Math.max(total-paye,0),c10:c10?1:0}}
 const dossierOps=(svcId,numero,exclude)=>S.ops.filter(o=>o.svcId==svcId&&o.num===String(numero).trim()&&o.id!==exclude);
@@ -204,7 +217,7 @@ function repAff(o){const s=svc(o.svcId);let r=o.rep||"",c="";if(s&&s.code==="DDM
 
 /* ───────────── Navigation ───────────── */
 let VIEW="accueil",ARGS={};
-function go(v,args){VIEW=v;ARGS=args||{};document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));render();window.scrollTo(0,0)}
+function go(v,args){VIEW=v;ARGS=args||{};if(S&&AG&&v!=="operation"){S.meta.reprise={view:v,args:ARGS,agent:AG.nom};save()}document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));render();window.scrollTo(0,0)}
 function render(){const f=V[VIEW]||V.accueil;$("app").innerHTML=f()+`<footer>ISC / STT — Caisse Espèce ${VERSION} · Conçu par Mokhtar Reguigui</footer>`;(A[VIEW]||(()=>{}))()}
 const V={},A={};
 
@@ -228,46 +241,124 @@ V.accueil=()=>{
   <h3>Encaissé par service — ${mois}</h3><div class="list">${Object.entries(parSvc).sort((a,b)=>b[1].t-a[1].t).map(([c,v])=>`<div class="it"><div class="t">${esc(c)}</div><div class="a">${f3(v.t)}</div><div class="s">${v.nb} opération(s)</div></div>`).join("")||`<p class="mu">Aucune opération ce mois.</p>`}</div>
   <a class="b gold full" onclick="go('saisie')">＋ Nouvelle saisie</a>`};
 
-/* ───────────── SAISIE ───────────── */
-V.saisie=()=>`<h2>＋ Saisie caisse</h2>
-<div class="step" id="s1"><div class="st"><b>1</b> — Dossier et déclarant</div>
- <label>N° dossier</label><input id="num" inputmode="numeric" maxlength="6" placeholder="ex : 25333" autocomplete="off">
- <label>Déclarant</label><div class="ac"><input id="dec" placeholder="Nom ou code…" autocomplete="off"><div class="acl" id="decl"></div></div>
- <button class="b full" onclick="go1()">Confirmer</button></div>
-<div class="step lock" id="s2"><div class="st"><b>2</b> — Service et client</div>
- <label>Service (code)</label><div class="ac"><input id="svcIn" placeholder="DDM, TCE, ASS…" autocapitalize="characters" autocomplete="off"><div class="acl" id="svcl"></div></div><input type="hidden" id="svc">
- <label>MF client (optionnel)</label><div class="ac"><input id="mf" placeholder="MF ou nom du client" autocomplete="off"><div class="acl" id="mfl"></div></div><div class="mu" id="cliInfo"></div>
+/* ───────────── SAISIE : feuille de caisse A → P ─────────────
+   A date/heure système · B date saisie · C date encaissement · D N° dossier (5 chiffres) · E type · F client
+   · G MF (auto) · H déclarant (auto) · I prix total · J répertoire · K prise en charge · L payé
+   · M reste à payer · N non payé · O observation · P agent (automatique) */
+V.saisie=()=>`<h2>＋ Saisie caisse</h2><p class="mu" style="margin-top:-6px">Agent : <b style="color:var(--gold)">${esc(AG.nom)}</b> (colonne P, automatique)</p>
+<div class="step" id="s1"><div class="st"><b>1</b> — Dossier <span class="mu">B · C · D · E</span></div>
+ <div class="row"><div><label>B · Date saisie</label><input id="dop" type="date" value="${today()}"></div><div><label>C · Encaissement</label><input id="dreg" type="date" value="${today()}"></div></div>
+ <div class="row"><div><label>D · N° dossier (5 chiffres)</label><input id="num" inputmode="numeric" maxlength="5" placeholder="25333" autocomplete="off"></div>
+ <div><label>E · Type</label><div class="ac"><input id="svcIn" placeholder="DDM, DCT…" autocapitalize="characters" autocomplete="off"><div class="acl" id="svcl"></div></div><input type="hidden" id="svc"></div></div>
  <div class="hist" id="hist" style="display:none"></div>
+ <button class="b full" onclick="go1()">Confirmer</button></div>
+<div class="step lock" id="s2"><div class="st"><b>2</b> — Client <span class="mu">F · G · H</span></div>
+ <label>F · Client (nom ou MF)</label><div class="ac"><input id="cli" placeholder="Nom du client…" autocomplete="off"><div class="acl" id="clil"></div></div>
+ <div class="row"><div><label>G · Matricule fiscal</label><input id="mfv" readonly class="ro"></div><div><label>H · Déclarant</label><input id="decv" readonly class="ro"></div></div>
  <button class="b full" onclick="go2()">Confirmer</button></div>
-<div class="step lock" id="s3" style="display:none"><div class="st"><b>3</b> — Répertoire / case 10 (DDM)</div>
- <label>N° répertoire (5 chiffres, vide = sans)</label><div class="ac"><input id="rep" inputmode="numeric" maxlength="5" placeholder="Sans répertoire" autocomplete="off"><div class="acl" id="repl"></div></div>
- <label class="chk"><input type="checkbox" id="c10"> Case 10</label>
+<div class="step lock" id="s3"><div class="st"><b>3</b> — Prix <span class="mu">I · J · K</span></div>
+ <div id="pxBtns"></div>
+ <label>I · Prix total (DT)</label><input id="prix" type="number" inputmode="decimal" step="0.001">
+ <div class="row ddm"><div><label>J · Répertoire</label><div class="ac"><input id="rep" inputmode="numeric" maxlength="5" autocomplete="off"><div class="acl" id="repl"></div></div></div>
+ <div><label>K · Prise en charge</label><input id="pec" inputmode="numeric" maxlength="5"></div></div>
+ <div class="mu" id="pxInfo" style="margin-top:6px"></div>
  <button class="b full" onclick="go3()">Confirmer</button></div>
-<div class="step lock" id="s4"><div class="st"><b>4</b> — Paiement</div>
- <div class="row"><div><label>Montant payé (DT)</label><input id="paye" type="number" inputmode="decimal" step="0.001" min="0"></div>
- <div><label>Date</label><input id="dreg" type="date" value="${today()}"></div></div>
- <label class="chk"><input type="checkbox" id="fac"> FAC (facturé, non encaissé)</label>
- <label>Observation</label><input id="obs">
+<div class="step lock" id="s4"><div class="st"><b>4</b> — Paiement <span class="mu">L · M · N · O</span></div>
+ <label>L · Montant payé (DT)</label><input id="paye" type="number" inputmode="decimal" step="0.001" min="0">
+ <label class="chk"><input type="checkbox" id="fac"> Non payé (FAC)</label>
+ <label>O · Observation</label><input id="obs">
  <div class="calc" id="calc"></div>
  <button class="b full" onclick="go4()">Contrôler</button></div>
 <div class="step lock review" id="s5"><div class="st"><b>5</b> — Dernier contrôle</div><div id="rv"></div>
- <button class="b ok full" onclick="valider()">✅ Valider l'encaissement</button><button class="b lite full" onclick="go('saisie')">Annuler</button></div>
+ <button class="b ok full" onclick="valider()">✅ Valider l'encaissement</button><button class="b lite full" onclick="annulerSaisie()">Annuler</button></div>
 <h3>Aujourd'hui</h3><div class="list">${opsList(S.ops.filter(o=>o.date===today()).sort((a,b)=>b.id-a.id))}</div>`;
 let SA={};
+const CHAMPS_S=["dop","dreg","num","svcIn","svc","cli","mfv","decv","prix","rep","pec","paye","obs"];
+function sauverBrouillon(){if(!S||!$("num"))return;const o={mf:SA.mf,decId:SA.decId,etape:[1,2,3,4,5].filter(i=>!$("s"+i).classList.contains("lock")).pop()};CHAMPS_S.forEach(id=>o[id]=$(id).value);o.fac=$("fac").checked;
+  S.meta.brouillon=o.num?o:null;save()}
 A.saisie=()=>{
-  SA={decId:null,H:null};
-  const decs=S.declarants.filter(d=>d.actif&&d.valide).sort((a,b)=>a.nom.localeCompare(b.nom));
-  ac($("dec"),$("decl"),decs,d=>d.nom+(d.code?" ("+d.code+")":""),d=>{SA.decId=d?d.id:null;if(d)$("dec").value=d.nom;$("dec").classList.toggle("ok",!!d)});
-  ac($("mf"),$("mfl"),S.clients.filter(c=>c.actif!==0),c=>c.mf+" — "+c.rs,c=>{if(c)$("mf").value=c.mf;cliInfo()});
-  ac($("rep"),$("repl"),S.reps.slice().sort().map(n=>({n})),r=>r.n,r=>{if(r)$("rep").value=r.n;calc()});
-  ["paye","c10","fac","rep"].forEach(id=>$(id).addEventListener("input",calc));
-  ac($("svcIn"),$("svcl"),S.services.filter(s=>s.actif).sort((a,b)=>a.code.localeCompare(b.code)),s=>s.code+" — "+s.lib,s=>{$("svc").value=s?s.id:"";if(s)$("svcIn").value=s.code+" — "+s.lib;$("svcIn").classList.toggle("ok",!!s);["s3","s4","s5"].forEach(lockS);SA.H=null});
-  $("mf").addEventListener("change",cliInfo);
-  $("num").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();$("dec").focus()}});
-};
+  SA={decId:null,mf:"",H:null};
+  ac($("svcIn"),$("svcl"),S.services.filter(s=>s.actif).sort((a,b)=>a.code.localeCompare(b.code)),s=>s.code+" — "+s.lib,s=>{$("svc").value=s?s.id:"";if(s)$("svcIn").value=s.code+" — "+s.lib;$("svcIn").classList.toggle("ok",!!s);["s2","s3","s4","s5"].forEach(lockS);SA.H=null});
+  ac($("cli"),$("clil"),S.clients.filter(c=>c.actif!==0).sort((a,b)=>a.rs.localeCompare(b.rs)),c=>c.rs+" ("+c.mf+")",c=>{setCli(c);if(!c)["s3","s4","s5"].forEach(lockS)});
+  ac($("rep"),$("repl"),S.reps.slice().sort().map(n=>({n})),r=>r.n,r=>{if(r)$("rep").value=r.n});
+  ["paye","fac"].forEach(id=>$(id).addEventListener("input",calc));$("prix").addEventListener("input",majPx);
+  $("app").addEventListener("input",()=>{clearTimeout(SA.tb);SA.tb=setTimeout(sauverBrouillon,400)});
+  $("num").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();$("svcIn").focus()}});
+  const o=S.meta.brouillon;
+  if(o&&o.num){CHAMPS_S.forEach(id=>{if(o[id]!=null)$(id).value=o[id]});$("fac").checked=!!o.fac;SA.mf=o.mf||"";SA.decId=o.decId||null;
+    if(o.svc){$("svcIn").classList.add("ok");SA.H=dossierInfo(o.svc,o.num);if(SA.H&&SA.H.reste<=.0005)SA.H=null}
+    for(let i=2;i<=Math.min(o.etape||1,4);i++)unlockS("s"+i);if(SA.mf)$("cli").classList.add("ok");majPx();calc();
+    toast("↩ Saisie en cours reprise là où elle a été laissée")}
+  else $("num").focus()};
+function setCli(c){SA.mf=c?c.mf:"";SA.decId=c?c.decId:null;$("mfv").value=c?c.mf:"";$("decv").value=c?((dec(c.decId)||{}).nom||""):"";$("cli").classList.toggle("ok",!!c);if(c)$("cli").value=c.rs}
+function dossierInfo(svcId,numero){const rows=dossierOps(svcId,numero);if(!rows.length)return null;const f=rows.slice().sort((a,b)=>b.total-a.total)[0];
+  const du=+f.total,p=rows.reduce((a,o)=>a+(+o.paye||0),0);return{nb:rows.length,du,paye:p,reste:Math.max(du-p,0),mf:f.mf,rep:f.rep,pec:!!f.c10,dates:rows.map(o=>frDate(o.date)),cli:(cli(f.clientId)||{}).rs||""}}
+function tarifsDDM(decId,svcId){const c=S.tarifs.find(t=>t.decId==decId&&t.svcId==svcId&&t.actif!==0),s=svc(svcId)||{};
+  return{t:c?+c.t:+s.tarif||0,r:c&&c.sr!=null?+c.sr:SUPP_REP,p:c&&c.sp!=null?+c.sp:SUPP_C10,conv:!!c}}
+async function go1(){const n=$("num").value.trim();if(!/^\d{5}$/.test(n)){toast("N° dossier : exactement 5 chiffres",false);return bad($("num"))}
+  if(!$("svc").value){const code=normService($("svcIn").value.split("—")[0]);if(!code)return bad($("svcIn"));let s=svcByCode(code);
+    if(!s){const r=await ask({titre:"Nouveau type de dossier",msg:`Le type « <b>${esc(code)}</b> » n'existe pas.<br>Voulez-vous l'enregistrer ?<br><span class="mu">Non = entrée erronée : la saisie est remise à zéro.</span>`,
+        champs:[{id:"code",label:"Code",val:code},{id:"lib",label:"Libellé",val:""},{id:"tarif",label:"Prix (DT) — 0 si variable",val:"",type:"number"}],oui:"Enregistrer le type"});
+      if(!r)return annulerSaisie();const c2=normService(r.code)||code;s=svcByCode(c2)||(()=>{const x={id:nid(),code:c2,lib:r.lib.trim()||c2,tarif:num(r.tarif)||0,actif:1};S.services.push(x);audit("NOUVEAU_SERVICE",`${c2} — ${x.tarif} DT`);return x})();save()}
+    $("svc").value=s.id;$("svcIn").value=s.code+" — "+s.lib;$("svcIn").classList.add("ok")}
+  SA.H=dossierInfo($("svc").value,n);const h=$("hist");
+  if(SA.H){const H=SA.H,solde=H.reste<=.0005;h.style.display="block";h.style.background=solde?"var(--kobg)":"var(--wabg)";h.style.color=solde?"var(--ko)":"var(--wa)";
+    h.textContent=(solde?"⛔ Dossier déjà payé intégralement":"⚠ Paiement complémentaire")+` — prix ${f3(H.du)}, payé ${f3(H.paye)}, reste ${f3(H.reste)} (${H.cli}, ${H.dates.join(", ")})`;
+    if(solde){SA.H=null;return}
+    const c=findCliMf(H.mf);if(c)setCli(c);$("prix").value=(+H.du).toFixed(3);$("rep").value=H.rep||"";$("pec").value=H.pec?H.rep:"";
+    ["cli","prix","rep","pec"].forEach(id=>{$(id).readOnly=true;$(id).classList.add("ro")});unlockS("s2");unlockS("s3");majPx();unlockS("s4");$("paye").value=(+H.reste).toFixed(3);calc();sauverBrouillon();return $("paye").focus()}
+  h.style.display="none";unlockS("s2");sauverBrouillon();$("cli").focus()}
+async function go2(){
+  if(!SA.mf){const saisi=$("cli").value.trim();if(!saisi){toast("Client obligatoire",false);return bad($("cli"))}
+    const parMf=findCliMf(saisi);if(parMf)setCli(parMf);else{
+      const estMf=/\d/.test(saisi)&&saisi.length<12;
+      const r=await ask({titre:"Nouveau client",msg:`Le client « <b>${esc(saisi)}</b> » n'existe pas.<br>Voulez-vous l'enregistrer ? (un client = un seul déclarant)<br><span class="mu">Non = entrée erronée : la saisie est remise à zéro.</span>`,
+        champs:[{id:"rs",label:"Client (raison sociale)",val:estMf?"":saisi,req:1},{id:"mf",label:"Matricule fiscal",val:estMf?cleanMf(saisi):"",req:1},{id:"dec",label:"Déclarant",val:"",req:1}],oui:"Enregistrer le client"});
+      if(!r)return annulerSaisie();let d=findDec(r.dec);
+      if(!d){if(!confirm(`Le déclarant « ${r.dec} » n'existe pas : l'enregistrer aussi ?\n(Annuler = saisie remise à zéro)`))return annulerSaisie();[d]=getOrCreateDec(r.dec,1);d.valide=1;audit("NOUVEAU_DECLARANT",d.nom)}
+      const m2=cleanMf(r.mf);let c=findCliMf(m2);if(!c){c={id:nid(),rs:r.rs.trim(),mf:m2,decId:d.id,tel:"",actif:1};S.clients.push(c);audit("NOUVEAU_CLIENT",`${m2} — ${c.rs}`)}
+      save();setCli(c);toast("Client enregistré")}}
+  unlockS("s3");majPx();sauverBrouillon();$("prix").focus()}
+function majPx(){if(!$("svc").value)return;const ddm=isDDM();document.querySelectorAll(".ddm").forEach(e=>e.style.display=ddm?"":"none");
+  if(SA.H){$("pxBtns").innerHTML="";$("pxInfo").textContent="Paiement complémentaire : prix et répertoire repris du dossier.";return}
+  if(ddm){const P=tarifsDDM(SA.decId,$("svc").value),opts=[[P.t,"DDM simple"],[P.t+P.r,"+ répertoire"],[P.t+P.r+P.p,"+ rép. + prise en charge"]];
+    $("pxBtns").innerHTML=`<div class="seg">${opts.map(o=>`<button type="button" class="${Math.abs(+$("prix").value-o[0])<.001?"on":""}" onclick="choixPx(${o[0]})">${f3(o[0])}<br><small style="font-weight:500">${o[1]}</small></button>`).join("")}</div>`;
+    $("pxInfo").innerHTML=(P.conv?"🤝 <b>Prix de faveur</b> du déclarant. ":"")+"1er prix = sans répertoire · 2e = répertoire obligatoire · 3e = répertoire + prise en charge (même numéro).";$("prix").readOnly=false;$("prix").classList.remove("ro")}
+  else{$("pxBtns").innerHTML="";const t=getTarif(SA.decId,$("svc").value);
+    if(t>0){$("prix").value=t.toFixed(3);$("prix").readOnly=true;$("prix").classList.add("ro");$("pxInfo").textContent=S.tarifs.some(x=>x.decId==SA.decId&&x.svcId==$("svc").value&&x.actif!==0)?"🤝 Prix de faveur du déclarant.":"Prix unique du service."}
+    else{$("prix").readOnly=false;$("prix").classList.remove("ro");$("pxInfo").textContent="Prix variable : saisissez le prix total (ex. assurance)."}}}
+function choixPx(v){$("prix").value=v.toFixed(3);majPx();const P=tarifsDDM(SA.decId,$("svc").value);if(Math.abs(v-P.t)<.001){$("rep").value="";$("pec").value="";go3()}else $("rep").focus()}
+function go3(){const v=+$("prix").value,rp=$("rep").value.trim(),pc=$("pec").value.trim();
+  if(!(v>0)){toast("Prix total obligatoire",false);return bad($("prix"))}
+  if(isDDM()&&!SA.H){const P=tarifsDDM(SA.decId,$("svc").value),k=(m,el)=>{toast(m,false);bad(el)};
+    if(Math.abs(v-P.t)<.001){if(rp||pc)return k(`DDM à ${f3(v)} : sans répertoire ni prise en charge`,$("rep"))}
+    else if(Math.abs(v-(P.t+P.r))<.001){if(!/^\d{5}$/.test(rp))return k(`DDM à ${f3(v)} : répertoire (5 chiffres) obligatoire`,$("rep"));if(pc)return k("La prise en charge doit rester vide",$("pec"))}
+    else if(Math.abs(v-(P.t+P.r+P.p))<.001){if(!/^\d{5}$/.test(rp))return k(`DDM à ${f3(v)} : répertoire (5 chiffres) obligatoire`,$("rep"));if(pc!==rp)return k(`Prise en charge = même numéro que le répertoire (${rp})`,$("pec"))}
+    else return k(`Prix DDM invalide : ${f3(P.t)}, ${f3(P.t+P.r)} ou ${f3(P.t+P.r+P.p)} DT`,$("prix"))}
+  unlockS("s4");if(!$("paye").value&&!$("fac").checked)$("paye").value=v.toFixed(3);calc();sauverBrouillon();$("paye").focus()}
+function calc(){const prix=+$("prix").value||0,fac=$("fac").checked,p=fac?0:(+$("paye").value||0),deja=SA.H?SA.H.paye:0,reste=Math.max(prix-deja-p,0);$("paye").disabled=fac;
+  $("calc").innerHTML=`I · Prix <b>${f3(prix)}</b>${deja?` · déjà payé <b>${f3(deja)}</b>`:""} · L · Payé <b>${f3(p)}</b><br>${fac?`N · Non payé : <b style="color:var(--ko)">${f3(reste)} DT</b>`:`M · Reste à payer : <b style="color:${reste>0?"var(--ko)":"var(--ok)"}">${f3(reste)} DT</b>`}`;
+  return{prix,p,reste,deja}}
+function go4(){const c=calc();if(!$("fac").checked&&$("paye").value==="")return bad($("paye"));if(c.p>c.prix-c.deja+.001){toast("Le montant payé dépasse le reste dû",false);return bad($("paye"))}
+  const it=[["B · Date saisie",frDate($("dop").value)],["C · Encaissement",frDate($("dreg").value)],["D · Dossier",$("num").value],["E · Type",$("svcIn").value],["F · Client",$("cli").value],["G · MF",$("mfv").value],["H · Déclarant",$("decv").value],["I · Prix total",f3(c.prix)+" DT"]];
+  if(isDDM())it.push(["J · Répertoire",$("rep").value||"—"],["K · Prise en charge",$("pec").value||"—"]);
+  it.push(["L · Payé",$("fac").checked?"0,000 (FAC)":f3(c.p)+" DT"],[$("fac").checked?"N · Non payé":"M · Reste à payer",f3(c.reste)+" DT"],["P · Agent",AG.nom]);
+  $("rv").innerHTML=`<div class="list">${it.map(([k,v])=>`<div class="it"><div class="s">${k}</div><div class="t" style="text-align:right">${esc(v)}</div></div>`).join("")}</div>`;
+  unlockS("s5");sauverBrouillon();$("s5").scrollIntoView({behavior:"smooth",block:"center"})}
+function valider(){const numero=$("num").value.trim(),svcId=+$("svc").value,c=findCliMf(SA.mf);if(!c)return toast("Client obligatoire",false);
+  const d=dec(c.decId),fac=$("fac").checked,paye=fac?0:(+$("paye").value||0),date=$("dreg").value,code=(svc(svcId)||{}).code;
+  let prix=+$("prix").value,rep="",pec=0,tarif=getTarif(d.id,svcId),sr=0,sp=0;
+  if(SA.H){const f=dossierOps(svcId,numero).sort((a,b)=>b.total-a.total)[0];prix=+f.total;rep=f.rep;pec=f.c10;tarif=f.tarif;sr=f.sRep;sp=f.sC10}
+  else if(code==="DDM"){const P=tarifsDDM(d.id,svcId);tarif=P.t;if(Math.abs(prix-(P.t+P.r))<.001){rep=addRep($("rep").value);sr=P.r}else if(Math.abs(prix-(P.t+P.r+P.p))<.001){rep=addRep($("rep").value);pec=1;sr=P.r;sp=P.p}}
+  const k=controle(numero,svcId,prix,paye);
+  if(!k.ok){anomalie("SAISIE",k.cle,date,d.nom,code,numero,paye,k.message);save();return toast("⛔ "+k.message,false)}
+  const reste=Math.max(prix-paye,0);
+  S.ops.push({id:nid(),num:numero,decId:d.id,clientId:c.id,mf:c.mf,svcId,rep:rep||"",c10:pec,dateOp:$("dop").value,date,tarif,sRep:sr,sC10:sp,total:prix,paye,reste,
+    statut:fac?"FAC":(reste<=.0005?"PAYE":"RESTE_A_PAYER"),obs:$("obs").value.trim(),created:nowIso(),agent:AG.nom});
+  recalc(svcId,numero);delete S.meta.brouillon;save();toast(`✅ ${k.cle} enregistré — ${f3(paye)} DT. ${k.message}`);go("saisie")}
 function opsList(ops){return ops.map(o=>{const s=svc(o.svcId)||{},d=dec(o.decId)||{},[r,c]=repAff(o);
   return `<div class="it" onclick="go('operation',{id:${o.id}})"><div class="t">${esc(s.code)}${esc(o.num)} · ${esc(d.nom)}</div><div class="a">${f3(o.paye)}</div>
-  <div class="s">${frDate(o.date)}${r?" · Rép "+esc(r):""}${c?" · C10":""}${o.reste>0?" · reste "+f3(o.reste):""}</div><div><span class="tag ${o.statut}">${o.statut==="RESTE_A_PAYER"?"RESTE":o.statut}</span></div></div>`}).join("")||`<p class="mu">Aucune opération.</p>`}
+  <div class="s">${frDate(o.date)}${o.clientId&&cli(o.clientId)?" · "+esc(cli(o.clientId).rs):""}${r?" · Rép "+esc(r):""}${c?" · PEC "+esc(c):""}${o.reste>0?" · reste "+f3(o.reste):""}${o.agent?" · "+esc(o.agent):""}</div><div><span class="tag ${o.statut}">${o.statut==="RESTE_A_PAYER"?"RESTE":o.statut}</span></div></div>`}).join("")||`<p class="mu">Aucune opération.</p>`}
 function ac(inp,list,data,label,pick){let cur=[],idx=-1;
   const show=()=>{const q=inp.value.trim().toLowerCase();cur=(q?data.filter(d=>label(d).toLowerCase().includes(q)):data).slice(0,40);
     list.innerHTML=cur.map((d,i)=>`<div data-i="${i}">${esc(label(d))}</div>`).join("");list.style.display=cur.length?"block":"none";idx=-1};
@@ -280,7 +371,7 @@ function ac(inp,list,data,label,pick){let cur=[],idx=-1;
     e.preventDefault();[...list.children].forEach((x,j)=>x.classList.toggle("on",j===idx))})}
 const unlockS=id=>$(id).classList.remove("lock"),lockS=id=>$(id).classList.add("lock");
 const bad=el=>{el.classList.add("bad");el.focus();setTimeout(()=>el.classList.remove("bad"),1600)};
-function annulerSaisie(){toast("Saisie annulée — entrée erronée remise à zéro",false);go("saisie")}
+function annulerSaisie(){if(S)delete S.meta.brouillon;save();toast("Saisie annulée — entrée erronée remise à zéro",false);go("saisie")}
 function ask({titre,msg,champs=[],oui="Oui",non="Non — annuler la saisie"}){return new Promise(res=>{
   $("mb").innerHTML=`<h3 style="margin-top:0">${titre}</h3><p style="margin:4px 0 8px">${msg}</p>${champs.map(c=>`<label>${c.label}${c.req?" *":""}</label><input id="mq_${c.id}" value="${esc(c.val)}" ${c.type==="number"?'type="number" inputmode="decimal" step="0.001"':c.type==="tel"?'inputmode="tel"':""}>`).join("")}
   <button class="b ok full" id="mq_oui">${oui}</button><button class="b ko full" id="mq_non">${non}</button>`;
@@ -289,64 +380,6 @@ function ask({titre,msg,champs=[],oui="Oui",non="Non — annuler la saisie"}){re
   $("mq_non").onclick=()=>close(null);
   $("mq_oui").onclick=()=>{const o={};for(const c of champs){const el=$("mq_"+c.id);o[c.id]=el.value;if(c.req&&!el.value.trim())return bad(el)}close(o)}})}
 const isDDM=()=>((svc($("svc").value)||{}).code==="DDM");
-function cliInfo(){const v=$("mf").value;const c=findCliMf(v);$("cliInfo").textContent=v?(c?"✔ "+c.rs+(SA.decId&&c.decId!=SA.decId?` — ⚠ client du déclarant « ${(dec(c.decId)||{}).nom} »`:""):"MF nouveau : enregistrement proposé à l'étape suivante"):""}
-function calc(){if(!$("svc").value)return{};
-  const t=getTarif(SA.decId,$("svc").value),fac=$("fac").checked,p=fac?0:(+$("paye").value||0);
-  let rep=isDDM()&&(/^\d{5}$/.test($("rep").value.trim())||$("c10").checked),c10=isDDM()&&$("c10").checked;
-  if(isDDM()&&!rep&&Math.abs(p-(t+12))<.001)rep=true;if(isDDM()&&!rep&&Math.abs(p-(t+22))<.001){rep=true;c10=true}
-  let du=Math.max(t+(rep?12:0)+(c10?10:0),p);const H=SA.H;if(H&&H.nb)du=Math.max(du,H.du);
-  const deja=H&&H.nb?H.paye:0,reste=Math.max(du-deja-p,0);
-  $("calc").innerHTML=`Tarif <b>${f3(t)}</b>${isDDM()?` · Rép <b>${rep?"+12":"—"}</b> · C10 <b>${c10?"+10":"—"}</b>`:""}<br>Dû <b>${f3(du)} DT</b>${deja?` · déjà payé <b>${f3(deja)}</b>`:""}<br>Reste après saisie : <b style="color:${reste>0?"var(--ko)":"var(--ok)"}">${f3(reste)} DT</b>`;
-  if(!$("paye").value&&!fac)$("paye").placeholder=f3(Math.max(du-deja,0));
-  return{t,rep,c10,du,deja,reste,p}}
-function go1(){const n=$("num").value.trim();if(!/^\d{1,6}$/.test(n))return bad($("num"));const nom=$("dec").value.trim();if(!nom)return bad($("dec"));
-  if(!SA.decId){const d=findDec(nom);
-    if(d&&!d.valide){toast(`Déclarant « ${d.nom} » en attente de validation.`,false);return}
-    if(d){SA.decId=d.id}else{
-      ask({titre:"Nouveau déclarant",msg:`Le déclarant « <b>${esc(nom)}</b> » n'existe pas.<br>Voulez-vous l'enregistrer ?<br><span class="mu">Non = entrée erronée : la saisie est remise à zéro.</span>`,
-        champs:[{id:"nom",label:"Nom",val:nom.toLowerCase(),req:1},{id:"code",label:"Code (optionnel)",val:""},{id:"tel",label:"Téléphone",val:"",type:"tel"}],oui:"Enregistrer le déclarant"}).then(r=>{
-        if(!r)return annulerSaisie();const[x,cr]=getOrCreateDec(r.nom,1);x.valide=1;if(cr){x.code=r.code.trim().toUpperCase();x.tel=r.tel.trim();audit("NOUVEAU_DECLARANT",x.nom)}
-        save();SA.decId=x.id;$("dec").value=x.nom;$("dec").classList.add("ok");toast("Déclarant enregistré");unlockS("s2");$("svcIn").focus()});return}}
-  unlockS("s2");$("svcIn").focus()}
-async function go2(){
-  if(!$("svc").value){const code=normService($("svcIn").value.split("—")[0]);if(!code)return bad($("svcIn"));
-    let s=svcByCode(code);
-    if(!s){const r=await ask({titre:"Nouveau service",msg:`Le service « <b>${esc(code)}</b> » n'existe pas.<br>Voulez-vous l'enregistrer ?<br><span class="mu">Non = entrée erronée : la saisie est remise à zéro.</span>`,
-        champs:[{id:"code",label:"Code",val:code},{id:"lib",label:"Libellé",val:""},{id:"tarif",label:"Tarif de base (DT)",val:"",type:"number"}],oui:"Enregistrer le service"});
-      if(!r)return annulerSaisie();const c2=normService(r.code)||code;if(svcByCode(c2))s=svcByCode(c2);else{s={id:nid(),code:c2,lib:r.lib.trim()||c2,tarif:num(r.tarif)||0,actif:1};S.services.push(s);audit("NOUVEAU_SERVICE",`${c2} — tarif ${s.tarif}`);save();toast(`Service ${c2} enregistré`)}}
-    if(!s.actif)return toast(`Service ${s.code} inactif`,false);$("svc").value=s.id;$("svcIn").value=s.code+" — "+s.lib;$("svcIn").classList.add("ok")}
-  const mfv=cleanMf($("mf").value.split("—")[0]);$("mf").value=mfv;
-  if(mfv&&!findCliMf(mfv)){const r=await ask({titre:"Nouveau client",msg:`Le matricule fiscal « <b>${esc(mfv)}</b> » est inconnu.<br>Voulez-vous enregistrer ce nouveau client (déclarant : <b>${esc((dec(SA.decId)||{}).nom)}</b>) ?<br><span class="mu">Non = entrée erronée : la saisie est remise à zéro.</span>`,
-      champs:[{id:"mf",label:"Matricule fiscal",val:mfv},{id:"rs",label:"Raison sociale",val:"",req:1},{id:"tel",label:"Téléphone",val:"",type:"tel"}],oui:"Enregistrer le client"});
-    if(!r)return annulerSaisie();const m2=cleanMf(r.mf)||mfv;
-    if(!findCliMf(m2)){S.clients.push({id:nid(),rs:r.rs.trim(),mf:m2,decId:SA.decId,tel:r.tel.trim(),actif:1});audit("NOUVEAU_CLIENT",`${m2} — ${r.rs.trim()}`);save();toast("Client enregistré")}
-    $("mf").value=m2;cliInfo()}
-  const rows=dossierOps($("svc").value,$("num").value);const h=$("hist");
-  if(rows.length){const du=Math.max(...rows.map(o=>+o.total)),p=rows.reduce((a,o)=>a+(+o.paye||0),0);SA.H={nb:rows.length,du,paye:p};
-    const solde=du-p<=.0005;h.style.display="block";h.style.background=solde?"var(--kobg)":"var(--wabg)";h.style.color=solde?"var(--ko)":"var(--wa)";
-    h.textContent=(solde?"⛔ Dossier déjà payé intégralement":"⚠ Dossier connu")+` — ${rows.length} op., dû ${f3(du)}, payé ${f3(p)}, reste ${f3(du-p)} (${(dec(rows[0].decId)||{}).nom||""}, ${rows.map(o=>frDate(o.date)).join(", ")})`;
-    if(solde)return;
-    const f=rows[0];if(f.rep&&!$("rep").value)$("rep").value=f.rep;if(f.c10)$("c10").checked=true;if(f.mf&&!$("mf").value){$("mf").value=f.mf;cliInfo()}}
-  else{SA.H=null;h.style.display="none"}
-  $("s3").style.display=isDDM()?"block":"none";
-  if(isDDM()){unlockS("s3");$("rep").focus()}else{unlockS("s4");calc();$("paye").focus()}}
-function go3(){const v=$("rep").value.trim();if(v&&!/^\d{5}$/.test(v))return bad($("rep"));unlockS("s4");calc();$("paye").focus()}
-function go4(){const c=calc();if(!$("fac").checked&&$("paye").value==="")return bad($("paye"));if(!$("dreg").value)return bad($("dreg"));
-  const s=svc($("svc").value),d=dec(SA.decId),cl=findCliMf($("mf").value);
-  const it=[["Dossier",s.code+$("num").value.trim()],["Déclarant",d.nom],["Client",$("mf").value?($("mf").value+(cl?" — "+cl.rs:" (inconnu)")):"—"]];
-  if(isDDM())it.push(["Répertoire",c.rep?($("rep").value||"REP"):"Sans"],["Case 10",c.c10?"Oui":"Non"]);
-  it.push(["Montant payé",$("fac").checked?"FAC — 0,000":f3(c.p)+" DT"],["Montant dû",f3(c.du)+" DT"],["Reste",f3(c.reste)+" DT"],["Date",frDate($("dreg").value)]);
-  $("rv").innerHTML=`<div class="list">${it.map(([k,v])=>`<div class="it"><div class="s">${k}</div><div class="t" style="text-align:right">${esc(v)}</div></div>`).join("")}</div>`;
-  unlockS("s5");$("s5").scrollIntoView({behavior:"smooth",block:"center"})}
-function valider(){
-  const numero=$("num").value.trim(),svcId=+$("svc").value,d=dec(SA.decId),fac=$("fac").checked,paye=fac?0:(+$("paye").value||0),date=$("dreg").value;
-  if(paye<0)return toast("Montant négatif interdit",false);
-  let rep=isDDM()?addRep($("rep").value):null,c10=isDDM()&&$("c10").checked,mf=cleanMf($("mf").value),cl=findCliMf(mf);
-  let m=calculer(d.id,svcId,rep,c10,paye);m=heriter(svcId,numero,m,paye);if(m.rep)rep=m.rep;if(!cl&&m.clientId){cl=cli(m.clientId);mf=mf||m.mf||""}
-  const k=controle(numero,svcId,m.total,paye);
-  if(!k.ok){anomalie("SAISIE",k.cle,date,d.nom,svc(svcId).code,numero,paye,k.message);save();return toast("⛔ "+k.message,false)}
-  S.ops.push({id:nid(),num:numero,decId:d.id,clientId:cl?cl.id:null,mf,svcId,rep:rep||"",c10:m.c10,date,tarif:m.tarif,sRep:m.sRep,sC10:m.sC10,total:m.total,paye,reste:m.reste,statut:fac?"FAC":(m.reste<=0?"PAYE":"RESTE_A_PAYER"),obs:$("obs").value.trim(),created:nowIso()});
-  recalc(svcId,numero);save();toast(`✅ ${k.cle} enregistré — ${f3(paye)} DT. ${k.message}`);go("saisie")}
 
 /* ───────────── JOURNAL ───────────── */
 V.journal=()=>{const dates=[...new Set(S.ops.map(o=>o.date))].sort().reverse();
@@ -361,11 +394,11 @@ V.journal=()=>{const dates=[...new Set(S.ops.map(o=>o.date))].sort().reverse();
   <label>Rechercher (dossier, déclarant, service, MF)</label><input value="${esc(ARGS.q||"")}" onchange="go('journal',{...ARGS,q:this.value})">
   <div class="row" style="margin-top:10px"><button class="b gold" onclick="exportJournal()">📥 Excel</button><button class="b lite" onclick="print()">🖨 Imprimer</button></div></div>
   <div class="stats"><div class="stat o"><div class="l">Encaissé</div><div class="v">${f3(tot("paye"))}</div></div><div class="stat"><div class="l">Opérations</div><div class="v">${ops.length}</div></div>
-  <div class="stat"><div class="l">Montant dû</div><div class="v">${f3(tot("total"))}</div></div><div class="stat r"><div class="l">Reste</div><div class="v">${f3(tot("reste"))}</div></div></div>
+  <div class="stat"><div class="l">Prix total</div><div class="v">${f3(tot("total"))}</div></div><div class="stat r"><div class="l">Reste</div><div class="v">${f3(tot("reste"))}</div></div></div>
   <div class="seg noprint"><button class="${VUE_J==="liste"?"on":""}" onclick="VUE_J='liste';render()">Liste</button><button class="${VUE_J==="table"?"on":""}" onclick="VUE_J='table';render()">Tableau</button></div>
-  ${VUE_J==="liste"?`<div class="list">${opsList(ops)}</div>`:`<div class="tw"><table><thead><tr><th>Date</th><th>Dossier</th><th>Déclarant</th><th>MF</th><th>Svc</th><th>Rép</th><th>C10</th><th class="n">Dû</th><th class="n">Payé</th><th class="n">Reste</th><th>Statut</th></tr></thead><tbody>
-  ${ops.map(o=>{const[r,c]=repAff(o);return `<tr onclick="go('operation',{id:${o.id}})"><td>${frDate(o.date)}</td><td><b>${esc(o.num)}</b></td><td>${esc((dec(o.decId)||{}).nom)}</td><td>${esc(o.mf)}</td><td>${esc((svc(o.svcId)||{}).code)}</td><td>${esc(r)}</td><td>${esc(c)}</td><td class="n">${f3(o.total)}</td><td class="n">${f3(o.paye)}</td><td class="n">${f3(o.reste)}</td><td><span class="tag ${o.statut}">${o.statut}</span></td></tr>`}).join("")}</tbody>
-  <tfoot><tr><td colspan="7">TOTAL</td><td class="n">${f3(tot("total"))}</td><td class="n">${f3(tot("paye"))}</td><td class="n">${f3(tot("reste"))}</td><td></td></tr></tfoot></table></div>`}`};
+  ${VUE_J==="liste"?`<div class="list">${opsList(ops)}</div>`:`<div class="tw"><table><thead><tr><th>A · Système</th><th>B · Saisie</th><th>C · Encaiss.</th><th>D · Dossier</th><th>E</th><th>F · Client</th><th>G · MF</th><th>H · Déclarant</th><th class="n">I · Prix</th><th>J · Rép.</th><th>K · PEC</th><th class="n">L · Payé</th><th class="n">M · Reste</th><th class="n">N · Non payé</th><th>O · Obs.</th><th>P · Agent</th></tr></thead><tbody>
+  ${ops.map(o=>{const[r,c]=repAff(o),fac=o.statut==="FAC"&&!o.paye;return `<tr onclick="go('operation',{id:${o.id}})"><td>${esc((o.created||"").replace("T"," ").slice(5,16))}</td><td>${frDate(o.dateOp||o.date)}</td><td>${frDate(o.date)}</td><td><b>${esc(o.num)}</b></td><td>${esc((svc(o.svcId)||{}).code)}</td><td>${esc((cli(o.clientId)||{}).rs||"")}</td><td>${esc(o.mf)}</td><td>${esc((dec(o.decId)||{}).nom)}</td><td class="n">${f3(o.total)}</td><td>${esc(r)}</td><td>${esc(c)}</td><td class="n">${fac?'<span class="tag FAC">FAC</span>':f3(o.paye)}</td><td class="n">${o.paye&&o.reste?f3(o.reste):""}</td><td class="n">${!o.paye&&o.reste?`<b style="color:var(--ko)">${f3(o.reste)}</b>`:""}</td><td>${esc(o.obs||"")}</td><td>${esc(o.agent||"")}</td></tr>`}).join("")}</tbody>
+  <tfoot><tr><td colspan="8">TOTAL</td><td class="n">${f3(tot("total"))}</td><td></td><td></td><td class="n">${f3(tot("paye"))}</td><td class="n">${f3(ops.filter(o=>o.paye).reduce((a,o)=>a+(+o.reste||0),0))}</td><td class="n">${f3(ops.filter(o=>!o.paye).reduce((a,o)=>a+(+o.reste||0),0))}</td><td colspan="2"></td></tr></tfoot></table></div>`}`};
 let VUE_J="liste",JOUR_OPS=[],JOUR_LBL="";
 
 /* ───────────── OPÉRATION (correction / suppression) ───────────── */
@@ -409,6 +442,7 @@ V.plus=()=>`<h2>☰ Menu</h2><div class="menu">
 <a onclick="go('declarants')"><span>👥</span>Déclarants<i>${S.declarants.filter(d=>!d.valide).length?"⚠ "+S.declarants.filter(d=>!d.valide).length:""} ›</i></a>
 <a onclick="go('clients')"><span>🏢</span>Clients<i>${S.clients.length} ›</i></a>
 <a onclick="go('services')"><span>⚙️</span>Services, prix & conventions déclarants<i>›</i></a>
+<a onclick="go('agents')"><span>👥</span>Agents et codes<i>${AGENTS.length} ›</i></a>
 <a onclick="go('repertoires')"><span>📁</span>Répertoires DDM<i>${S.reps.length} ›</i></a>
 <a onclick="go('anomalies')"><span>🔎</span>Anomalies doublons<i>${S.anomalies.filter(a=>a.statut==="A_VERIFIER").length||""} ›</i></a>
 <a onclick="go('charger')"><span>📥</span>Charger fichiers Excel (MF, services, caisse)<i>›</i></a>
@@ -446,37 +480,58 @@ function editCli(id){const c=cli(id);const rs=prompt("Raison sociale :",c.rs);if
   if(confirm("Supprimer ce client ?")){if(S.ops.some(o=>o.clientId===id)){c.actif=0;toast("Client lié à des opérations : désactivé")}else S.clients=S.clients.filter(x=>x.id!==id)}save();render()}
 
 /* ───────────── SERVICES & TARIFS ───────────── */
-V.services=()=>{const decs=S.declarants.filter(d=>d.actif&&d.valide).sort((a,b)=>a.nom.localeCompare(b.nom)),svs=S.services.slice().sort((a,b)=>a.code.localeCompare(b.code));
+V.services=()=>{if(!estGerant())return `<h2>⚙️ Services & prix</h2><div class="list">${S.services.filter(s=>s.actif).sort((a,b)=>a.code.localeCompare(b.code)).map(s=>`<div class="it"><div class="t">${esc(s.code)} <span class="mu">${esc(s.lib)}</span></div><div class="a">${s.tarif?f3(s.tarif):"variable"}</div></div>`).join("")}</div><p class="mu">Les prix et les conventions sont gérés par le gérant.</p>`;const decs=S.declarants.filter(d=>d.actif&&d.valide).sort((a,b)=>a.nom.localeCompare(b.nom)),svs=S.services.slice().sort((a,b)=>a.code.localeCompare(b.code));
   return `<h2>⚙️ Services & tarifs</h2><h3>Tarifs de base</h3><div class="list">${svs.map(s=>`<div class="it" onclick="editSvc(${s.id})"><div class="t">${esc(s.code)} <span class="mu">${esc(s.lib)}</span></div><div class="a">${f3(s.tarif)}</div>${s.actif?"":'<div class="s">inactif</div>'}</div>`).join("")}</div>
   <button class="b lite full" onclick="addSvc()">➕ Nouveau service</button>
   <h3>🤝 Conventions de prix par déclarant</h3><p class="mu">Prix de faveur fixés par le gérant selon le volume de travail. Valables pour ce seul déclarant <b>jusqu'à nouvel ordre</b>. Suspendre ou supprimer = retour au tarif de base.</p>
   <div class="card"><label>Déclarant</label><select id="t_dec"><option value="">—</option>${decs.map(d=>`<option value="${d.id}">${esc(d.nom)} — ${S.ops.filter(o=>o.decId===d.id&&o.date>=jPlus(-90)).length} dossier(s) / 90 j</option>`).join("")}</select>
-  <div class="row"><div><label>Service</label><select id="t_svc">${svs.map(s=>`<option value="${s.id}">${esc(s.code)} (base ${f3(s.tarif)})</option>`).join("")}</select></div><div><label>Prix convenu (DT)</label><input id="t_val" type="number" inputmode="decimal" step="0.001"></div></div>
+  <div class="row"><div><label>Service</label><select id="t_svc" onchange="$('t_ddm').style.display=(svc(this.value)||{}).code==='DDM'?'grid':'none'">${svs.map(s=>`<option value="${s.id}">${esc(s.code)} (base ${f3(s.tarif)})</option>`).join("")}</select></div><div><label>Prix convenu (DT)</label><input id="t_val" type="number" inputmode="decimal" step="0.001"></div></div>
+  <div class="row" id="t_ddm" style="display:none"><div><label>Suppl. répertoire</label><input id="t_sr" type="number" inputmode="decimal" step="0.001" placeholder="${f3(SUPP_REP)} std"></div><div><label>Suppl. prise en charge</label><input id="t_sp" type="number" inputmode="decimal" step="0.001" placeholder="${f3(SUPP_C10)} std"></div></div>
   <div class="row"><div><label>À compter du</label><input id="t_date" type="date" value="${today()}"></div><div><label>Condition / motif</label><input id="t_cond" placeholder="ex : > 100 DDM/mois"></div></div>
   <button class="b ok full" onclick="addTarif()">💾 Enregistrer la convention</button></div>
   <div class="list">${S.tarifs.slice().sort((a,b)=>((dec(a.decId)||{}).nom||"").localeCompare((dec(b.decId)||{}).nom||"")).map(t=>{const s=svc(t.svcId)||{},e=t.t-(+s.tarif||0);return `<div class="it" style="${t.actif===0?"opacity:.55":""}"><div class="t">${esc((dec(t.decId)||{}).nom)} · ${esc(s.code)}</div><div class="a">${f3(t.t)}</div>
-  <div class="s">base ${f3(s.tarif)} · écart <b style="color:${e<0?"var(--ok)":e>0?"var(--ko)":"inherit"}">${e>0?"+":""}${f3(e)}</b>${t.date?" · depuis "+frDate(t.date):""}${t.cond?"<br>"+esc(t.cond):""}</div>
+  <div class="s">${s.code==="DDM"?`${f3(t.t)} / ${f3(t.t+(t.sr??SUPP_REP))} / ${f3(t.t+(t.sr??SUPP_REP)+(t.sp??SUPP_C10))} · `:""}base ${f3(s.tarif)} · écart <b style="color:${e<0?"var(--ok)":e>0?"var(--ko)":"inherit"}">${e>0?"+":""}${f3(e)}</b>${t.date?" · depuis "+frDate(t.date):""}${t.cond?"<br>"+esc(t.cond):""}</div>
   <div style="white-space:nowrap"><span class="tag ${t.actif===0?"FAC":"PAYE"}">${t.actif===0?"Suspendue":"En vigueur"}</span><br><button class="b sm lite" style="margin-top:4px" onclick="toggleTarif(${t.decId},${t.svcId})">${t.actif===0?"Réactiver":"Suspendre"}</button> <button class="b sm ko" onclick="delTarif(${t.decId},${t.svcId})">🗑</button></div></div>`}).join("")||'<p class="mu">Aucune convention : le tarif de base s\'applique.</p>'}</div>
   <details><summary><b>Historique des conventions</b></summary><div class="list">${S.audit.filter(a=>a.action==="CONVENTION_PRIX").slice(0,100).map(a=>`<div class="it"><div class="s">${esc(a.quand.replace("T"," ").slice(0,16))}</div><div></div><div class="t" style="font-weight:500">${esc(a.detail)}</div></div>`).join("")||'<p class="mu">—</p>'}</div></details>
-  <p class="mu">DDM : répertoire +12 DT, case 10 +10 DT. Tarif 0 (ASS…) : le montant payé fait foi.</p>`};
-function editSvc(id){const s=svc(id);const t=prompt(`Tarif de base ${s.code} (DT) :`,s.tarif);if(t===null)return;const v=num(t);if(v===null)return toast("Montant invalide",false);
+  <p class="mu">DDM : 9 DT simple · +12 avec répertoire (21) · +10 avec prise en charge (31). Une convention peut modifier un, deux ou les trois prix. Prix 0 (ASS) : prix variable saisi.</p>`};
+function editSvc(id){if(!estGerant())return toast("Réservé au gérant",false);const s=svc(id);const t=prompt(`Tarif de base ${s.code} (DT) :`,s.tarif);if(t===null)return;const v=num(t);if(v===null)return toast("Montant invalide",false);
   const l=prompt("Libellé :",s.lib);if(l!==null)s.lib=l.trim()||s.lib;audit("TARIF_BASE",`${s.code} ${s.tarif}→${v}`);s.tarif=v;s.actif=confirm(`${s.code} actif ? (OK = actif)`)?1:0;save();render()}
 function addSvc(){const c=normService(prompt("Code du service (ex : DDM) :")||"");if(!c)return;if(svcByCode(c))return toast("Code déjà existant",false);
   const l=prompt("Libellé :",c)||c,t=num(prompt("Tarif de base (DT) :","0"))||0;S.services.push({id:nid(),code:c,lib:l,tarif:t,actif:1});save();render()}
 const jPlus=n=>{const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)};
 function addTarif(){const d=+$("t_dec").value,s=+$("t_svc").value,v=num($("t_val").value);if(!d)return bad($("t_dec"));if(v===null)return bad($("t_val"));
+  if(!estGerant())return toast("Réservé au gérant",false);
   const x=S.tarifs.find(t=>t.decId===d&&t.svcId===s),av=x?f3(x.t)+" DT":"aucun",cond=$("t_cond").value.trim(),dt=$("t_date").value||today();
-  if(x)Object.assign(x,{t:v,actif:1,date:dt,cond,modifie:nowIso()});else S.tarifs.push({decId:d,svcId:s,t:v,actif:1,date:dt,cond,modifie:nowIso()});
-  audit("CONVENTION_PRIX",`${dec(d).nom} / ${svc(s).code} : ${av} → ${f3(v)} DT à compter du ${frDate(dt)}${cond?" — "+cond:""}`);save();toast("Convention enregistrée (jusqu'à nouvel ordre)");render()}
-function toggleTarif(d,s){const x=S.tarifs.find(t=>t.decId===d&&t.svcId===s);x.actif=x.actif===0?1:0;
+  const ddm=svc(s).code==="DDM",sr=ddm?num($("t_sr").value):null,sp=ddm?num($("t_sp").value):null;
+  if(x)Object.assign(x,{t:v,sr,sp,actif:1,date:dt,cond,modifie:nowIso()});else S.tarifs.push({decId:d,svcId:s,t:v,sr,sp,actif:1,date:dt,cond,modifie:nowIso()});
+  const aff=ddm?`${f3(v)} / rép. +${f3(sr??SUPP_REP)} / PEC +${f3(sp??SUPP_C10)}`:f3(v);
+  audit("CONVENTION_PRIX",`${dec(d).nom} / ${svc(s).code} : ${av} → ${aff} DT à compter du ${frDate(dt)}${cond?" — "+cond:""} (par ${AG.nom})`);save();toast("Convention enregistrée (jusqu'à nouvel ordre)");render()}
+function toggleTarif(d,s){if(!estGerant())return toast("Réservé au gérant",false);const x=S.tarifs.find(t=>t.decId===d&&t.svcId===s);x.actif=x.actif===0?1:0;
   audit("CONVENTION_PRIX",`${dec(d).nom} / ${svc(s).code} (${f3(x.t)} DT) : ${x.actif?"réactivée":"suspendue → tarif de base"}`);save();render()}
-function delTarif(d,s){if(!confirm("Supprimer cette convention ? Le tarif de base s'appliquera."))return;const x=S.tarifs.find(t=>t.decId===d&&t.svcId===s);
+function delTarif(d,s){if(!estGerant())return toast("Réservé au gérant",false);if(!confirm("Supprimer cette convention ? Le tarif de base s'appliquera."))return;const x=S.tarifs.find(t=>t.decId===d&&t.svcId===s);
   audit("CONVENTION_PRIX",`${dec(d).nom} / ${svc(s).code} (${f3(x.t)} DT) : supprimée`);S.tarifs=S.tarifs.filter(t=>t!==x);save();render()}
+
+/* ───────────── AGENTS (gérant) ───────────── */
+V.agents=()=>`<h2>👥 Agents et codes</h2><p class="mu">Chaque agent ouvre la caisse avec <b>son propre code</b> ; son nom est inscrit automatiquement (colonne P). En quittant son poste, il appuie sur 🔒 : l'agent suivant reprend exactement au même endroit.</p>
+<div class="list">${AGENTS.map(a=>`<div class="it"><div class="t">${esc(a.nom)} ${a.id===AG.id?'<span class="tag PAYE">connecté</span>':""}</div><div class="mu">${a.role==="gerant"?"gérant":"agent"}</div>
+<div class="s">créé le ${frDate((a.cree||"").slice(0,10))} · ${S.ops.filter(o=>o.agent===a.nom).length} saisie(s)</div>
+<div style="white-space:nowrap">${estGerant()||a.id===AG.id?`<button class="b sm lite" onclick="codeAgent('${a.id}')">🔑 Code</button>`:""} ${estGerant()&&a.id!==AG.id?`<button class="b sm ko" onclick="supprAgent('${a.id}')">🗑</button>`:""}</div></div>`).join("")}</div>
+${estGerant()?`<div class="card"><h3 style="margin-top:0">➕ Nouvel agent</h3><label>Nom</label><input id="ag_nom"><label>Code personnel (6 caractères min.)</label><input id="ag_code" type="password" autocomplete="new-password">
+<label class="chk"><input type="checkbox" id="ag_ger"> Droits de gérant (prix, conventions, agents)</label><button class="b ok full" onclick="ajoutAgent()">Créer l'agent</button></div>`:""}`;
+async function persistAgents(msg){await kvPut(VKEY,await coffre());toast(msg);render()}
+async function ajoutAgent(){if(!estGerant())return;const nom=$("ag_nom").value.trim(),code=$("ag_code").value;if(!nom)return bad($("ag_nom"));if(code.length<6){toast("Code : 6 caractères minimum",false);return bad($("ag_code"))}
+  if(AGENTS.some(a=>a.nom.toLowerCase()===nom.toLowerCase()))return toast("Ce nom existe déjà",false);
+  AGENTS.push(await nouvelAgent(nom,$("ag_ger").checked?"gerant":"agent",code));audit("AGENT",`${nom} créé par ${AG.nom}`);await persistAgents("Agent créé")}
+async function codeAgent(id){const a=AGENTS.find(x=>x.id===id);if(!estGerant()&&id!==AG.id)return;const c=prompt(`Nouveau code pour ${a.nom} (6 caractères min.) :`);if(c===null)return;
+  if(c.length<6)return toast("6 caractères minimum",false);if(prompt("Confirmez le code :")!==c)return toast("Codes différents",false);
+  const n=await nouvelAgent(a.nom,a.role,c);Object.assign(a,{salt:n.salt,cle:n.cle});audit("AGENT",`code de ${a.nom} changé par ${AG.nom}`);await persistAgents("Code changé — refaites une sauvegarde")}
+async function supprAgent(id){if(!estGerant())return;const a=AGENTS.find(x=>x.id===id);if(!confirm(`Supprimer l'agent ${a.nom} ? Il ne pourra plus ouvrir la caisse.`))return;
+  AGENTS=AGENTS.filter(x=>x.id!==id);audit("AGENT",`${a.nom} supprimé par ${AG.nom}`);await persistAgents("Agent supprimé")}
 
 /* ───────────── RÉPERTOIRES ───────────── */
 V.repertoires=()=>{const by={};S.ops.filter(o=>o.rep).forEach(o=>{(by[o.rep]=by[o.rep]||[]).push(o)});
   return `<h2>📁 Répertoires DDM</h2><div class="card"><label>Nouveau répertoire (5 chiffres)</label><input id="r_n" inputmode="numeric" maxlength="5"><button class="b ok full" onclick="if(addRep($('r_n').value)){save();render()}else bad($('r_n'))">➕ Ajouter</button></div>
-  ${S.reps.slice().sort().map(r=>{const o=by[r]||[];const t=k=>o.reduce((a,x)=>a+(+x[k]||0),0);return `<div class="card"><b>📁 ${r}</b> <span class="mu">— ${o.length} dossier(s)${o.filter(x=>x.c10).length?" · "+o.filter(x=>x.c10).length+" case 10":""}</span><div class="mu">Dû ${f3(t("total"))} · Payé ${f3(t("paye"))} · Reste ${f3(t("reste"))}</div>${o.length?`<div class="list" style="margin-top:8px">${opsList(o)}</div>`:""}</div>`}).join("")||'<p class="mu">Aucun répertoire.</p>'}`};
+  ${S.reps.slice().sort().map(r=>{const o=by[r]||[];const t=k=>o.reduce((a,x)=>a+(+x[k]||0),0);return `<div class="card"><b>📁 ${r}</b> <span class="mu">— ${o.length} dossier(s)${o.filter(x=>x.c10).length?" · "+o.filter(x=>x.c10).length+" prise(s) en charge":""}</span><div class="mu">Dû ${f3(t("total"))} · Payé ${f3(t("paye"))} · Reste ${f3(t("reste"))}</div>${o.length?`<div class="list" style="margin-top:8px">${opsList(o)}</div>`:""}</div>`}).join("")||'<p class="mu">Aucun répertoire.</p>'}`};
 
 /* ───────────── ANOMALIES / FÉRIÉS / AUDIT ───────────── */
 V.anomalies=()=>`<h2>🔎 Anomalies doublons</h2><div class="list">${S.anomalies.map(a=>`<div class="it"><div class="t">${esc(a.cle)} · ${esc(a.dec)}</div><div>${a.statut==="A_VERIFIER"?`<button class="b sm gold" onclick="S.anomalies.find(x=>x.id==${a.id}).statut='TRAITEE';save();render()">Traitée</button>`:'<span class="tag PAYE">Traitée</span>'}</div><div class="s">${esc(a.quand.replace("T"," ").slice(0,16))} · ${esc(a.source)} · ${f3(a.montant)} DT<br>${esc(a.motif)}</div></div>`).join("")||'<p class="mu">Aucune anomalie.</p>'}</div>`;
@@ -494,9 +549,9 @@ const TYPES=[
   aide:"Col. A = Code (DDM, TCE…) · col. B = Libellé · col. C = Prix de base en DT. Un code existant voit son prix mis à jour.",
   ex:[["DDM","Déclaration douanière",9],["TCE","Titre commerce extérieur",14]],
   data:()=>S.services.slice().sort((a,b)=>a.code.localeCompare(b.code)).map(s=>[s.code,s.lib,+s.tarif])},
- {k:"caisse",ic:"💰",titre:"État caisse",fichier:"etat_caisse.xlsx",cols:["date reglement","nom declarant","N°dossier","MF","type","N°rep","case10","montant payé","non payé"],
-  aide:"Opérations de caisse (même format que l'export du PC). Ré-importer le même fichier met à jour sans doublon.",
-  ex:[[frDate(today()),"ahmed","25333","1234567A","DDM","","",9,0]],data:null}];
+ {k:"caisse",ic:"💰",titre:"État caisse",fichier:"etat_caisse.xlsx",cols:["date heure systeme","date saisie","date encaissement","N°dossier","type","client","MF","nom declarant","prix total","repertoire","prise en charge","paye","reste a payer","non paye","observation","agent"],
+  aide:"Feuille de caisse colonnes A à P (même format que l'export du PC). Ré-importer le même fichier met à jour sans doublon.",
+  ex:[["",frDate(today()),frDate(today()),"25333","DDM","SOCIETE EXEMPLE","1234567A","ahmed",31,"12345","12345",31,"","","",""]],data:null}];
 V.charger=()=>`<h2>📥 Charger des fichiers Excel</h2>
 <p class="mu">Choisissez le type de fichier, puis le fichier .xlsx (depuis Fichiers, iCloud, WhatsApp…). « Modèle » donne un fichier vide au bon format.</p>
 ${TYPES.map(T=>`<div class="card"><h3 style="margin-top:0">${T.ic} ${T.titre}</h3><p class="mu">${T.aide}</p>
@@ -518,39 +573,37 @@ V.outils=()=>{const last=S.meta.lastBackup;return `<h2>🧰 Import · Export · 
 <div class="card"><h3 style="margin-top:0">📤 Export Excel</h3><p class="mu">Format état caisse, réimportable dans l'application PC (Outils → Imports). ⚠ Le fichier Excel n'est <b>pas chiffré</b> : ne le partagez qu'avec des personnes autorisées.</p>
 <div class="row"><div><label>Du</label><input type="date" id="x_du" value="${today().slice(0,8)}01"></div><div><label>Au</label><input type="date" id="x_au" value="${today()}"></div></div>
 <button class="b full" onclick="exportPeriode()">📥 Exporter la période</button></div>
-<div class="card"><h3 style="margin-top:0">🔒 Sécurité</h3><p class="mu">Données chiffrées (AES-256) sur cet appareil. Verrouillage automatique après 5 min d'inactivité ou 2 min en arrière-plan.</p>
-<button class="b lite full" onclick="changePw()">Changer le mot de passe</button><button class="b full" onclick="verrouiller()">🔒 Verrouiller maintenant</button></div>
+<div class="card"><h3 style="margin-top:0">🔒 Sécurité</h3><p class="mu">Données chiffrées (AES-256) sur cet appareil. Chaque agent ouvre la caisse avec son propre code. Verrouillage automatique après 5 min d'inactivité ou 2 min en arrière-plan.</p>
+<button class="b lite full" onclick="go('agents')">👥 Agents et codes</button><button class="b full" onclick="quitter()">🔒 Quitter / changer d'agent</button></div>
 <div class="card"><h3 style="margin-top:0">ℹ️ Stockage</h3><p class="mu" id="stoInfo">${S.ops.length} opérations · ${S.declarants.length} déclarants · ${S.clients.length} clients</p>
 <button class="b ko full" onclick="resetAll()">⚠ Tout effacer</button></div>`};
 A.outils=async()=>{try{if(navigator.storage&&navigator.storage.estimate){const e=await navigator.storage.estimate();$("stoInfo").textContent+=` · ${(e.usage/1048576).toFixed(1)} Mo utilisés`;if(navigator.storage.persisted&&await navigator.storage.persisted())$("stoInfo").textContent+=" · stockage protégé ✔"}}catch(e){}};
-async function resetAll(){if(prompt("Tapez EFFACER pour supprimer toutes les données de cet appareil (y compris le mot de passe) :")!=="EFFACER")return;await kvPut(VKEY,undefined);await kvPut(OLDKEY,undefined);location.reload()}
-async function changePw(){const old=prompt("Mot de passe actuel :");if(old===null)return;
-  try{await unseal(await kvGet(VKEY),await deriveKey(old,SALT))}catch(e){return toast("Mot de passe actuel incorrect",false)}
-  const n=prompt("Nouveau mot de passe (8 caractères minimum) :");if(n===null)return;if(n.length<8)return toast("8 caractères minimum",false);
-  if(prompt("Confirmez le nouveau mot de passe :")!==n)return toast("Les mots de passe diffèrent",false);
-  SALT=crypto.getRandomValues(new Uint8Array(16));CK=await deriveKey(n,SALT);audit("MOT_DE_PASSE","changé");await kvPut(VKEY,await seal(S,CK,SALT));
-  toast("Mot de passe changé — refaites une sauvegarde");render()}
-function verrouiller(){S=null;CK=null;location.reload()}
+async function resetAll(){if(!estGerant())return toast("Réservé au gérant",false);if(prompt("Tapez EFFACER pour supprimer toutes les données de cet appareil (y compris le mot de passe) :")!=="EFFACER")return;await kvPut(VKEY,undefined);await kvPut(OLDKEY,undefined);location.reload()}
 async function partager(blob,nom){
   const file=new File([blob],nom,{type:blob.type});
   if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:nom});return}catch(e){if(e.name==="AbortError")return}}
   const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=nom;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},3000)}
-async function exportJSON(){S.meta.lastBackup=nowIso();save();const box=await seal(S,CK,SALT);
-  partager(new Blob([JSON.stringify({app:"ISC_Caisse_Mobile",version:VERSION,date:nowIso(),chiffre:true,coffre:box})],{type:"application/json"}),`ISC_caisse_sauvegarde_${today()}.json`)}
+async function exportJSON(){S.meta.lastBackup=nowIso();save();
+  partager(new Blob([JSON.stringify({app:"ISC_Caisse_Mobile",version:VERSION,date:nowIso(),chiffre:true,coffre2:await coffre()})],{type:"application/json"}),`ISC_caisse_sauvegarde_${today()}.json`)}
 function importJSON(f){if(!f)return;const r=new FileReader();r.onload=async()=>{let j;try{j=JSON.parse(r.result)}catch(e){return toast("Fichier de sauvegarde invalide",false)}
-  let d;try{if(j.chiffre&&j.coffre){const pw=prompt("Mot de passe de cette sauvegarde :");if(pw===null)return;d=await unseal(j.coffre,await deriveKey(pw,ub64(j.coffre.salt)))}else d=j.data||j}
-  catch(e){return toast("Mot de passe de la sauvegarde incorrect",false)}
+  let d;try{
+    if(j.coffre2){const nom=prompt("Sauvegarde protégée par les codes de ses agents.\nNom de l'agent ("+j.coffre2.agents.map(a=>a.nom).join(", ")+") :");if(nom===null)return;
+      const a=j.coffre2.agents.find(x=>x.nom.toLowerCase()===nom.trim().toLowerCase());if(!a)return toast("Agent inconnu dans cette sauvegarde",false);
+      const pw=prompt("Code de "+a.nom+" :");if(pw===null)return;const raw=await ouvrirAgent(a,pw);d=await unseal(j.coffre2.data,await importDek(raw))}
+    else if(j.chiffre&&j.coffre){const pw=prompt("Mot de passe de cette sauvegarde :");if(pw===null)return;d=await unseal(j.coffre,await deriveKey(pw,ub64(j.coffre.salt)))}
+    else d=j.data||j}
+  catch(e){return toast("Code ou mot de passe de la sauvegarde incorrect",false)}
   if(!d||!d.ops||!d.services)return toast("Fichier de sauvegarde invalide",false);
-  if(!confirm(`Restaurer la sauvegarde du ${(j.date||"?").slice(0,10)} (${d.ops.length} opérations) ?\nLes données actuelles de cet appareil seront REMPLACÉES.\n(Elles restent protégées par votre mot de passe actuel.)`))return;
+  if(!confirm(`Restaurer la sauvegarde du ${(j.date||"?").slice(0,10)} (${d.ops.length} opérations) ?\nLes données actuelles de cet appareil seront REMPLACÉES.\n(Les agents et codes actuels sont conservés.)`))return;
   S=d;normalise();audit("RESTAURATION",`sauvegarde du ${(j.date||"?").slice(0,10)}`);save();toast("Sauvegarde restaurée");go("accueil")};r.readAsText(f)}
 
 /* Export état caisse en vrai .xlsx (sans bibliothèque) */
 function exportJournal(){exportOps(JOUR_OPS,"etat_caisse_"+JOUR_LBL)}
 function exportPeriode(){const du=$("x_du").value,au=$("x_au").value;exportOps(S.ops.filter(o=>o.date>=du&&o.date<=au).sort((a,b)=>a.date.localeCompare(b.date)||a.id-b.id),`etat_caisse_${du}_${au}`)}
 function exportOps(ops,nom){if(!ops.length)return toast("Aucune opération à exporter",false);
-  const head=["date reglement","nom declarant","N°dossier","MF","client","type","N°rep","case10","montant dû","montant payé","non payé","statut","observation"];
-  const rows=ops.map(o=>{const[r,c]=repAff(o);return[frDate(o.date),(dec(o.decId)||{}).nom||"",o.num,o.mf||"",(cli(o.clientId)||{}).rs||"",(svc(o.svcId)||{}).code||"",r,c,+o.total,o.statut==="FAC"&&!o.paye?"FAC":+o.paye,+o.reste,o.statut,o.obs||""]});
-  partager(xlsxBlob([head,...rows]),nom+".xlsx")}
+  const head=["date heure systeme","date saisie","date encaissement","N°dossier","type","client","MF","nom declarant","prix total","repertoire","prise en charge","paye","reste a payer","non paye","observation","agent"];
+  const rows=ops.map(o=>{const[r,c]=repAff(o),fac=o.statut==="FAC"&&!o.paye;return[(o.created||"").replace("T"," ").slice(0,16),frDate(o.dateOp||o.date),frDate(o.date),o.num,(svc(o.svcId)||{}).code||"",(cli(o.clientId)||{}).rs||"",o.mf||"",(dec(o.decId)||{}).nom||"",+o.total,r,c,fac?"FAC":+o.paye,o.paye&&o.reste?+o.reste:"",!o.paye&&o.reste?+o.reste:"",o.obs||"",o.agent||""]});
+  partager(xlsxBlob([head,...rows],16),nom+".xlsx")}
 const crcT=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c}return t})();
 const crc32=b=>{let c=~0;for(let i=0;i<b.length;i++)c=crcT[(c^b[i])&255]^(c>>>8);return(~c)>>>0};
 function zipStore(files){const enc=new TextEncoder(),parts=[],cd=[];let off=0;
@@ -564,7 +617,7 @@ function zipStore(files){const enc=new TextEncoder(),parts=[],cd=[];let off=0;
 function xlsxBlob(rows,ncol){const x=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])).replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g,"");
   const col=i=>{let s="";i++;while(i){const m=(i-1)%26;s=String.fromCharCode(65+m)+s;i=Math.floor((i-1)/26)}return s};
   const sheet=rows.map((r,ri)=>`<row r="${ri+1}">${r.map((v,ci)=>{const ref=col(ci)+(ri+1);if(typeof v==="number")return `<c r="${ref}" s="${ri?2:1}"><v>${v}</v></c>`;return `<c r="${ref}" t="inlineStr"${ri?"":' s="1"'}><is><t xml:space="preserve">${x(v)}</t></is></c>`}).join("")}</row>`).join("");
-  const widths=(ncol===3?[34,18,24]:ncol?[14,20,11,14,8,8,8,12,12]:[13,22,11,14,26,7,8,8,12,12,12,15,30]).map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join("");
+  const widths=(ncol===3?[34,18,24]:ncol===16?[17,12,12,10,8,28,13,18,11,11,11,11,11,11,26,14]:ncol?[14,20,11,14,8,8,8,12,12]:[13,22,11,14,26,7,8,8,12,12,12,15,30]).map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join("");
   return zipStore([
    ["[Content_Types].xml",'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>'],
    ["_rels/.rels",'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'],
@@ -601,10 +654,11 @@ async function importXlsx(file,type,cible){if(!file)return;const res=$(cible||"i
     res.innerHTML=`<div class="stats" style="margin-top:10px">${Object.entries(r).filter(([k])=>!k.startsWith("_")).map(([k,v])=>`<div class="stat ${k==="anomalies"&&v?"r":""}"><div class="l">${k}</div><div class="v">${v}</div></div>`).join("")}</div>${(r._details||[]).length?`<details open><summary><b>Anomalies</b></summary><ul class="mu">${r._details.map(d=>`<li>${esc(d)}</li>`).join("")}</ul></details>`:""}`;toast("Import terminé")}
   catch(e){res.innerHTML=`<p style="color:var(--ko);font-weight:700">Import impossible : ${esc(e.message||e)}</p>`}}
 function importCaisse(rows){
-  let h=rows.findIndex(r=>{const k=new Set(r.map(norm));return["datereglement","nomdeclarant","ndossier","mf","type"].filter(x=>k.has(x)).length>=4});
-  if(h<0)throw new Error("en-tête introuvable : date reglement, nom declarant, N°dossier, MF, type");
+  const GR=[["datereglement","dateencaissement"],["nomdeclarant","declarant"],["ndossier","nodossier"],["mf","matriculefiscal","matriculefiscale"],["type","typedossier"]];
+  let h=rows.findIndex(r=>{const k=new Set(r.map(norm));return GR.filter(g=>g.some(x=>k.has(x))).length>=4});
+  if(h<0)throw new Error("en-tête introuvable : date encaissement, N°dossier, type, MF, déclarant…");
   const H=rows[h].map(norm),ix=(...n)=>{for(const x of n){const i=H.indexOf(x);if(i>=0)return i}return -1};
-  const C={date:ix("datereglement","daterglement","datecaisse","datepaiement"),dec:ix("nomdeclarant","declarant","nomdec","dec"),num:ix("ndossier","nodossier","numerodossier","numdossier","dossier"),mf:ix("mf","matriculefiscale","codedouane","codeclient"),type:ix("type","service","typedossier","typeservice"),rep:ix("nrep","norep","numerorep","repertoire","numrepertoire","nrepertoire"),c10:ix("case10","case","ncase10"),paye:ix("montantpaye","paye","payee","montantregle","regle"),np:ix("nonpaye","reste","resteapayer","montantnonpaye"),obs:ix("observation","observations","obs")};
+  const C={cli:ix("client","raisonsociale","nomclient"),dateOp:ix("datesaisie"),prix:ix("prixtotal","montantdu","prix"),reste:ix("reste","resteapayer"),date:ix("datereglement","daterglement","datecaisse","datepaiement","dateencaissement"),dec:ix("nomdeclarant","declarant","nomdec","dec"),num:ix("ndossier","nodossier","numerodossier","numdossier","dossier"),mf:ix("mf","matriculefiscale","matriculefiscal","codedouane","codeclient"),type:ix("type","service","typedossier","typeservice"),rep:ix("nrep","norep","numerorep","repertoire","numrepertoire","nrepertoire"),c10:ix("priseencharge","pec","case10","case","ncase10"),paye:ix("montantpaye","paye","payee","montantregle","regle"),np:ix("nonpaye","montantnonpaye"),obs:ix("observation","observations","obs")};
   const miss=["date","dec","num","type","paye"].filter(k=>C[k]<0);if(miss.length)throw new Error("colonnes manquantes : "+miss.join(", "));
   let imp=0,maj=0,ign=0;const det=[],dates=new Set();
   rows.slice(h+1).forEach((r,i)=>{const L=h+i+2,g=k=>C[k]>=0?r[C[k]]:null;if(!r.some(v=>v!==null&&v!==undefined&&String(v).trim()!==""))return;
@@ -613,14 +667,14 @@ function importCaisse(rows){
     const pr=g("paye"),npr=g("np"),fac=String(pr??"").toLowerCase()==="fac"||String(npr??"").toLowerCase()==="fac",paye=fac?0:num(pr);
     if(paye===null){det.push(`Ligne ${L} : montant payé non numérique (${numero})`);return}
     const[d,cr]=getOrCreateDec(dn,0);if(cr)det.push(`Ligne ${L} : déclarant nouveau « ${dn} » — en attente de validation`);
-    const s=getOrCreateSvc(code),cl=mf?findCliMf(mf):null;if(mf&&!cl)det.push(`Ligne ${L} : MF inconnu ${mf}`);else if(cl&&cl.decId!==d.id)det.push(`Ligne ${L} : MF ${mf} rattaché à un autre déclarant`);
+    const s=getOrCreateSvc(code);let cl=mf?findCliMf(mf):null;const cn=C.cli>=0?String(g("cli")??"").trim():"";if(mf&&!cl&&cn){cl={id:nid(),rs:cn,mf,decId:d.id,tel:"",actif:1};S.clients.push(cl);det.push(`Ligne ${L} : nouveau client ${cn} (${mf}) créé pour « ${dn} »`)}if(mf&&!cl)det.push(`Ligne ${L} : MF inconnu ${mf}`);else if(cl&&cl.decId!==d.id)det.push(`Ligne ${L} : MF ${mf} rattaché à un autre déclarant`);
     let rep=code==="DDM"?addRep(g("rep")):null;const c10=code==="DDM"&&!["","0","false","non","null","undefined"].includes(String(g("c10")??"").trim().toLowerCase());
-    let m=calculer(d.id,s.id,rep,c10,paye);if(!fac&&num(npr))m.total=Math.max(m.total,paye+num(npr));m=heriter(s.id,numero,m,paye,date);rep=m.rep||rep;
+    let m=calculer(d.id,s.id,rep,c10,paye);if(num(g("prix")))m.total=Math.max(num(g("prix")),paye);[g("reste"),fac?null:npr].forEach(x=>{if(num(x))m.total=Math.max(m.total,paye+num(x))});m=heriter(s.id,numero,m,paye,date);rep=m.rep||rep;
     const ex=S.ops.find(o=>o.num===numero&&o.svcId===s.id&&o.date===date&&o.decId===d.id&&Math.abs((+o.paye||0)-paye)<.001);
     const k=controle(numero,s.id,m.total,paye,ex?ex.id:undefined);
     if(!k.ok){det.push(`Ligne ${L} : ${k.message}`);anomalie("IMPORT",k.cle,date,dn,code,numero,paye,k.message);return}
     const v={clientId:cl?cl.id:null,mf,rep:rep||"",c10:m.c10,tarif:m.tarif,sRep:m.sRep,sC10:m.sC10,total:m.total,paye,reste:fac?m.total:Math.max(m.total-paye,0),statut:fac?"FAC":(paye>=m.total-.001?"PAYE":"RESTE_A_PAYER"),obs:String(g("obs")??"").trim()||"Import état caisse"};
-    if(ex){Object.assign(ex,v);maj++}else{S.ops.push({id:nid(),num:numero,decId:d.id,svcId:s.id,date,created:nowIso(),...v});imp++}recalc(s.id,numero)});
+    if(ex){Object.assign(ex,v);maj++}else{S.ops.push({id:nid(),num:numero,decId:d.id,svcId:s.id,date,dateOp:toIso(g("dateOp"))||date,created:nowIso(),agent:AG.nom+" (import)",...v});imp++}recalc(s.id,numero)});
   audit("IMPORT_CAISSE",`${imp} ajoutées, ${maj} mises à jour, ${det.length} anomalies — ${[...dates].sort().join(", ")}`);
   return{"lignes importées":imp,"lignes mises à jour":maj,"lignes ignorées":ign,"anomalies":det.length,_details:det.slice(0,200)}}
 /* Fichier « Matricule fiscal » : col. A = Client, col. B = Matricule fiscal, col. C = Déclarant
@@ -645,32 +699,50 @@ function importServices(rows){rows=rows.filter(r=>r&&r.some(v=>v!==null&&v!==und
     else{S.services.push({id:nid(),code,lib:lib||code,tarif:prix,actif:1});st["services ajoutés"]++}});
   audit("IMPORT_SERVICES",JSON.stringify(st));st._details=det.slice(0,200);return st}
 
-/* ───────────── Démarrage : création / saisie du mot de passe ───────────── */
-let MODE=null,ESSAIS=0,BLOQUE=0,OLD_PLAIN=null;
-function lockUI(titre,msg,creation){$("lkT").textContent=titre;$("lkM").innerHTML=msg;$("lkF").style.display="block";$("pw2w").style.display=creation?"block":"none";
-  $("pw1").autocomplete=creation?"new-password":"current-password";$("lkB").textContent=creation?"Créer et chiffrer":"Déverrouiller";setTimeout(()=>$("pw1").focus(),200)}
+/* ───────────── Démarrage : agents, codes personnels, reprise ───────────── */
+let MODE=null,ESSAIS=0,BLOQUE=0,OLD_PLAIN=null,V1=null;
+function lockUI(mode,titre,msg){MODE=mode;$("lkT").textContent=titre;$("lkM").innerHTML=msg;$("lkF").style.display="block";
+  const cre=mode==="creer"||mode==="migrer";$("pw2w").style.display=mode==="creer"?"block":"none";$("nomW").style.display=cre?"block":"none";
+  $("agW").style.display=mode==="ouvrir"?"block":"none";$("pw1L").textContent=mode==="v1"?"Mot de passe actuel":mode==="creer"?"Code personnel du gérant (6 caractères min.)":"Code personnel";
+  $("pw1").autocomplete=mode==="creer"?"new-password":"current-password";$("lkB").textContent=mode==="creer"?"Créer et chiffrer":"Ouvrir la caisse";
+  if(mode==="ouvrir"){$("agList").innerHTML=AGENTS.map((a,i)=>`<input type="radio" name="ag" id="ag${i}" value="${a.id}" ${AGENTS.length===1?"checked":""}><label for="ag${i}">${esc(a.nom)}<small>${a.role==="gerant"?"gérant":"agent"}</small></label>`).join("");
+    document.querySelectorAll("#agList input").forEach(r=>r.onchange=()=>{$("lkUser").value=(AGENTS.find(a=>a.id===r.value)||{}).nom||"";$("pw1").focus()})}
+  setTimeout(()=>(mode==="creer"||mode==="migrer"?$("nomG"):$("pw1")).focus(),200)}
 async function lockSubmit(){const pw=$("pw1").value,E=$("lkE");E.textContent="";
   if(Date.now()<BLOQUE){E.textContent=`Trop d'essais — patientez ${Math.ceil((BLOQUE-Date.now())/1000)} s`;return}
-  $("lkB").disabled=true;$("lkB").textContent="⏳";
+  $("lkB").disabled=true;const lbl=$("lkB").textContent;$("lkB").textContent="⏳";
   try{
-    if(MODE==="creer"){if(pw.length<8){E.textContent="8 caractères minimum";return}if(pw!==$("pw2").value){E.textContent="Les deux mots de passe diffèrent";return}
-      SALT=crypto.getRandomValues(new Uint8Array(16));CK=await deriveKey(pw,SALT);S=OLD_PLAIN||fresh();normalise();audit("CREATION_COFFRE",OLD_PLAIN?"données existantes chiffrées":"nouveau");
-      await kvPut(VKEY,await seal(S,CK,SALT));if(OLD_PLAIN){await kvPut(OLDKEY,undefined);try{localStorage.removeItem(DBN)}catch(e){}}OLD_PLAIN=null}
-    else{const box=await kvGet(VKEY);SALT=ub64(box.salt);const k=await deriveKey(pw,SALT);
-      try{S=await unseal(box,k)}catch(e){ESSAIS++;if(ESSAIS>=5){BLOQUE=Date.now()+30000*Math.pow(2,ESSAIS-5)}E.textContent="Mot de passe incorrect";$("pw1").value="";return}
-      CK=k;ESSAIS=0;normalise()}
-    $("pw1").value=$("pw2").value="";$("lock").style.display="none";go("accueil");armerVerrou();
+    if(MODE==="creer"||MODE==="migrer"){const nom=$("nomG").value.trim();if(!nom){E.textContent="Indiquez votre nom";return}
+      if(MODE==="creer"){if(pw.length<6){E.textContent="Code : 6 caractères minimum";return}if(pw!==$("pw2").value){E.textContent="Les deux codes diffèrent";return}}
+      DEKRAW=crypto.getRandomValues(new Uint8Array(32));DEK=await importDek(DEKRAW);
+      const g=await nouvelAgent(nom,"gerant",MODE==="migrer"?V1.pw:pw);AGENTS=[g];AG={id:g.id,nom:g.nom,role:"gerant"};
+      S=MODE==="migrer"?V1.S:(OLD_PLAIN||fresh());normalise();audit("CREATION_COFFRE",`gérant ${nom}`+(MODE==="migrer"?" (migration mot de passe unique)":OLD_PLAIN?" (données existantes chiffrées)":""));
+      await kvPut(VKEY,await coffre());if(OLD_PLAIN){await kvPut(OLDKEY,undefined);try{localStorage.removeItem(DBN)}catch(e){}}OLD_PLAIN=V1=null}
+    else if(MODE==="v1"){const box=await kvGet(VKEY);try{V1={S:await unseal(box,await deriveKey(pw,ub64(box.salt))),pw}}catch(e){ESSAIS++;E.textContent="Mot de passe incorrect";$("pw1").value="";return}
+      $("pw1").value="";return lockUI("migrer","Nouvelle version : agents","Chaque agent aura désormais son propre code.<br>Indiquez votre nom : vous devenez <b>gérant</b>, avec votre mot de passe actuel comme code.")}
+    else{const sel=document.querySelector("#agList input:checked");if(!sel){E.textContent="Choisissez l'agent";return}
+      const a=AGENTS.find(x=>x.id===sel.value);let raw;
+      try{raw=await ouvrirAgent(a,pw)}catch(e){ESSAIS++;if(ESSAIS>=5)BLOQUE=Date.now()+30000*Math.pow(2,ESSAIS-5);E.textContent="Code incorrect";$("pw1").value="";return}
+      DEKRAW=raw;DEK=await importDek(raw);S=await unseal((await kvGet(VKEY)).data,DEK);ESSAIS=0;AG={id:a.id,nom:a.nom,role:a.role};normalise()}
+    $("pw1").value=$("pw2").value="";$("lock").style.display="none";$("agentSub").textContent="Agent : "+AG.nom;
+    audit("CONNEXION",`${AG.nom} prend la caisse`);save();
+    const r=S.meta.reprise;if(r&&r.view&&V[r.view]){go(r.view,r.args||{});if(r.view!=="accueil")toast(`↩ Reprise là où ${r.agent&&r.agent!==AG.nom?r.agent+" a":"vous avez"} quitté`)}else go("accueil");
+    armerVerrou();
   }catch(e){E.textContent="Erreur : "+(e.message||e)}
-  finally{$("lkB").disabled=false;$("lkB").textContent=MODE==="creer"?"Créer et chiffrer":"Déverrouiller"}}
+  finally{$("lkB").disabled=false;if($("lkB").textContent==="⏳")$("lkB").textContent=lbl}}
+function quitter(){if(!S)return location.reload();if(VIEW==="saisie")sauverBrouillon();audit("DECONNEXION",`${AG.nom} quitte la caisse`);save();
+  saving.then(()=>new Promise(r=>setTimeout(r,200))).then(()=>{S=DEK=DEKRAW=null;location.reload()})}
+function verrouiller(){quitter()}
 function armerVerrou(){let t=Date.now(),cache=0;const act=()=>t=Date.now();["pointerdown","keydown","scroll"].forEach(e=>addEventListener(e,act,{passive:true}));
-  setInterval(()=>{if(CK&&Date.now()-t>5*60000)verrouiller()},15000);
-  document.addEventListener("visibilitychange",()=>{if(document.hidden)cache=Date.now();else if(CK&&cache&&Date.now()-cache>2*60000)verrouiller()})}
+  setInterval(()=>{if(DEK&&Date.now()-t>5*60000)verrouiller()},15000);
+  document.addEventListener("visibilitychange",()=>{if(document.hidden){cache=Date.now();if(VIEW==="saisie")sauverBrouillon()}else if(DEK&&cache&&Date.now()-cache>2*60000)verrouiller()})}
 (async()=>{
   if(!window.crypto||!crypto.subtle){$("lkT").textContent="Connexion non sécurisée";$("lkM").innerHTML="Le chiffrement exige une page en <b>https://</b> (ou le fichier ouvert sur PC). Ouvrez l'adresse sécurisée de l'application.";return}
   try{const box=await kvGet(VKEY);
-    if(box){MODE="ouvrir";lockUI("ISC Caisse Espèce","Saisissez votre mot de passe.",false)}
+    if(box&&box.v===2){AGENTS=box.agents||[];lockUI("ouvrir","ISC Caisse Espèce","Choisissez votre nom puis saisissez votre code personnel.")}
+    else if(box){lockUI("v1","ISC Caisse Espèce","Saisissez votre mot de passe actuel.")}
     else{try{OLD_PLAIN=await kvGet(OLDKEY)}catch(e){}if(!OLD_PLAIN){try{OLD_PLAIN=JSON.parse(localStorage.getItem(DBN)||"null")}catch(e){}}
-      MODE="creer";lockUI("Créer votre mot de passe",(OLD_PLAIN?"<b>Des données non protégées existent : elles vont être chiffrées.</b><br>":"")+"8 caractères minimum. <b style='color:var(--ko)'>Sans ce mot de passe, les données sont irrécupérables</b> (même par le concepteur).",true)}
+      lockUI("creer","Première ouverture",(OLD_PLAIN?"<b>Des données non protégées existent : elles vont être chiffrées.</b><br>":"")+"Créez le compte du <b>gérant</b>. Vous ajouterez ensuite les agents (☰ Plus → Agents). <b style='color:var(--ko)'>Sans code, les données sont irrécupérables</b>.")}
     if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
   }catch(e){$("lkM").textContent="Erreur de stockage : "+(e.message||e)}
   if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("sw.js").catch(()=>{});
