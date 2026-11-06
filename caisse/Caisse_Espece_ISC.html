@@ -109,10 +109,10 @@ footer{text-align:center;color:var(--mu);font-size:11px;padding:10px}
    (IndexedDB). Échanges : Excel état caisse (compatible V36) et
    sauvegarde complète JSON.  Conçu par Mokhtar Reguigui — ISC/STT
    ════════════════════════════════════════════════════════════════════ */
-const VERSION="Mobile 1.3";
+const VERSION="Mobile 1.4";
 const SUPP_REP=12, SUPP_C10=10;
 const JOURS=["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
-const DEFAULT_SERVICES=[["DDM", "Déclaration détaillée des marchandises", 9], ["TCE AP", "Titre de commerce extérieur avec paiement (code 33)", 14], ["TCE SP", "Titre de commerce extérieur sans paiement (code 93)", 0], ["FDE", "Facture définitive à l'exportation (code 22)", 0], ["AT", "Document d'admission temporaire — régime suspensif (code 39)", 0], ["VISA", "Visa", 15], ["BS", "Bon de sortie", 7], ["DCT", "Contrôle technique", 14], ["INOR", "INORPI — certificat de conformité aux normes", 15], ["ONA", "Contrôle de l'Office national de l'artisanat", 15], ["DAE", "Déclaration simplifiée d'autorisation d'exportation", 8], ["ASS", "Assurance — prix variable selon le total facture", 0]];
+const DEFAULT_SERVICES=[["DDM", "Déclaration détaillée des marchandises", 9], ["TCE AP", "Titre de commerce extérieur avec paiement (code 33)", 14], ["TCE SP", "Titre de commerce extérieur sans paiement (code 93)", 14], ["FDE", "Facture définitive à l'exportation (code 22)", 14], ["AT", "Document d'admission temporaire — régime suspensif (code 39)", 14], ["VISA", "Visa", 15], ["BS", "Bon de sortie", 7], ["DCT", "Contrôle technique", 14], ["INOR", "INORPI — certificat de conformité aux normes", 15], ["ONA", "Contrôle de l'Office national de l'artisanat", 15], ["DAE", "Déclaration simplifiée d'autorisation d'exportation", 8], ["ASS", "Assurance — prix variable selon le total facture", 0], ["PRIV", "Privilège", 10]];
 
 /* ───────────── Stockage CHIFFRÉ (IndexedDB + AES-256-GCM) ─────────────
    Les données ne sont jamais écrites en clair : clé dérivée du mot de passe
@@ -130,7 +130,7 @@ async function deriveKey(pw,salt){const base=await crypto.subtle.importKey("raw"
 async function seal(obj,key,salt){const iv=crypto.getRandomValues(new Uint8Array(12));
   const ct=await crypto.subtle.encrypt({name:"AES-GCM",iv},key,TE.encode(JSON.stringify(obj)));return{v:1,alg:"AES-256-GCM/PBKDF2-SHA256",iter:ITER,salt:b64(salt),iv:b64(iv),ct:b64(ct)}}
 async function unseal(box,key){const pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:ub64(box.iv)},key,ub64(box.ct));return JSON.parse(TD.decode(pt))}
-function normalise(){S.meta=S.meta||{};if(S.services)DEFAULT_SERVICES.forEach(([c,l,p])=>{const s=S.services.find(x=>x.code===c);if(s)s.lib=l;else S.services.push({id:(S.meta.seq=(S.meta.seq||1)+1)-1,code:c,lib:l,tarif:p,actif:1})});if(S.services){const o=S.services.find(x=>x.code==="TCE"),n=S.services.find(x=>x.code==="TCE AP");if(o&&n){(S.ops||[]).forEach(op=>{if(op.svcId===o.id)op.svcId=n.id});(S.tarifs||[]).forEach(tf=>{if(tf.svcId===o.id&&!S.tarifs.some(x=>x.decId===tf.decId&&x.svcId===n.id))tf.svcId=n.id});S.tarifs=(S.tarifs||[]).filter(tf=>tf.svcId!==o.id);if(o.tarif)n.tarif=o.tarif;S.services=S.services.filter(x=>x!==o);(S.audit=S.audit||[]).unshift({quand:nowIso(),action:"FUSION_SERVICE",detail:"TCE → TCE AP"})}}["declarants","clients","services","tarifs","reps","ops","feries","anomalies","audit"].forEach(k=>S[k]=S[k]||[]);
+function normalise(){S.meta=S.meta||{};if(S.services)DEFAULT_SERVICES.forEach(([c,l,p])=>{const s=S.services.find(x=>x.code===c);if(s)s.lib=l;else S.services.push({id:(S.meta.seq=(S.meta.seq||1)+1)-1,code:c,lib:l,tarif:p,actif:1})});if(S.services){const ap=S.services.find(x=>x.code==="TCE AP");if(ap)S.services.filter(x=>["TCE SP","FDE","AT"].includes(x.code)&&!+x.tarif).forEach(x=>x.tarif=ap.tarif)}if(S.services){const o=S.services.find(x=>x.code==="TCE"),n=S.services.find(x=>x.code==="TCE AP");if(o&&n){(S.ops||[]).forEach(op=>{if(op.svcId===o.id)op.svcId=n.id});(S.tarifs||[]).forEach(tf=>{if(tf.svcId===o.id&&!S.tarifs.some(x=>x.decId===tf.decId&&x.svcId===n.id))tf.svcId=n.id});S.tarifs=(S.tarifs||[]).filter(tf=>tf.svcId!==o.id);if(o.tarif)n.tarif=o.tarif;S.services=S.services.filter(x=>x!==o);(S.audit=S.audit||[]).unshift({quand:nowIso(),action:"FUSION_SERVICE",detail:"TCE → TCE AP"})}}["declarants","clients","services","tarifs","reps","ops","feries","anomalies","audit"].forEach(k=>S[k]=S[k]||[]);
   if(!S.meta.seq)S.meta.seq=Math.max(1,...S.ops.map(o=>o.id+1),...S.declarants.map(d=>d.id+1),...S.clients.map(c=>c.id+1),...S.services.map(s=>s.id+1));delete S.meta.pin}
 let saveTimer=null,saving=Promise.resolve();
 function save(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>{saving=saving.then(async()=>{
@@ -148,7 +148,7 @@ function nowIso(){const d=new Date();return today()+"T"+d.toTimeString().slice(0
 const norm=s=>String(s??"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]/g,"");
 const cleanMf=s=>String(s??"").toUpperCase().replace(/\s/g,"");
 const mfKey=s=>cleanMf(s).replace(/^0+/,"");
-function normService(v){const t=String(v??"").toUpperCase().replace(/\./g,"").replace(/\s+/g," ").trim();return({ASSUR:"ASS",ASSURANCE:"ASS",AASUR:"ASS",OBLIGATION:"OBL",INORPI:"INOR",BONSORTIE:"BS",BONDESORTIE:"BS",VISAEXPORT:"VISA",TCE:"TCE AP",TCEAP:"TCE AP",TCESP:"TCE SP",TCEAVECPAIEMENT:"TCE AP",TCESANSPAIEMENT:"TCE SP",CONTROLETECHNIQUE:"DCT"})[t.replace(/ /g,"")]||t}
+function normService(v){const t=String(v??"").toUpperCase().replace(/\./g,"").replace(/\s+/g," ").trim();return({ASSUR:"ASS",ASSURANCE:"ASS",AASUR:"ASS",OBLIGATION:"OBL",INORPI:"INOR",BONSORTIE:"BS",BONDESORTIE:"BS",VISAEXPORT:"VISA",TCE:"TCE AP",TCEAP:"TCE AP",PRIVILEGE:"PRIV",TCESP:"TCE SP",TCEAVECPAIEMENT:"TCE AP",TCESANSPAIEMENT:"TCE SP",CONTROLETECHNIQUE:"DCT"})[t.replace(/ /g,"")]||t}
 const num=v=>{if(v===null||v===undefined||v==="")return null;if(typeof v==="number")return v;const n=parseFloat(String(v).replace(/\s/g,"").replace(",","."));return isNaN(n)?null:n};
 function toIso(v){if(v===null||v===undefined||v==="")return null;
   if(typeof v==="number"&&v>20000&&v<80000){const d=new Date(Math.round((v-25569)*86400000));return d.toISOString().slice(0,10)}
@@ -170,7 +170,7 @@ function getOrCreateDec(nom,valide=1){const d=findDec(nom);if(d)return[d,false];
 function getOrCreateSvc(code){code=normService(code);if(!code)return null;let s=svcByCode(code);if(!s){s={id:nid(),code,lib:code,tarif:0,actif:1};S.services.push(s)}return s}
 function findCliMf(mf){const k=mfKey(mf);return k?S.clients.find(c=>mfKey(c.mf)===k):null}
 function addRep(n){n=String(n??"").trim().replace(/\.0$/,"");if(!/^\d{5}$/.test(n))return null;if(!S.reps.includes(n))S.reps.push(n);return n}
-function getTarif(decId,svcId){const t=S.tarifs.find(t=>t.decId==decId&&t.svcId==svcId);if(t)return +t.t;const s=svc(svcId);return s?+s.tarif:0}
+function getTarif(decId,svcId){const t=S.tarifs.find(t=>t.decId==decId&&t.svcId==svcId&&t.actif!==0);if(t)return +t.t;const s=svc(svcId);return s?+s.tarif:0}
 
 /* ───────────── Règles métier (identiques V36) ───────────── */
 function calculer(decId,svcId,rep,c10,paye){
@@ -408,7 +408,7 @@ V.plus=()=>`<h2>☰ Menu</h2><div class="menu">
 <a onclick="go('recap')"><span>📅</span>Récapitulatif mensuel<i>›</i></a>
 <a onclick="go('declarants')"><span>👥</span>Déclarants<i>${S.declarants.filter(d=>!d.valide).length?"⚠ "+S.declarants.filter(d=>!d.valide).length:""} ›</i></a>
 <a onclick="go('clients')"><span>🏢</span>Clients<i>${S.clients.length} ›</i></a>
-<a onclick="go('services')"><span>⚙️</span>Services & tarifs<i>›</i></a>
+<a onclick="go('services')"><span>⚙️</span>Services, prix & conventions déclarants<i>›</i></a>
 <a onclick="go('repertoires')"><span>📁</span>Répertoires DDM<i>${S.reps.length} ›</i></a>
 <a onclick="go('anomalies')"><span>🔎</span>Anomalies doublons<i>${S.anomalies.filter(a=>a.statut==="A_VERIFIER").length||""} ›</i></a>
 <a onclick="go('charger')"><span>📥</span>Charger fichiers Excel (MF, services, caisse)<i>›</i></a>
@@ -449,18 +449,29 @@ function editCli(id){const c=cli(id);const rs=prompt("Raison sociale :",c.rs);if
 V.services=()=>{const decs=S.declarants.filter(d=>d.actif&&d.valide).sort((a,b)=>a.nom.localeCompare(b.nom)),svs=S.services.slice().sort((a,b)=>a.code.localeCompare(b.code));
   return `<h2>⚙️ Services & tarifs</h2><h3>Tarifs de base</h3><div class="list">${svs.map(s=>`<div class="it" onclick="editSvc(${s.id})"><div class="t">${esc(s.code)} <span class="mu">${esc(s.lib)}</span></div><div class="a">${f3(s.tarif)}</div>${s.actif?"":'<div class="s">inactif</div>'}</div>`).join("")}</div>
   <button class="b lite full" onclick="addSvc()">➕ Nouveau service</button>
-  <h3>Tarifs conventionnels</h3><div class="card"><label>Déclarant</label><select id="t_dec"><option value="">—</option>${decs.map(d=>`<option value="${d.id}">${esc(d.nom)}</option>`).join("")}</select>
-  <div class="row"><div><label>Service</label><select id="t_svc">${svs.map(s=>`<option value="${s.id}">${esc(s.code)}</option>`).join("")}</select></div><div><label>Tarif spécial</label><input id="t_val" type="number" inputmode="decimal" step="0.001"></div></div>
-  <button class="b ok full" onclick="addTarif()">💾 Enregistrer</button></div>
-  <div class="list">${S.tarifs.map(t=>`<div class="it" onclick="delTarif(${t.decId},${t.svcId})"><div class="t">${esc((dec(t.decId)||{}).nom)} · ${esc((svc(t.svcId)||{}).code)}</div><div class="a">${f3(t.t)}</div><div class="s">base ${f3((svc(t.svcId)||{}).tarif)} — toucher pour supprimer</div></div>`).join("")||'<p class="mu">Aucun : le tarif de base s\'applique.</p>'}</div>
+  <h3>🤝 Conventions de prix par déclarant</h3><p class="mu">Prix de faveur fixés par le gérant selon le volume de travail. Valables pour ce seul déclarant <b>jusqu'à nouvel ordre</b>. Suspendre ou supprimer = retour au tarif de base.</p>
+  <div class="card"><label>Déclarant</label><select id="t_dec"><option value="">—</option>${decs.map(d=>`<option value="${d.id}">${esc(d.nom)} — ${S.ops.filter(o=>o.decId===d.id&&o.date>=jPlus(-90)).length} dossier(s) / 90 j</option>`).join("")}</select>
+  <div class="row"><div><label>Service</label><select id="t_svc">${svs.map(s=>`<option value="${s.id}">${esc(s.code)} (base ${f3(s.tarif)})</option>`).join("")}</select></div><div><label>Prix convenu (DT)</label><input id="t_val" type="number" inputmode="decimal" step="0.001"></div></div>
+  <div class="row"><div><label>À compter du</label><input id="t_date" type="date" value="${today()}"></div><div><label>Condition / motif</label><input id="t_cond" placeholder="ex : > 100 DDM/mois"></div></div>
+  <button class="b ok full" onclick="addTarif()">💾 Enregistrer la convention</button></div>
+  <div class="list">${S.tarifs.slice().sort((a,b)=>((dec(a.decId)||{}).nom||"").localeCompare((dec(b.decId)||{}).nom||"")).map(t=>{const s=svc(t.svcId)||{},e=t.t-(+s.tarif||0);return `<div class="it" style="${t.actif===0?"opacity:.55":""}"><div class="t">${esc((dec(t.decId)||{}).nom)} · ${esc(s.code)}</div><div class="a">${f3(t.t)}</div>
+  <div class="s">base ${f3(s.tarif)} · écart <b style="color:${e<0?"var(--ok)":e>0?"var(--ko)":"inherit"}">${e>0?"+":""}${f3(e)}</b>${t.date?" · depuis "+frDate(t.date):""}${t.cond?"<br>"+esc(t.cond):""}</div>
+  <div style="white-space:nowrap"><span class="tag ${t.actif===0?"FAC":"PAYE"}">${t.actif===0?"Suspendue":"En vigueur"}</span><br><button class="b sm lite" style="margin-top:4px" onclick="toggleTarif(${t.decId},${t.svcId})">${t.actif===0?"Réactiver":"Suspendre"}</button> <button class="b sm ko" onclick="delTarif(${t.decId},${t.svcId})">🗑</button></div></div>`}).join("")||'<p class="mu">Aucune convention : le tarif de base s\'applique.</p>'}</div>
+  <details><summary><b>Historique des conventions</b></summary><div class="list">${S.audit.filter(a=>a.action==="CONVENTION_PRIX").slice(0,100).map(a=>`<div class="it"><div class="s">${esc(a.quand.replace("T"," ").slice(0,16))}</div><div></div><div class="t" style="font-weight:500">${esc(a.detail)}</div></div>`).join("")||'<p class="mu">—</p>'}</div></details>
   <p class="mu">DDM : répertoire +12 DT, case 10 +10 DT. Tarif 0 (ASS…) : le montant payé fait foi.</p>`};
 function editSvc(id){const s=svc(id);const t=prompt(`Tarif de base ${s.code} (DT) :`,s.tarif);if(t===null)return;const v=num(t);if(v===null)return toast("Montant invalide",false);
   const l=prompt("Libellé :",s.lib);if(l!==null)s.lib=l.trim()||s.lib;audit("TARIF_BASE",`${s.code} ${s.tarif}→${v}`);s.tarif=v;s.actif=confirm(`${s.code} actif ? (OK = actif)`)?1:0;save();render()}
 function addSvc(){const c=normService(prompt("Code du service (ex : DDM) :")||"");if(!c)return;if(svcByCode(c))return toast("Code déjà existant",false);
   const l=prompt("Libellé :",c)||c,t=num(prompt("Tarif de base (DT) :","0"))||0;S.services.push({id:nid(),code:c,lib:l,tarif:t,actif:1});save();render()}
+const jPlus=n=>{const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)};
 function addTarif(){const d=+$("t_dec").value,s=+$("t_svc").value,v=num($("t_val").value);if(!d)return bad($("t_dec"));if(v===null)return bad($("t_val"));
-  const x=S.tarifs.find(t=>t.decId===d&&t.svcId===s);if(x)x.t=v;else S.tarifs.push({decId:d,svcId:s,t:v});save();toast("Tarif enregistré");render()}
-function delTarif(d,s){if(confirm("Supprimer ce tarif conventionnel ?")){S.tarifs=S.tarifs.filter(t=>!(t.decId===d&&t.svcId===s));save();render()}}
+  const x=S.tarifs.find(t=>t.decId===d&&t.svcId===s),av=x?f3(x.t)+" DT":"aucun",cond=$("t_cond").value.trim(),dt=$("t_date").value||today();
+  if(x)Object.assign(x,{t:v,actif:1,date:dt,cond,modifie:nowIso()});else S.tarifs.push({decId:d,svcId:s,t:v,actif:1,date:dt,cond,modifie:nowIso()});
+  audit("CONVENTION_PRIX",`${dec(d).nom} / ${svc(s).code} : ${av} → ${f3(v)} DT à compter du ${frDate(dt)}${cond?" — "+cond:""}`);save();toast("Convention enregistrée (jusqu'à nouvel ordre)");render()}
+function toggleTarif(d,s){const x=S.tarifs.find(t=>t.decId===d&&t.svcId===s);x.actif=x.actif===0?1:0;
+  audit("CONVENTION_PRIX",`${dec(d).nom} / ${svc(s).code} (${f3(x.t)} DT) : ${x.actif?"réactivée":"suspendue → tarif de base"}`);save();render()}
+function delTarif(d,s){if(!confirm("Supprimer cette convention ? Le tarif de base s'appliquera."))return;const x=S.tarifs.find(t=>t.decId===d&&t.svcId===s);
+  audit("CONVENTION_PRIX",`${dec(d).nom} / ${svc(s).code} (${f3(x.t)} DT) : supprimée`);S.tarifs=S.tarifs.filter(t=>t!==x);save();render()}
 
 /* ───────────── RÉPERTOIRES ───────────── */
 V.repertoires=()=>{const by={};S.ops.filter(o=>o.rep).forEach(o=>{(by[o.rep]=by[o.rep]||[]).push(o)});
