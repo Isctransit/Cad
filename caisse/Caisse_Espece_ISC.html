@@ -109,10 +109,10 @@ footer{text-align:center;color:var(--mu);font-size:11px;padding:10px}
    (IndexedDB). Échanges : Excel état caisse (compatible V36) et
    sauvegarde complète JSON.  Conçu par Mokhtar Reguigui — ISC/STT
    ════════════════════════════════════════════════════════════════════ */
-const VERSION="Mobile 1.2";
+const VERSION="Mobile 1.3";
 const SUPP_REP=12, SUPP_C10=10;
 const JOURS=["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
-const DEFAULT_SERVICES=[["DDM", "Déclaration détaillée des marchandises", 9], ["TCE AP", "Titre de commerce extérieur avec paiement (code 33)", 0], ["TCE SP", "Titre de commerce extérieur sans paiement (code 93)", 0], ["FDE", "Facture définitive à l'exportation (code 22)", 0], ["AT", "Document d'admission temporaire — régime suspensif (code 39)", 0], ["VISA", "Visa", 15], ["BS", "Bon de sortie", 7], ["DCT", "Contrôle technique", 14], ["INOR", "INORPI — certificat de conformité aux normes", 15], ["ONA", "Contrôle de l'Office national de l'artisanat", 15], ["DAE", "Déclaration simplifiée d'autorisation d'exportation", 8]];
+const DEFAULT_SERVICES=[["DDM", "Déclaration détaillée des marchandises", 9], ["TCE AP", "Titre de commerce extérieur avec paiement (code 33)", 14], ["TCE SP", "Titre de commerce extérieur sans paiement (code 93)", 0], ["FDE", "Facture définitive à l'exportation (code 22)", 0], ["AT", "Document d'admission temporaire — régime suspensif (code 39)", 0], ["VISA", "Visa", 15], ["BS", "Bon de sortie", 7], ["DCT", "Contrôle technique", 14], ["INOR", "INORPI — certificat de conformité aux normes", 15], ["ONA", "Contrôle de l'Office national de l'artisanat", 15], ["DAE", "Déclaration simplifiée d'autorisation d'exportation", 8], ["ASS", "Assurance — prix variable selon le total facture", 0]];
 
 /* ───────────── Stockage CHIFFRÉ (IndexedDB + AES-256-GCM) ─────────────
    Les données ne sont jamais écrites en clair : clé dérivée du mot de passe
@@ -130,7 +130,7 @@ async function deriveKey(pw,salt){const base=await crypto.subtle.importKey("raw"
 async function seal(obj,key,salt){const iv=crypto.getRandomValues(new Uint8Array(12));
   const ct=await crypto.subtle.encrypt({name:"AES-GCM",iv},key,TE.encode(JSON.stringify(obj)));return{v:1,alg:"AES-256-GCM/PBKDF2-SHA256",iter:ITER,salt:b64(salt),iv:b64(iv),ct:b64(ct)}}
 async function unseal(box,key){const pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:ub64(box.iv)},key,ub64(box.ct));return JSON.parse(TD.decode(pt))}
-function normalise(){S.meta=S.meta||{};if(S.services)DEFAULT_SERVICES.forEach(([c,l,p])=>{const s=S.services.find(x=>x.code===c);if(s)s.lib=l;else S.services.push({id:(S.meta.seq=(S.meta.seq||1)+1)-1,code:c,lib:l,tarif:p,actif:1})});["declarants","clients","services","tarifs","reps","ops","feries","anomalies","audit"].forEach(k=>S[k]=S[k]||[]);
+function normalise(){S.meta=S.meta||{};if(S.services)DEFAULT_SERVICES.forEach(([c,l,p])=>{const s=S.services.find(x=>x.code===c);if(s)s.lib=l;else S.services.push({id:(S.meta.seq=(S.meta.seq||1)+1)-1,code:c,lib:l,tarif:p,actif:1})});if(S.services){const o=S.services.find(x=>x.code==="TCE"),n=S.services.find(x=>x.code==="TCE AP");if(o&&n){(S.ops||[]).forEach(op=>{if(op.svcId===o.id)op.svcId=n.id});(S.tarifs||[]).forEach(tf=>{if(tf.svcId===o.id&&!S.tarifs.some(x=>x.decId===tf.decId&&x.svcId===n.id))tf.svcId=n.id});S.tarifs=(S.tarifs||[]).filter(tf=>tf.svcId!==o.id);if(o.tarif)n.tarif=o.tarif;S.services=S.services.filter(x=>x!==o);(S.audit=S.audit||[]).unshift({quand:nowIso(),action:"FUSION_SERVICE",detail:"TCE → TCE AP"})}}["declarants","clients","services","tarifs","reps","ops","feries","anomalies","audit"].forEach(k=>S[k]=S[k]||[]);
   if(!S.meta.seq)S.meta.seq=Math.max(1,...S.ops.map(o=>o.id+1),...S.declarants.map(d=>d.id+1),...S.clients.map(c=>c.id+1),...S.services.map(s=>s.id+1));delete S.meta.pin}
 let saveTimer=null,saving=Promise.resolve();
 function save(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>{saving=saving.then(async()=>{
@@ -148,7 +148,7 @@ function nowIso(){const d=new Date();return today()+"T"+d.toTimeString().slice(0
 const norm=s=>String(s??"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]/g,"");
 const cleanMf=s=>String(s??"").toUpperCase().replace(/\s/g,"");
 const mfKey=s=>cleanMf(s).replace(/^0+/,"");
-function normService(v){const t=String(v??"").toUpperCase().replace(/\./g,"").replace(/\s+/g," ").trim();return({ASSUR:"ASS",ASSURANCE:"ASS",AASUR:"ASS",OBLIGATION:"OBL",INORPI:"INOR",BONSORTIE:"BS",BONDESORTIE:"BS",VISAEXPORT:"VISA",TCEAP:"TCE AP",TCESP:"TCE SP",TCEAVECPAIEMENT:"TCE AP",TCESANSPAIEMENT:"TCE SP",CONTROLETECHNIQUE:"DCT"})[t.replace(/ /g,"")]||t}
+function normService(v){const t=String(v??"").toUpperCase().replace(/\./g,"").replace(/\s+/g," ").trim();return({ASSUR:"ASS",ASSURANCE:"ASS",AASUR:"ASS",OBLIGATION:"OBL",INORPI:"INOR",BONSORTIE:"BS",BONDESORTIE:"BS",VISAEXPORT:"VISA",TCE:"TCE AP",TCEAP:"TCE AP",TCESP:"TCE SP",TCEAVECPAIEMENT:"TCE AP",TCESANSPAIEMENT:"TCE SP",CONTROLETECHNIQUE:"DCT"})[t.replace(/ /g,"")]||t}
 const num=v=>{if(v===null||v===undefined||v==="")return null;if(typeof v==="number")return v;const n=parseFloat(String(v).replace(/\s/g,"").replace(",","."));return isNaN(n)?null:n};
 function toIso(v){if(v===null||v===undefined||v==="")return null;
   if(typeof v==="number"&&v>20000&&v<80000){const d=new Date(Math.round((v-25569)*86400000));return d.toISOString().slice(0,10)}
