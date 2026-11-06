@@ -75,6 +75,10 @@ tfoot td{background:var(--lb);font-weight:800;color:var(--navy)}
 .seg button.on{background:var(--gold);color:#fff}
 #lock{position:fixed;inset:0;z-index:100;background:linear-gradient(135deg,var(--navy),var(--navy2));display:none;align-items:center;justify-content:center;flex-direction:column;color:#fff;gap:14px}
 #lock .box{background:#fff;color:var(--tx);border-radius:16px;padding:22px 20px;width:min(360px,90vw);border-top:5px solid var(--gold);box-shadow:0 20px 50px rgba(0,0,0,.35)}#lock h3{margin:0 0 4px;text-align:center}#lock .mu{text-align:center}#lock .err{color:var(--ko);font-weight:700;text-align:center;min-height:20px;margin-top:8px}
+#modal{position:fixed;inset:0;z-index:90;background:rgba(10,25,50,.55);display:none;align-items:flex-end;justify-content:center;padding:12px}
+#modal .mb{background:#fff;border-radius:16px;padding:16px;width:min(480px,100%);border-top:5px solid var(--gold);max-height:90vh;overflow:auto;margin-bottom:env(safe-area-inset-bottom)}
+@media(min-width:760px){#modal{align-items:center}}
+.dz{border:2px dashed #93b4f6;border-radius:12px;padding:12px;background:#f8fbff}
 footer{text-align:center;color:var(--mu);font-size:11px;padding:10px}
 @media print{header,nav.tabs,.noprint{display:none!important}main{padding:0}.tw{max-height:none}}
 </style>
@@ -86,9 +90,10 @@ footer{text-align:center;color:var(--mu);font-size:11px;padding:10px}
 <div id="pw2w" style="display:none"><label>Confirmer le mot de passe</label><input id="pw2" type="password" autocomplete="new-password"></div>
 <button class="b gold full" id="lkB">Déverrouiller</button><div class="err" id="lkE"></div></form></div></div>
 <header><div class="logo">ISC</div><div><h1>Caisse Espèce</h1><div class="sub">Version mobile autonome</div></div>
-<div class="r noprint"><button class="ib" onclick="go('outils')" title="Outils">⚙️</button></div></header>
+<div class="r noprint"><button class="ib" onclick="go('charger')" title="Charger des fichiers Excel">📥</button><button class="ib" onclick="go('outils')" title="Outils">⚙️</button></div></header>
 <main id="app"></main>
 <div class="toast" id="toast"></div>
+<div id="modal"><div class="mb" id="mb"></div></div>
 <nav class="tabs noprint">
  <button data-v="accueil" onclick="go('accueil')"><b>🏠</b>Accueil</button>
  <button data-v="journal" onclick="go('journal')"><b>📋</b>Journal</button>
@@ -104,7 +109,7 @@ footer{text-align:center;color:var(--mu);font-size:11px;padding:10px}
    (IndexedDB). Échanges : Excel état caisse (compatible V36) et
    sauvegarde complète JSON.  Conçu par Mokhtar Reguigui — ISC/STT
    ════════════════════════════════════════════════════════════════════ */
-const VERSION="Mobile 1.0";
+const VERSION="Mobile 1.1";
 const SUPP_REP=12, SUPP_C10=10;
 const JOURS=["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
 const DEFAULT_SERVICES=[["DDM","Déclaration douanière",9],["TCE","Titre commerce extérieur",14],["DCT","DCT",14],["OBL","Obligation",15],["VISA","Visa export",15],["INOR","INORPI",15],["BS","Bon de sortie",7],["ONA","ONA",15],["DAE","DAE",8],["ASS","Assurance variable",0],["FDE","Frais divers export",0]];
@@ -230,7 +235,7 @@ V.saisie=()=>`<h2>＋ Saisie caisse</h2>
  <label>Déclarant</label><div class="ac"><input id="dec" placeholder="Nom ou code…" autocomplete="off"><div class="acl" id="decl"></div></div>
  <button class="b full" onclick="go1()">Confirmer</button></div>
 <div class="step lock" id="s2"><div class="st"><b>2</b> — Service et client</div>
- <label>Service</label><select id="svc"><option value="">— choisir —</option>${S.services.filter(s=>s.actif).sort((a,b)=>a.code.localeCompare(b.code)).map(s=>`<option value="${s.id}">${esc(s.code)} — ${esc(s.lib)}</option>`).join("")}</select>
+ <label>Service (code)</label><div class="ac"><input id="svcIn" placeholder="DDM, TCE, ASS…" autocapitalize="characters" autocomplete="off"><div class="acl" id="svcl"></div></div><input type="hidden" id="svc">
  <label>MF client (optionnel)</label><div class="ac"><input id="mf" placeholder="MF ou nom du client" autocomplete="off"><div class="acl" id="mfl"></div></div><div class="mu" id="cliInfo"></div>
  <div class="hist" id="hist" style="display:none"></div>
  <button class="b full" onclick="go2()">Confirmer</button></div>
@@ -256,7 +261,7 @@ A.saisie=()=>{
   ac($("mf"),$("mfl"),S.clients.filter(c=>c.actif!==0),c=>c.mf+" — "+c.rs,c=>{if(c)$("mf").value=c.mf;cliInfo()});
   ac($("rep"),$("repl"),S.reps.slice().sort().map(n=>({n})),r=>r.n,r=>{if(r)$("rep").value=r.n;calc()});
   ["paye","c10","fac","rep"].forEach(id=>$(id).addEventListener("input",calc));
-  $("svc").addEventListener("change",()=>{["s3","s4","s5"].forEach(lockS);SA.H=null});
+  ac($("svcIn"),$("svcl"),S.services.filter(s=>s.actif).sort((a,b)=>a.code.localeCompare(b.code)),s=>s.code+" — "+s.lib,s=>{$("svc").value=s?s.id:"";if(s)$("svcIn").value=s.code+" — "+s.lib;$("svcIn").classList.toggle("ok",!!s);["s3","s4","s5"].forEach(lockS);SA.H=null});
   $("mf").addEventListener("change",cliInfo);
   $("num").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();$("dec").focus()}});
 };
@@ -275,8 +280,16 @@ function ac(inp,list,data,label,pick){let cur=[],idx=-1;
     e.preventDefault();[...list.children].forEach((x,j)=>x.classList.toggle("on",j===idx))})}
 const unlockS=id=>$(id).classList.remove("lock"),lockS=id=>$(id).classList.add("lock");
 const bad=el=>{el.classList.add("bad");el.focus();setTimeout(()=>el.classList.remove("bad"),1600)};
+function annulerSaisie(){toast("Saisie annulée — entrée erronée remise à zéro",false);go("saisie")}
+function ask({titre,msg,champs=[],oui="Oui",non="Non — annuler la saisie"}){return new Promise(res=>{
+  $("mb").innerHTML=`<h3 style="margin-top:0">${titre}</h3><p style="margin:4px 0 8px">${msg}</p>${champs.map(c=>`<label>${c.label}${c.req?" *":""}</label><input id="mq_${c.id}" value="${esc(c.val)}" ${c.type==="number"?'type="number" inputmode="decimal" step="0.001"':c.type==="tel"?'inputmode="tel"':""}>`).join("")}
+  <button class="b ok full" id="mq_oui">${oui}</button><button class="b ko full" id="mq_non">${non}</button>`;
+  $("modal").style.display="flex";const f=champs.find(c=>c.req&&!c.val)||champs[0];if(f)setTimeout(()=>$("mq_"+f.id).focus(),100);
+  const close=v=>{$("modal").style.display="none";res(v)};
+  $("mq_non").onclick=()=>close(null);
+  $("mq_oui").onclick=()=>{const o={};for(const c of champs){const el=$("mq_"+c.id);o[c.id]=el.value;if(c.req&&!el.value.trim())return bad(el)}close(o)}})}
 const isDDM=()=>((svc($("svc").value)||{}).code==="DDM");
-function cliInfo(){const v=$("mf").value;const c=findCliMf(v);$("cliInfo").textContent=v?(c?"✔ "+c.rs+(SA.decId&&c.decId!=SA.decId?" — ⚠ rattaché à un autre déclarant":""):"⚠ MF inconnu (enregistré tel quel)"):""}
+function cliInfo(){const v=$("mf").value;const c=findCliMf(v);$("cliInfo").textContent=v?(c?"✔ "+c.rs+(SA.decId&&c.decId!=SA.decId?` — ⚠ client du déclarant « ${(dec(c.decId)||{}).nom} »`:""):"MF nouveau : enregistrement proposé à l'étape suivante"):""}
 function calc(){if(!$("svc").value)return{};
   const t=getTarif(SA.decId,$("svc").value),fac=$("fac").checked,p=fac?0:(+$("paye").value||0);
   let rep=isDDM()&&(/^\d{5}$/.test($("rep").value.trim())||$("c10").checked),c10=isDDM()&&$("c10").checked;
@@ -289,10 +302,25 @@ function calc(){if(!$("svc").value)return{};
 function go1(){const n=$("num").value.trim();if(!/^\d{1,6}$/.test(n))return bad($("num"));const nom=$("dec").value.trim();if(!nom)return bad($("dec"));
   if(!SA.decId){const d=findDec(nom);
     if(d&&!d.valide){toast(`Déclarant « ${d.nom} » en attente de validation.`,false);return}
-    if(d){SA.decId=d.id}else{if(!confirm(`Déclarant « ${nom} » inconnu.\nIl sera créé EN ATTENTE de validation (Plus → Déclarants) et la saisie sera bloquée.`))return;
-      getOrCreateDec(nom,0);audit("DECLARANT_INCONNU",nom);save();toast(`« ${nom} » ajouté en attente de validation.`,false);return}}
-  unlockS("s2");$("svc").focus()}
-function go2(){if(!$("svc").value)return bad($("svc"));
+    if(d){SA.decId=d.id}else{
+      ask({titre:"Nouveau déclarant",msg:`Le déclarant « <b>${esc(nom)}</b> » n'existe pas.<br>Voulez-vous l'enregistrer ?<br><span class="mu">Non = entrée erronée : la saisie est remise à zéro.</span>`,
+        champs:[{id:"nom",label:"Nom",val:nom.toLowerCase(),req:1},{id:"code",label:"Code (optionnel)",val:""},{id:"tel",label:"Téléphone",val:"",type:"tel"}],oui:"Enregistrer le déclarant"}).then(r=>{
+        if(!r)return annulerSaisie();const[x,cr]=getOrCreateDec(r.nom,1);x.valide=1;if(cr){x.code=r.code.trim().toUpperCase();x.tel=r.tel.trim();audit("NOUVEAU_DECLARANT",x.nom)}
+        save();SA.decId=x.id;$("dec").value=x.nom;$("dec").classList.add("ok");toast("Déclarant enregistré");unlockS("s2");$("svcIn").focus()});return}}
+  unlockS("s2");$("svcIn").focus()}
+async function go2(){
+  if(!$("svc").value){const code=normService($("svcIn").value.split("—")[0]);if(!code)return bad($("svcIn"));
+    let s=svcByCode(code);
+    if(!s){const r=await ask({titre:"Nouveau service",msg:`Le service « <b>${esc(code)}</b> » n'existe pas.<br>Voulez-vous l'enregistrer ?<br><span class="mu">Non = entrée erronée : la saisie est remise à zéro.</span>`,
+        champs:[{id:"code",label:"Code",val:code},{id:"lib",label:"Libellé",val:""},{id:"tarif",label:"Tarif de base (DT)",val:"",type:"number"}],oui:"Enregistrer le service"});
+      if(!r)return annulerSaisie();const c2=normService(r.code)||code;if(svcByCode(c2))s=svcByCode(c2);else{s={id:nid(),code:c2,lib:r.lib.trim()||c2,tarif:num(r.tarif)||0,actif:1};S.services.push(s);audit("NOUVEAU_SERVICE",`${c2} — tarif ${s.tarif}`);save();toast(`Service ${c2} enregistré`)}}
+    if(!s.actif)return toast(`Service ${s.code} inactif`,false);$("svc").value=s.id;$("svcIn").value=s.code+" — "+s.lib;$("svcIn").classList.add("ok")}
+  const mfv=cleanMf($("mf").value.split("—")[0]);$("mf").value=mfv;
+  if(mfv&&!findCliMf(mfv)){const r=await ask({titre:"Nouveau client",msg:`Le matricule fiscal « <b>${esc(mfv)}</b> » est inconnu.<br>Voulez-vous enregistrer ce nouveau client (déclarant : <b>${esc((dec(SA.decId)||{}).nom)}</b>) ?<br><span class="mu">Non = entrée erronée : la saisie est remise à zéro.</span>`,
+      champs:[{id:"mf",label:"Matricule fiscal",val:mfv},{id:"rs",label:"Raison sociale",val:"",req:1},{id:"tel",label:"Téléphone",val:"",type:"tel"}],oui:"Enregistrer le client"});
+    if(!r)return annulerSaisie();const m2=cleanMf(r.mf)||mfv;
+    if(!findCliMf(m2)){S.clients.push({id:nid(),rs:r.rs.trim(),mf:m2,decId:SA.decId,tel:r.tel.trim(),actif:1});audit("NOUVEAU_CLIENT",`${m2} — ${r.rs.trim()}`);save();toast("Client enregistré")}
+    $("mf").value=m2;cliInfo()}
   const rows=dossierOps($("svc").value,$("num").value);const h=$("hist");
   if(rows.length){const du=Math.max(...rows.map(o=>+o.total)),p=rows.reduce((a,o)=>a+(+o.paye||0),0);SA.H={nb:rows.length,du,paye:p};
     const solde=du-p<=.0005;h.style.display="block";h.style.background=solde?"var(--kobg)":"var(--wabg)";h.style.color=solde?"var(--ko)":"var(--wa)";
@@ -383,7 +411,8 @@ V.plus=()=>`<h2>☰ Menu</h2><div class="menu">
 <a onclick="go('services')"><span>⚙️</span>Services & tarifs<i>›</i></a>
 <a onclick="go('repertoires')"><span>📁</span>Répertoires DDM<i>${S.reps.length} ›</i></a>
 <a onclick="go('anomalies')"><span>🔎</span>Anomalies doublons<i>${S.anomalies.filter(a=>a.statut==="A_VERIFIER").length||""} ›</i></a>
-<a onclick="go('outils')"><span>🧰</span>Import / export / sauvegarde<i>›</i></a>
+<a onclick="go('charger')"><span>📥</span>Charger fichiers Excel (MF, services, caisse)<i>›</i></a>
+<a onclick="go('outils')"><span>🧰</span>Export / sauvegarde / sécurité<i>›</i></a>
 <a onclick="go('feries')"><span>🎉</span>Jours fériés<i>›</i></a>
 <a onclick="go('audit')"><span>📜</span>Journal d'audit<i>›</i></a></div>`;
 
@@ -444,6 +473,29 @@ V.feries=()=>`<h2>🎉 Jours fériés</h2><div class="card"><div class="row"><di
 <div class="list">${S.feries.slice().sort((a,b)=>b.jour.localeCompare(a.jour)).map(f=>`<div class="it" onclick="if(confirm('Supprimer ?')){S.feries=S.feries.filter(x=>x.jour!=='${f.jour}');save();render()}"><div class="t">${frDate(f.jour)}</div><div class="s">${esc(f.lib)}</div></div>`).join("")}</div>`;
 V.audit=()=>`<h2>📜 Journal d'audit</h2><div class="list">${S.audit.slice(0,300).map(a=>`<div class="it"><div class="t">${esc(a.action)}</div><div class="mu">${esc(a.quand.replace("T"," ").slice(0,16))}</div><div class="s">${esc(a.detail)}</div></div>`).join("")||'<p class="mu">Vide.</p>'}</div>`;
 
+/* ───────────── 📥 CHARGER DES FICHIERS EXCEL ───────────── */
+const TYPES=[
+ {k:"clients",ic:"🏢",titre:"Matricule fiscal",fichier:"matricule_fiscale.xlsx",cols:["Client","Matricule fiscal","Déclarant"],
+  aide:"Col. A = Client · col. B = Matricule fiscal · col. C = Déclarant. Un client n'a qu'un seul déclarant ; un déclarant peut avoir plusieurs clients. Les déclarants absents sont créés automatiquement.",
+  ex:[["SOCIETE EXEMPLE SARL","1234567A","ahmed"]],
+  data:()=>S.clients.filter(c=>c.actif!==0).sort((a,b)=>a.rs.localeCompare(b.rs)).map(c=>[c.rs,c.mf,(dec(c.decId)||{}).nom||""])},
+ {k:"services",ic:"⚙️",titre:"Services et prix",fichier:"services.xlsx",cols:["Code service","Libellé","Prix (DT)"],
+  aide:"Col. A = Code (DDM, TCE…) · col. B = Libellé · col. C = Prix de base en DT. Un code existant voit son prix mis à jour.",
+  ex:[["DDM","Déclaration douanière",9],["TCE","Titre commerce extérieur",14]],
+  data:()=>S.services.slice().sort((a,b)=>a.code.localeCompare(b.code)).map(s=>[s.code,s.lib,+s.tarif])},
+ {k:"caisse",ic:"💰",titre:"État caisse",fichier:"etat_caisse.xlsx",cols:["date reglement","nom declarant","N°dossier","MF","type","N°rep","case10","montant payé","non payé"],
+  aide:"Opérations de caisse (même format que l'export du PC). Ré-importer le même fichier met à jour sans doublon.",
+  ex:[[frDate(today()),"ahmed","25333","1234567A","DDM","","",9,0]],data:null}];
+V.charger=()=>`<h2>📥 Charger des fichiers Excel</h2>
+<p class="mu">Choisissez le type de fichier, puis le fichier .xlsx (depuis Fichiers, iCloud, WhatsApp…). « Modèle » donne un fichier vide au bon format.</p>
+${TYPES.map(T=>`<div class="card"><h3 style="margin-top:0">${T.ic} ${T.titre}</h3><p class="mu">${T.aide}</p>
+<div class="tw" style="margin-bottom:8px"><table><thead><tr>${T.cols.map((c,i)=>`<th>${String.fromCharCode(65+i)} · ${esc(c)}</th>`).join("")}</tr></thead><tbody>${T.ex.map(r=>`<tr>${r.map(v=>`<td>${esc(typeof v==="number"?f3(v):v)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>
+<div class="dz"><label style="margin-top:0">📂 Choisir le fichier « ${T.titre} »</label><input type="file" accept=".xlsx" onchange="importXlsx(this.files[0],'${T.k}','res_${T.k}').then(()=>{});this.value=''"></div>
+<div class="row" style="margin-top:8px"><button class="b lite" onclick="modele('${T.k}')">📄 Modèle</button>${T.data?`<button class="b lite" onclick="exporterBase('${T.k}')">📤 Exporter la base</button>`:""}</div>
+<div id="res_${T.k}"></div></div>`).join("")}`;
+function modele(k){const T=TYPES.find(x=>x.k===k);partager(xlsxBlob([T.cols,...T.ex],T.cols.length),"modele_"+T.fichier)}
+function exporterBase(k){const T=TYPES.find(x=>x.k===k);const d=T.data();if(!d.length)return toast("Base vide",false);partager(xlsxBlob([T.cols,...d],T.cols.length),T.fichier)}
+
 /* ───────────── OUTILS : import / export / sauvegarde / PIN ───────────── */
 V.outils=()=>{const last=S.meta.lastBackup;return `<h2>🧰 Import · Export · Sauvegarde</h2>
 <div class="card"><h3 style="margin-top:0">💾 Sauvegarde complète</h3><p class="mu">Fichier <b>chiffré</b> avec votre mot de passe actuel (illisible sans lui). À faire régulièrement et à garder dans Fichiers / iCloud. ${last?"Dernière : "+esc(last.replace("T"," ").slice(0,16)):"<b style='color:var(--ko)'>Aucune sauvegarde encore.</b>"}</p>
@@ -451,7 +503,7 @@ V.outils=()=>{const last=S.meta.lastBackup;return `<h2>🧰 Import · Export · 
 <label>Restaurer une sauvegarde</label><input type="file" accept=".json,application/json" onchange="importJSON(this.files[0]);this.value=''"></div>
 <div class="card"><h3 style="margin-top:0">📥 Import Excel (.xlsx)</h3><p class="mu">État caisse (colonnes : date reglement, nom declarant, N°dossier, MF, type, N°rep, case10, montant payé / FAC, non payé) — compatible avec l'export du PC. Ré-importer le même fichier met à jour sans doublon.</p>
 <label>État caisse</label><input type="file" accept=".xlsx" onchange="importXlsx(this.files[0],'caisse');this.value=''">
-<label>Base clients / déclarants (MF, déclarant, client)</label><input type="file" accept=".xlsx" onchange="importXlsx(this.files[0],'clients');this.value=''"><div id="impRes"></div></div>
+<p class="mu">Fichiers Matricule fiscal et Services : icône 📥 en haut de l'écran.</p><div id="impRes"></div></div>
 <div class="card"><h3 style="margin-top:0">📤 Export Excel</h3><p class="mu">Format état caisse, réimportable dans l'application PC (Outils → Imports). ⚠ Le fichier Excel n'est <b>pas chiffré</b> : ne le partagez qu'avec des personnes autorisées.</p>
 <div class="row"><div><label>Du</label><input type="date" id="x_du" value="${today().slice(0,8)}01"></div><div><label>Au</label><input type="date" id="x_au" value="${today()}"></div></div>
 <button class="b full" onclick="exportPeriode()">📥 Exporter la période</button></div>
@@ -498,10 +550,10 @@ function zipStore(files){const enc=new TextEncoder(),parts=[],cd=[];let off=0;
     cd.push(new Uint8Array(c.buffer),n);off+=30+n.length+d.length}
   const cdLen=cd.reduce((a,x)=>a+x.length,0),e=new DataView(new ArrayBuffer(22));e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cdLen,true);e.setUint32(16,off,true);
   return new Blob([...parts,...cd,new Uint8Array(e.buffer)],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"})}
-function xlsxBlob(rows){const x=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])).replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g,"");
+function xlsxBlob(rows,ncol){const x=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])).replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g,"");
   const col=i=>{let s="";i++;while(i){const m=(i-1)%26;s=String.fromCharCode(65+m)+s;i=Math.floor((i-1)/26)}return s};
   const sheet=rows.map((r,ri)=>`<row r="${ri+1}">${r.map((v,ci)=>{const ref=col(ci)+(ri+1);if(typeof v==="number")return `<c r="${ref}" s="${ri?2:1}"><v>${v}</v></c>`;return `<c r="${ref}" t="inlineStr"${ri?"":' s="1"'}><is><t xml:space="preserve">${x(v)}</t></is></c>`}).join("")}</row>`).join("");
-  const widths=[13,22,11,14,26,7,8,8,12,12,12,15,30].map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join("");
+  const widths=(ncol===3?[34,18,24]:ncol?[14,20,11,14,8,8,8,12,12]:[13,22,11,14,26,7,8,8,12,12,12,15,30]).map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join("");
   return zipStore([
    ["[Content_Types].xml",'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>'],
    ["_rels/.rels",'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'],
@@ -533,8 +585,8 @@ async function readXlsx(file){
       if(t==="s")val=ss[+v.textContent];else if(t==="inlineStr")val=[...c.getElementsByTagName("t")].map(x=>x.textContent).join("");else if(v){val=t==="str"||t==="b"?v.textContent:+v.textContent}
       row[ref?cidx(ref):row.length]=val});out[ri]=row});
   return out.map(r=>r||[])}
-async function importXlsx(file,type){if(!file)return;const res=$("impRes");res.innerHTML='<p class="mu">⏳ Lecture…</p>';
-  try{const rows=await readXlsx(file);const r=type==="caisse"?importCaisse(rows):importClients(rows);save();
+async function importXlsx(file,type,cible){if(!file)return;const res=$(cible||"impRes");res.innerHTML='<p class="mu">⏳ Lecture…</p>';
+  try{const rows=await readXlsx(file);const r=type==="caisse"?importCaisse(rows):type==="services"?importServices(rows):importClients(rows);save();
     res.innerHTML=`<div class="stats" style="margin-top:10px">${Object.entries(r).filter(([k])=>!k.startsWith("_")).map(([k,v])=>`<div class="stat ${k==="anomalies"&&v?"r":""}"><div class="l">${k}</div><div class="v">${v}</div></div>`).join("")}</div>${(r._details||[]).length?`<details open><summary><b>Anomalies</b></summary><ul class="mu">${r._details.map(d=>`<li>${esc(d)}</li>`).join("")}</ul></details>`:""}`;toast("Import terminé")}
   catch(e){res.innerHTML=`<p style="color:var(--ko);font-weight:700">Import impossible : ${esc(e.message||e)}</p>`}}
 function importCaisse(rows){
@@ -560,15 +612,27 @@ function importCaisse(rows){
     if(ex){Object.assign(ex,v);maj++}else{S.ops.push({id:nid(),num:numero,decId:d.id,svcId:s.id,date,created:nowIso(),...v});imp++}recalc(s.id,numero)});
   audit("IMPORT_CAISSE",`${imp} ajoutées, ${maj} mises à jour, ${det.length} anomalies — ${[...dates].sort().join(", ")}`);
   return{"lignes importées":imp,"lignes mises à jour":maj,"lignes ignorées":ign,"anomalies":det.length,_details:det.slice(0,200)}}
-function importClients(rows){let h=rows.findIndex(r=>r.map(norm).some(k=>["mf","codedouane","matriculefiscale"].includes(k)));if(h<0)h=0;
-  const H=rows[h].map(norm),ix=(...n)=>{for(const x of n){const i=H.indexOf(x);if(i>=0)return i}return -1};
-  const im=ix("codedouane","mf","matriculefiscale","matriculefiscal"),id=ix("declarant","nomdeclarant"),ic=ix("client","raisonsociale","societe","nomclient"),it=ix("telephone","tel");
-  if(im<0||id<0||ic<0)throw new Error("colonnes MF (ou Code douane), Déclarant et Client requises");
-  const st={"déclarants ajoutés":0,"clients ajoutés":0,"clients mis à jour":0,"lignes ignorées":0};
-  rows.slice(h+1).forEach(r=>{const mf=cleanMf(r[im]),dn=String(r[id]??"").trim().toLowerCase().replace(/\s+/g," "),rs=String(r[ic]??"").trim().replace(/\s+/g," ");
-    if(!mf||!dn||!rs){st["lignes ignorées"]++;return}const[d,cr]=getOrCreateDec(dn,1);if(cr)st["déclarants ajoutés"]++;
-    const c=findCliMf(mf),tel=it>=0?String(r[it]??"").trim():"";if(c){c.rs=rs;c.decId=d.id;if(tel)c.tel=tel;st["clients mis à jour"]++}else{S.clients.push({id:nid(),rs,mf,decId:d.id,tel,actif:1});st["clients ajoutés"]++}});
-  audit("IMPORT_CLIENTS",JSON.stringify(st));return st}
+/* Fichier « Matricule fiscal » : col. A = Client, col. B = Matricule fiscal, col. C = Déclarant
+   (1 client → 1 seul déclarant ; 1 déclarant → plusieurs clients). Ligne d'en-tête facultative. */
+const estEntete=r=>{const k=r.map(norm).join(" ");return/client|matricule|mf|declarant|raison|code|service|libelle|prix|tarif/.test(k)&&!r.some(v=>typeof v==="number")};
+function importClients(rows){rows=rows.filter(r=>r&&r.some(v=>v!==null&&v!==undefined&&String(v).trim()!==""));if(rows.length&&estEntete(rows[0]))rows=rows.slice(1);
+  const st={"clients ajoutés":0,"clients mis à jour":0,"réaffectés à un autre déclarant":0,"déclarants ajoutés":0,"lignes ignorées":0},det=[];const vus={};
+  rows.forEach((r,i)=>{const rs=String(r[0]??"").trim().replace(/\s+/g," "),mf=cleanMf(r[1]),dn=String(r[2]??"").trim().toLowerCase().replace(/\s+/g," ");
+    if(!rs||!mf||!dn){st["lignes ignorées"]++;det.push(`Ligne ${i+1} : client, MF ou déclarant manquant`);return}
+    const k=mfKey(mf);if(vus[k]&&vus[k]!==dn)det.push(`MF ${mf} : présent 2 fois avec des déclarants différents (« ${vus[k]} » puis « ${dn} ») — la dernière ligne est retenue`);vus[k]=dn;
+    const[d,cr]=getOrCreateDec(dn,1);d.valide=1;if(cr)st["déclarants ajoutés"]++;
+    const c=findCliMf(mf);
+    if(c){if(c.decId!==d.id){st["réaffectés à un autre déclarant"]++;det.push(`MF ${mf} (${rs}) : déclarant « ${(dec(c.decId)||{}).nom} » → « ${d.nom} »`)}c.rs=rs;c.decId=d.id;c.actif=1;st["clients mis à jour"]++}
+    else{S.clients.push({id:nid(),rs,mf,decId:d.id,tel:"",actif:1});st["clients ajoutés"]++}});
+  audit("IMPORT_MATRICULE_FISCAL",JSON.stringify(st));st._details=det.slice(0,200);return st}
+/* Fichier « Services » : col. A = Code service, col. B = Libellé, col. C = Prix (DT) */
+function importServices(rows){rows=rows.filter(r=>r&&r.some(v=>v!==null&&v!==undefined&&String(v).trim()!==""));if(rows.length&&estEntete(rows[0]))rows=rows.slice(1);
+  const st={"services ajoutés":0,"prix mis à jour":0,"lignes ignorées":0},det=[];
+  rows.forEach((r,i)=>{const code=normService(r[0]),lib=String(r[1]??"").trim(),prix=num(r[2]);
+    if(!code||prix===null){st["lignes ignorées"]++;det.push(`Ligne ${i+1} : code ou prix manquant`);return}
+    let s=svcByCode(code);if(s){if(+s.tarif!==prix)det.push(`${code} : ${f3(s.tarif)} → ${f3(prix)} DT`);s.tarif=prix;if(lib)s.lib=lib;s.actif=1;st["prix mis à jour"]++}
+    else{S.services.push({id:nid(),code,lib:lib||code,tarif:prix,actif:1});st["services ajoutés"]++}});
+  audit("IMPORT_SERVICES",JSON.stringify(st));st._details=det.slice(0,200);return st}
 
 /* ───────────── Démarrage : création / saisie du mot de passe ───────────── */
 let MODE=null,ESSAIS=0,BLOQUE=0,OLD_PLAIN=null;
