@@ -1,68 +1,158 @@
 (function () {
   "use strict";
 
-  /* Menu mobile */
-  var btn = document.querySelector(".menu-btn");
-  var nav = document.getElementById("nav");
-  function setMenu(open) {
-    nav.classList.toggle("open", open);
-    btn.setAttribute("aria-expanded", open ? "true" : "false");
+  /* Mobile menu */
+  const burger = document.querySelector(".burger");
+  const mobileMenu = document.querySelector(".mobile-menu");
+  const scrim = document.querySelector(".scrim");
+  const closeBtn = document.querySelector(".mobile-menu-close");
+
+  function openMenu() {
+    mobileMenu.classList.add("open");
+    scrim.classList.add("open");
+    document.body.style.overflow = "hidden";
   }
-  if (btn && nav) {
-    btn.addEventListener("click", function () { setMenu(!nav.classList.contains("open")); });
-    nav.querySelectorAll("a").forEach(function (a) { a.addEventListener("click", function () { setMenu(false); }); });
-    document.addEventListener("keydown", function (e) { if (e.key === "Escape") setMenu(false); });
+  function closeMenu() {
+    mobileMenu.classList.remove("open");
+    scrim.classList.remove("open");
+    document.body.style.overflow = "";
+  }
+  if (burger) burger.addEventListener("click", openMenu);
+  if (closeBtn) closeBtn.addEventListener("click", closeMenu);
+  if (scrim) scrim.addEventListener("click", closeMenu);
+  document.querySelectorAll(".mobile-menu a").forEach((a) => a.addEventListener("click", closeMenu));
+
+  /* Active nav link on scroll */
+  const sections = document.querySelectorAll("main section[id]");
+  const navLinks = document.querySelectorAll("nav.main-nav a[href^='#']");
+  function setActiveLink() {
+    let current = "";
+    sections.forEach((sec) => {
+      const top = sec.offsetTop - 120;
+      if (window.scrollY >= top) current = sec.id;
+    });
+    navLinks.forEach((link) => {
+      link.classList.toggle("active", link.getAttribute("href") === "#" + current);
+    });
+  }
+  window.addEventListener("scroll", setActiveLink, { passive: true });
+
+  /* Back to top */
+  const backToTop = document.querySelector(".back-to-top");
+  function toggleBackToTop() {
+    if (!backToTop) return;
+    backToTop.classList.toggle("show", window.scrollY > 500);
+  }
+  window.addEventListener("scroll", toggleBackToTop, { passive: true });
+  if (backToTop) {
+    backToTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
   }
 
-  /* Lien actif selon la section visible */
-  var links = Array.prototype.slice.call(document.querySelectorAll(".nav a[href^='#']:not(.nav-cta)"));
-  var targets = links.map(function (a) { return document.querySelector(a.getAttribute("href")); }).filter(Boolean);
-  if ("IntersectionObserver" in window && targets.length) {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (!en.isIntersecting) return;
-        links.forEach(function (a) { a.classList.toggle("is-active", a.getAttribute("href") === "#" + en.target.id); });
+  /* Scroll reveal */
+  const revealEls = document.querySelectorAll("[data-reveal]");
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in-view");
+          io.unobserve(entry.target);
+        }
       });
-    }, { rootMargin: "-45% 0px -50% 0px" });
-    targets.forEach(function (t) { io.observe(t); });
-  }
+    },
+    { threshold: 0.15 }
+  );
+  revealEls.forEach((el) => io.observe(el));
 
-  /* Formulaire de devis : ouvre la messagerie avec la demande rédigée */
-  var form = document.getElementById("contact-form");
-  var status = document.getElementById("form-status");
+  /* Animated counters */
+  const counters = document.querySelectorAll("[data-count]");
+  const counterIO = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        counterIO.unobserve(entry.target);
+        const el = entry.target;
+        const target = parseFloat(el.getAttribute("data-count"));
+        const suffix = el.getAttribute("data-suffix") || "";
+        const duration = 1600;
+        const start = performance.now();
+        function tick(now) {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          const value = target * eased;
+          el.textContent = (target % 1 === 0 ? Math.round(value) : value.toFixed(1)) + suffix;
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      });
+    },
+    { threshold: 0.4 }
+  );
+  counters.forEach((el) => counterIO.observe(el));
+
+  /* Formulaire de devis : ouvre la messagerie avec la demande rédigée (info@stt.tn) */
+  const form = document.querySelector("#contact-form");
+  const status = document.querySelector("#form-status");
   if (form) {
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      var missing = [];
-      form.querySelectorAll("[required]").forEach(function (f) {
-        var bad = !f.value.trim() || (f.type === "email" && !f.checkValidity());
-        f.setAttribute("aria-invalid", bad ? "true" : "false");
-        if (bad) missing.push(f);
-      });
-      if (missing.length) {
-        status.textContent = "Complétez les champs en rouge : nom, email valide et description de la marchandise.";
-        status.classList.add("is-error");
-        missing[0].focus();
+      status.classList.remove("ok", "err");
+      if (!form.checkValidity()) {
+        status.textContent = "Complétez les champs obligatoires : nom, email valide et message.";
+        status.classList.add("show", "err");
+        form.reportValidity();
         return;
       }
-      status.classList.remove("is-error");
-      var d = new FormData(form);
-      var subject = "Demande de devis — " + d.get("service") + (d.get("company") ? " — " + d.get("company") : "");
-      var body = [
-        "Nom : " + d.get("name"),
-        "Société : " + (d.get("company") || "—"),
-        "Email : " + d.get("email"),
-        "Téléphone : " + (d.get("phone") || "—"),
-        "Service : " + d.get("service"),
-        "Trajet : " + (d.get("route") || "—"),
-        "",
-        d.get("message")
-      ].join("\n");
+      const d = new FormData(form);
+      const v = (k) => (d.get(k) || "").toString().trim() || "—";
+      const subject = "Demande de devis" + (d.get("service") ? " — " + d.get("service") : "");
+      const body = ["Nom : " + v("name"), "Société : " + v("company"), "Email : " + v("email"), "Téléphone : " + v("phone"),
+        "Service : " + v("service"), "Trajet : " + v("route"), "", v("message")].join("\n");
       window.location.href = "mailto:info@stt.tn?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
-      status.textContent = "Votre messagerie s’ouvre avec la demande. Il ne reste qu’à l’envoyer.";
+      status.textContent = "Votre messagerie s’ouvre avec la demande rédigée : il ne reste qu’à l’envoyer.";
+      status.classList.add("show", "ok");
     });
   }
 
-  var y = document.getElementById("year");
-  if (y) y.textContent = new Date().getFullYear();
+  /* Suivi : renvoie vers le suivi officiel de la compagnie maritime */
+  const trackForm = document.querySelector("#tracking-form");
+  const trackResult = document.querySelector("#tracking-result");
+  if (trackForm) {
+    trackForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const val = trackForm.querySelector("input").value.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+      if (!val) return;
+      const links = [
+        ["MSC", "https://www.msc.com/fr/track-a-shipment"],
+        ["CMA CGM", "https://www.cma-cgm.com/ebusiness/tracking"],
+        ["Maersk", "https://www.maersk.com/tracking/" + encodeURIComponent(val)],
+        ["CTN", "https://www.ctn.com.tn"]
+      ];
+      trackResult.innerHTML = "<strong>" + val + "</strong> : choisissez la compagnie maritime de votre conteneur.<span class=\"track-links\">" +
+        links.map((l) => '<a href="' + l[1] + '" target="_blank" rel="noopener">' + l[0] + "</a>").join("") + "</span>";
+      trackResult.classList.remove("err");
+      trackResult.classList.add("show", "ok");
+    });
+  }
+
+  /* Galerie : masque les photos absentes, et la section si aucune photo */
+  const galSection = document.querySelector("#galerie");
+  if (galSection) {
+    const items = galSection.querySelectorAll(".gallery-item");
+    function checkGallery() {
+      const visible = galSection.querySelectorAll(".gallery-item:not([hidden])").length;
+      if (!visible) galSection.hidden = true;
+    }
+    let pending = items.length;
+    items.forEach((item) => {
+      const img = item.querySelector("img");
+      const fail = () => { item.hidden = true; if (--pending <= 0) checkGallery(); };
+      const ok = () => { if (--pending <= 0) checkGallery(); };
+      if (img.complete) { img.naturalWidth ? ok() : fail(); }
+      else { img.addEventListener("load", ok); img.addEventListener("error", fail); }
+    });
+  }
+
+  /* Footer year */
+  const yearEl = document.querySelector("#year");
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 })();
