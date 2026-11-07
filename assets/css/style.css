@@ -895,3 +895,51 @@ nav.main-nav a.nav-formation { color: #f3b7d0; }
 /* Défilement plus fluide : on ne bloque plus chaque section */
 html { scroll-snap-type: y proximity; }
 main > section { scroll-snap-stop: normal; }
+
+/* ---------- Photos des opérations ---------- */
+.photo-media { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: var(--bg-1); }
+.photo-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; transition: transform 1.2s var(--ease); }
+.photo-media .op-scene { position: absolute; inset: 0; }
+.op-card:hover .photo-media img { transform: scale(1.06); }
+.op-card .photo-media::after { content: ""; position: absolute; inset: 0; z-index: 2; background: linear-gradient(180deg, transparent 55%, rgba(10, 14, 26, .55)); pointer-events: none; }
+.hero-photo { position: absolute; inset: 0; aspect-ratio: auto; }
+.hero-photo img { animation: kenburns 18s ease-in-out infinite alternate; }
+@keyframes kenburns { from { transform: scale(1.02) translate(0, 0); } to { transform: scale(1.14) translate(-2%, -1.5%); } }
+
+/* ---------- Film photo « Le métier en 1 minute » ---------- */
+.film { position: relative; max-width: 1040px; margin: 0 auto; border-radius: var(--radius); overflow: hidden; background: #000; border: 1px solid var(--line-strong); box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 0 0 6px rgba(201,169,97,.08); }
+.film-stage { position: relative; aspect-ratio: 16 / 9; }
+.film-slide { position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity 1.1s ease; }
+.film-slide.on { opacity: 1; z-index: 1; }
+.film-slide img { width: 100%; height: 100%; object-fit: cover; animation: fz0 10s linear both; }
+.film-z1 img { animation-name: fz1; }
+.film-z2 img { animation-name: fz2; }
+@keyframes fz0 { from { transform: scale(1.02); } to { transform: scale(1.16) translate(-2%, -1%); } }
+@keyframes fz1 { from { transform: scale(1.16) translate(2%, 0); } to { transform: scale(1.03); } }
+@keyframes fz2 { from { transform: scale(1.05) translate(-2%, 1%); } to { transform: scale(1.15) translate(2%, -1%); } }
+.film-slide figcaption {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+  display: flex; align-items: flex-end; gap: 16px;
+  padding: 60px clamp(18px, 4vw, 40px) clamp(56px, 7vw, 72px);
+  background: linear-gradient(180deg, transparent, rgba(5, 7, 13, .88));
+  transform: translateY(12px); opacity: 0; transition: transform .8s var(--ease) .3s, opacity .8s var(--ease) .3s;
+}
+.film-slide.on figcaption { transform: none; opacity: 1; }
+.film-n { flex-shrink: 0; width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--gold); display: grid; place-items: center; font-weight: 700; font-size: 1.2rem; color: var(--gold-light); background: rgba(5,7,13,.5); }
+.film-slide figcaption b { display: block; font-family: "Playfair Display", Georgia, serif; font-size: clamp(1.25rem, 2.6vw, 2rem); font-weight: 600; color: #fff; line-height: 1.2; }
+.film-slide figcaption em { display: block; font-style: normal; color: var(--text-1); font-size: clamp(.88rem, 1.4vw, 1.05rem); margin-top: 4px; max-width: 60ch; }
+.film-bars { position: absolute; top: 14px; left: 14px; right: 14px; z-index: 3; display: flex; gap: 6px; }
+.film-bars span { flex: 1; height: 4px; border-radius: 2px; background: rgba(255,255,255,.28); overflow: hidden; cursor: pointer; }
+.film-bars i { display: block; height: 100%; width: 0; background: var(--gold); }
+.film-ctrl { position: absolute; right: 14px; bottom: 14px; z-index: 3; display: flex; gap: 8px; }
+.film-ctrl button { width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(255,255,255,.3); background: rgba(5,7,13,.55); color: #fff; display: grid; place-items: center; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.film-ctrl button:hover { background: var(--gold); color: #05070d; border-color: var(--gold); }
+.film-ctrl svg { width: 18px; height: 18px; }
+.film .i-pause { display: none; }
+.film.is-playing .i-pause { display: block; }
+.film.is-playing .i-play { display: none; }
+@media (max-width: 640px) {
+  .film-slide figcaption { padding-bottom: 64px; gap: 12px; }
+  .film-n { width: 38px; height: 38px; font-size: 1rem; }
+  .film-slide figcaption em { display: none; }
+}
