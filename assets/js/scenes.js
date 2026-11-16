@@ -262,7 +262,7 @@
     s += '<g opacity="' + a + '" font-family="' + F + '" text-anchor="middle">';
     s += '<text x="640" y="250" font-family="' + FS + '" font-size="60" font-weight="700" fill="' + C.text + '">International Shipping Company</text>';
     s += '<text x="640" y="310" font-size="26" fill="' + C.gold2 + '">Transit et dédouanement · Radès · La Goulette · Bizerte</text>';
-    s += '<text x="640" y="390" font-size="30" font-weight="600" fill="' + C.text + '">+216 29 877 878  ·  info@stt.tn  ·  www.stt.tn</text>';
+    s += '<text x="640" y="390" font-size="30" font-weight="600" fill="' + C.text + '">+216 29 877 878  ·  ops@isc-shipping.tn  ·  www.stt.tn</text>';
     s += '</g>';
     return s;
   }});

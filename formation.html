@@ -244,7 +244,7 @@
         </label>
         <label><span>Message <i>(facultatif)</i></span><textarea name="message" placeholder="Vos questions, vos disponibilités"></textarea></label>
         <button type="submit" class="btn btn-rose">Envoyer ma pré-inscription</button>
-        <p class="note" id="note" role="status">L’envoi ouvre votre messagerie avec la demande rédigée, adressée à info@stt.tn.</p>
+        <p class="note" id="note" role="status">L’envoi ouvre votre messagerie avec la demande rédigée, adressée à ops@isc-shipping.tn.</p>
       </form>
     </div>
   </section>
@@ -274,7 +274,7 @@
     note.classList.remove("err");
     var d = new FormData(f), g = function (k) { return (d.get(k) || "").toString().trim() || "—"; };
     var body = ["Nom : " + g("name"), "Téléphone : " + g("phone"), "Email : " + g("email"), "Profil : " + g("profil"), "", g("message")].join("\n");
-    location.href = "mailto:info@stt.tn?subject=" + encodeURIComponent("Pré-inscription Formation CAD — " + g("name")) + "&body=" + encodeURIComponent(body);
+    location.href = "mailto:ops@isc-shipping.tn?subject=" + encodeURIComponent("Pré-inscription Formation CAD — " + g("name")) + "&body=" + encodeURIComponent(body);
     note.textContent = "Votre messagerie s’ouvre avec la pré-inscription : il ne reste qu’à l’envoyer.";
   });
 })();

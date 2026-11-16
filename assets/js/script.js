@@ -89,7 +89,7 @@
   );
   counters.forEach((el) => counterIO.observe(el));
 
-  /* Formulaire de devis : ouvre la messagerie avec la demande rédigée (info@stt.tn) */
+  /* Formulaire de devis : ouvre la messagerie avec la demande rédigée (ops@isc-shipping.tn) */
   const form = document.querySelector("#contact-form");
   const status = document.querySelector("#form-status");
   if (form) {
@@ -107,7 +107,7 @@
       const subject = "Demande de devis" + (d.get("service") ? " — " + d.get("service") : "");
       const body = ["Nom : " + v("name"), "Société : " + v("company"), "Email : " + v("email"), "Téléphone : " + v("phone"),
         "Service : " + v("service"), "Trajet : " + v("route"), "", v("message")].join("\n");
-      window.location.href = "mailto:info@stt.tn?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+      window.location.href = "mailto:ops@isc-shipping.tn?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
       status.textContent = "Votre messagerie s’ouvre avec la demande rédigée : il ne reste qu’à l’envoyer.";
       status.classList.add("show", "ok");
     });
