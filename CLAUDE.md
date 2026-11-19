@@ -54,6 +54,7 @@ Claude le lit automatiquement au début de chaque session. Il doit être mis à 
   « Désignation », le clavier mobile restait numérique. Cause : `removeAttribute('inputmode')`
   sur un champ déjà focalisé ne change pas le clavier. Fix : `inputmode="text"` explicite +
   `blur()` puis `focus()` dans `setMode` pour forcer le rechargement du clavier.
+  PR #6 créée et **fusionnée dans `main`** à la demande de l'utilisateur (commit b3ac568).
 
 ## Tâches en cours / à faire
 - Paiement par carte pour NGP — plan décidé (2026-11-19) :
