@@ -30,7 +30,8 @@ Claude le lit automatiquement au début de chaque session. Il doit être mis à 
 - Branche de travail : `claude/inspiring-euler-v5a413`.
 - Renommage de `Flashcards Valeur en Douane.html.html` → `Flashcards Valeur en Douane.html`
   (aucun lien interne ne pointait vers l'ancien nom).
-- Branche par défaut du dépôt : `claude/maritime-shipping-website-rp11iu` (pas de `main`).
+- Branche par défaut du dépôt : `claude/maritime-shipping-website-rp11iu`. Une branche `main`
+  existe aussi (contient CNAME, formation.html, QCM_VALEUR.html…, probablement le site publié).
 - Pull request #4 (https://github.com/Isctransit/Cad/pull/4) ouverte vers la branche par défaut,
   en attente de validation par l'utilisateur ; surveillée par Claude (commentaires, revues).
 
