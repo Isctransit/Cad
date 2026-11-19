@@ -32,7 +32,8 @@ Claude le lit automatiquement au début de chaque session. Il doit être mis à 
   (aucun lien interne ne pointait vers l'ancien nom).
 - Branche par défaut du dépôt : `claude/maritime-shipping-website-rp11iu`. Une branche `main`
   existe aussi (contient CNAME, formation.html, QCM_VALEUR.html…, probablement le site publié).
-- Pull request #4 (https://github.com/Isctransit/Cad/pull/4) ouverte vers la branche par défaut,
+- Pull request #4 (https://github.com/Isctransit/Cad/pull/4) redirigée vers `main` à la demande
+  de l'utilisateur (`main` = branche principale de travail),
   en attente de validation par l'utilisateur ; surveillée par Claude (commentaires, revues).
 
 ## Tâches en cours / à faire
