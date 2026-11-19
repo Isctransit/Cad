@@ -758,9 +758,9 @@ const scenes = [
     <li><b>Intérêt légal de retard</b> : 0,75%/mois si non régularisé dans le délai</li>
     <li><b>Sanction (art. 403)</b> : exclusion possible par arrêté du Ministre des Finances</li>
   </ul>
-  <div class="warnbox"><b>Piège fréquent :</b> le remboursement/drawback (art. 298) ne doit pas être confondu avec le <b>perfectionnement actif</b> prévu par l’article 137. Le Code distingue les régimes énumérés à l’article 137 et les mécanismes de remboursement des droits.</div>
+  <div class="warnbox"><b>Piège fréquent :</b> le remboursement/drawback (art. 298) n'est <b>pas</b> un régime économique — rattaché à l'exportation définitive. Ne pas confondre avec le perfectionnement actif « en rembours », qui lui, est un vrai régime économique.</div>
   <div class="badge">Fin du Module 7 — Régimes douaniers</div>`,
- cap:"L'exportation temporaire en l'état utilise la déclaration ET276. Si un régime suspensif n'est pas régularisé dans le délai, un intérêt légal de retard de zéro virgule soixante-quinze pourcent par mois s'applique, et l'article 403 prévoit une exclusion possible en cas d'abus. Piège fréquent à l'examen : ne pas confondre le mécanisme de remboursement (drawback) avec le perfectionnement actif. L'article 137 énumère les régimes suspensifs, régimes douaniers économiques et l'exportation temporaire. Ceci conclut le module sur les régimes douaniers."},
+ cap:"L'exportation temporaire en l'état utilise la déclaration ET276. Si un régime suspensif n'est pas régularisé dans le délai, un intérêt légal de retard de zéro virgule soixante-quinze pourcent par mois s'applique, et l'article 403 prévoit une exclusion possible en cas d'abus. Piège fréquent à l'examen : le remboursement, ou drawback classique, n'est pas un régime économique au sens de l'article 137, contrairement au perfectionnement actif en rembours qui, lui, en est un. Ceci conclut le module sur les régimes douaniers."},
 
 /* ================= MODULE 8 — AVANTAGES FISCAUX ================= */
 {mod:8, chapter:true, kicker:"Module 8 / 8", html:`
@@ -950,7 +950,7 @@ function playScene(i){
   speak(scenes[i].cap);
   sceneStart = performance.now();
   animateBar(scenes[i].est);
-  fallbackTimer = setTimeout(()=>{ if(!paused) next(); }, scenes[i].est);
+  fallbackTimer = setTimeout(()=>{ if(!paused) next(); }, scenes[i].est / rate);
 }
 
 function animateBar(dur){
@@ -973,7 +973,7 @@ playBtn.onclick=()=>{
   paused=!paused; playBtn.textContent = paused ? '▶':'⏸';
   if(paused){ if(TTS) speechSynthesis.pause(); if(rafId) cancelAnimationFrame(rafId); if(fallbackTimer) clearTimeout(fallbackTimer); }
   else{ if(TTS && speechSynthesis.paused) speechSynthesis.resume(); animateBar(scenes[cur].est);
-    fallbackTimer=setTimeout(()=>{ if(!paused) next(); }, scenes[cur].est); }
+    fallbackTimer=setTimeout(()=>{ if(!paused) next(); }, scenes[cur].est/rate); }
 };
 document.getElementById('prevBtn').onclick=prev;
 document.getElementById('nextBtn').onclick=next;
