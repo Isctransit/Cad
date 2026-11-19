@@ -49,4 +49,5 @@ Claude le lit automatiquement au début de chaque session. Il doit être mis à 
   (historique de `main`) ; ne pas la réintroduire.
 
 ## Tâches en cours / à faire
-- (aucune pour l'instant)
+- La note sur ECC (commit sur `claude/inspiring-euler-v5a413`) n'est pas encore dans `main` :
+  l'inclure dans la prochaine pull request (l'utilisateur ne veut pas de PR dédiée).
