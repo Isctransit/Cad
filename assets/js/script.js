@@ -89,50 +89,66 @@
   );
   counters.forEach((el) => counterIO.observe(el));
 
-  /* Contact form (demo — no backend wired yet) */
+  /* Formulaire de devis : ouvre la messagerie avec la demande rédigée (ops@isc-shipping.tn) */
   const form = document.querySelector("#contact-form");
   const status = document.querySelector("#form-status");
   if (form) {
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      const requiredOk = form.checkValidity();
       status.classList.remove("ok", "err");
-      if (!requiredOk) {
-        status.textContent = "Merci de remplir tous les champs obligatoires.";
+      if (!form.checkValidity()) {
+        status.textContent = "Complétez les champs obligatoires : nom, email valide et message.";
         status.classList.add("show", "err");
         form.reportValidity();
         return;
       }
-      const btn = form.querySelector("button[type='submit']");
-      const originalText = btn.textContent;
-      btn.textContent = "Envoi en cours...";
-      btn.disabled = true;
-      setTimeout(() => {
-        status.textContent = "Votre demande a bien été enregistrée. Notre équipe vous recontactera sous 24h ouvrées.";
-        status.classList.add("show", "ok");
-        form.reset();
-        btn.textContent = originalText;
-        btn.disabled = false;
-      }, 900);
+      const d = new FormData(form);
+      const v = (k) => (d.get(k) || "").toString().trim() || "—";
+      const subject = "Demande de devis" + (d.get("service") ? " — " + d.get("service") : "");
+      const body = ["Nom : " + v("name"), "Société : " + v("company"), "Email : " + v("email"), "Téléphone : " + v("phone"),
+        "Service : " + v("service"), "Trajet : " + v("route"), "", v("message")].join("\n");
+      window.location.href = "mailto:ops@isc-shipping.tn?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+      status.textContent = "Votre messagerie s’ouvre avec la demande rédigée : il ne reste qu’à l’envoyer.";
+      status.classList.add("show", "ok");
     });
   }
 
-  /* Tracking widget (demo) */
+  /* Suivi : renvoie vers le suivi officiel de la compagnie maritime */
   const trackForm = document.querySelector("#tracking-form");
   const trackResult = document.querySelector("#tracking-result");
   if (trackForm) {
     trackForm.addEventListener("submit", function (e) {
       e.preventDefault();
-      const input = trackForm.querySelector("input");
-      const val = input.value.trim();
+      const val = trackForm.querySelector("input").value.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
       if (!val) return;
-      trackResult.classList.add("show");
-      trackResult.innerHTML =
-        "<strong>Référence " +
-        val.toUpperCase() +
-        " :</strong> ce module de suivi est une démonstration. Connectez-le à votre système de tracking (EDI / API armateur) pour un suivi en temps réel.";
+      const links = [
+        ["MSC", "https://www.msc.com/fr/track-a-shipment"],
+        ["CMA CGM", "https://www.cma-cgm.com/ebusiness/tracking"],
+        ["Maersk", "https://www.maersk.com/tracking/" + encodeURIComponent(val)],
+        ["CTN", "https://www.ctn.com.tn"]
+      ];
+      trackResult.innerHTML = "<strong>" + val + "</strong> : choisissez la compagnie maritime de votre conteneur.<span class=\"track-links\">" +
+        links.map((l) => '<a href="' + l[1] + '" target="_blank" rel="noopener">' + l[0] + "</a>").join("") + "</span>";
       trackResult.classList.remove("err");
-      trackResult.classList.add("ok");
+      trackResult.classList.add("show", "ok");
+    });
+  }
+
+  /* Galerie : masque les photos absentes, et la section si aucune photo */
+  const galSection = document.querySelector("#galerie");
+  if (galSection) {
+    const items = galSection.querySelectorAll(".gallery-item");
+    function checkGallery() {
+      const visible = galSection.querySelectorAll(".gallery-item:not([hidden])").length;
+      if (!visible) galSection.hidden = true;
+    }
+    let pending = items.length;
+    items.forEach((item) => {
+      const img = item.querySelector("img");
+      const fail = () => { item.hidden = true; if (--pending <= 0) checkGallery(); };
+      const ok = () => { if (--pending <= 0) checkGallery(); };
+      if (img.complete) { img.naturalWidth ? ok() : fail(); }
+      else { img.addEventListener("load", ok); img.addEventListener("error", fail); }
     });
   }
 

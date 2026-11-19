@@ -132,8 +132,8 @@
       <h1>Révision complète — Examen oral (17-18 août 2026)</h1>
       <p>Les 8 modules de l'examen oral, condensés à partir de vos cours vidéo — définitions, bases légales,
       délais, exemples chiffrés et pièges classiques — avec voix posée et musique d'ambiance.</p>
-      <button class="start" id="startBtn">▶ Démarrer la révision</button>
-      <div class="mini" id="ttsNote">Version test iPhone — navigation et révision sans audio. Utilisez le menu en bas pour sauter directement à un module.</div>
+      <button class="start" id="startBtn">▶ Démarrer la révision (voix + musique)</button>
+      <div class="mini" id="ttsNote">La voix utilise la synthèse vocale de votre navigateur · la musique est générée localement. Utilisez le menu en bas pour sauter directement à un module.</div>
     </div>
   </div>
   <div class="hint">▶ « Démarrer » lance la narration et la musique · Espace = pause · ← → = naviguer · cliquez un module pour y sauter directement</div>
@@ -877,7 +877,7 @@ Object.keys(firstIdxOfMod).sort((a,b)=>a-b).forEach(m=>{
 });
 const menuBtns=[...menuEl.querySelectorAll('.menubtn')];
 
-let cur=-1, paused=false, soundOn=false, musicOn=false, rafId=null, sceneStart=0, fallbackTimer=null;
+let cur=-1, paused=false, soundOn=true, musicOn=true, rafId=null, sceneStart=0, fallbackTimer=null;
 let rate=0.9; const rateCycle=[0.8,0.9,1.0,1.1];
 const TTS=('speechSynthesis' in window);
 if(!TTS){ soundOn=false; soundBtn.classList.add('off'); soundBtn.disabled=true;
@@ -895,7 +895,7 @@ if(TTS){ speechSynthesis.onvoiceschanged = pickVoice; pickVoice(); }
 /* --- Musique d'ambiance simple via WebAudio --- */
 let actx=null, musicNodes=[];
 function startMusic(){
-  return;
+  if(!musicOn) return;
   try{
     if(!actx) actx = new (window.AudioContext||window.webkitAudioContext)();
     stopMusic();
@@ -926,7 +926,7 @@ musicBtn.onclick=()=>{
 };
 
 function speak(text){
-  return;
+  if(!TTS || !soundOn) return;
   try{ speechSynthesis.cancel(); }catch(e){}
   const u=new SpeechSynthesisUtterance(text);
   u.lang='fr-FR'; u.rate=rate; u.pitch=1.0; if(voiceFR) u.voice=voiceFR;
@@ -1002,8 +1002,8 @@ document.addEventListener('keydown', e=>{
 
 startBtn.onclick=()=>{
   overlay.classList.add('hidden');
-  paused=false;
-  playBtn.textContent='⏸';
+  if(TTS){ try{ const w=new SpeechSynthesisUtterance(' '); w.volume=0; speechSynthesis.speak(w); }catch(e){} pickVoice(); }
+  if(musicOn) startMusic();
   playScene(0);
 };
 </script>
