@@ -23,6 +23,9 @@ Claude le lit automatiquement au début de chaque session. Il doit être mis à 
 - **claude-mem** : plugin communautaire (non officiel) de mémoire pour Claude Code, stockage
   local dans `~/.claude-mem`. Inutile dans les sessions cloud (conteneur effacé) ; on utilise
   plutôt ce fichier `CLAUDE.md` versionné dans git.
+- **ECC (Everything Claude Code, affaan-m/ECC)** : examiné le 2026-11-19 (72 agents, 327 skills,
+  28 hooks automatiques). **Non installé**, décision de l'utilisateur : orienté développement
+  logiciel, inutile pour ce projet, alourdit les sessions et exécute du code tiers à chaque action.
 
 ## Journal des sessions
 ### 2026-11-19
