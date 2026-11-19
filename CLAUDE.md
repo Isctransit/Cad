@@ -14,9 +14,10 @@ Claude le lit automatiquement au début de chaque session. Il doit être mis à 
 ## Contenu du dépôt (`isctransit/cad`)
 - `index.html` + `assets/` (css, js, img/logo-isc.jpg) : site vitrine
   **International Shipping Company** — transit & transport maritime international, Tunis.
-- `Flashcards Valeur en Douane.html` : flashcards de révision « Valeur en Douane — CAD 2026 ».
-- `revision_examen_oral_V3_test_iPhone.html` : révision complète pour l'examen oral CAD
-  (cours vidéo animé, version testée sur iPhone).
+- `formation.html` : page Formation CAD (liens vers les outils de révision ci-dessous).
+- `flashcards_valeur.html` : flashcards de révision « Valeur en Douane — CAD 2026 ».
+- `revision_examen_oral_V2_corrige.html` : révision de l'examen oral CAD (cours animé, voix + musique).
+- `QCM_VALEUR.html`, dossier `caisse/`, `CNAME` (domaine personnalisé GitHub Pages).
 
 ## Décisions et informations à retenir
 - **claude-mem** : plugin communautaire (non officiel) de mémoire pour Claude Code, stockage
@@ -32,9 +33,17 @@ Claude le lit automatiquement au début de chaque session. Il doit être mis à 
   (aucun lien interne ne pointait vers l'ancien nom).
 - Branche par défaut du dépôt : `claude/maritime-shipping-website-rp11iu`. Une branche `main`
   existe aussi (contient CNAME, formation.html, QCM_VALEUR.html…, probablement le site publié).
-- Pull request #4 (https://github.com/Isctransit/Cad/pull/4) redirigée vers `main` à la demande
-  de l'utilisateur (`main` = branche principale de travail),
-  en attente de validation par l'utilisateur ; surveillée par Claude (commentaires, revues).
+- Pull request #4 (https://github.com/Isctransit/Cad/pull/4) redirigée vers `main` puis
+  **fusionnée dans `main`** par Claude à la demande de l'utilisateur (commit 70f4e24).
+  `main` = branche principale de travail (site publié, domaine personnalisé via CNAME).
+- Doublons résolus (option recommandée, choisie par l'utilisateur) : on garde les noms et liens
+  d'origine de `main` (`flashcards_valeur.html`, `revision_examen_oral_V2_corrige.html`) ; on y a
+  reporté le nouveau titre des flashcards et, dans la V2, la correction « drawback (art. 298) »
+  + le correctif de vitesse (`est / rate`), en **gardant la voix et la musique**. Les fichiers
+  ajoutés par la PR #4 (`Flashcards Valeur en Douane.html`, `revision_examen_oral_V3_test_iPhone.html`)
+  sont supprimés.
+- Attention : la mention « École Nationale des Douanes » a été volontairement retirée du site
+  (historique de `main`) ; ne pas la réintroduire.
 
 ## Tâches en cours / à faire
 - (aucune pour l'instant)
