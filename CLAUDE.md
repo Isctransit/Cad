@@ -62,6 +62,14 @@ Claude le lit automatiquement au début de chaque session. Il doit être mis à 
   2025 existe, elle est hors GitHub (PC de l'utilisateur, Drive, autre session non poussée).
 
 ## Tâches en cours / à faire
+- **Migration NGP vers le tarif 2025** (prévue le 2026-11-20) : l'utilisateur envoie un **ZIP**
+  (97 fichiers Excel, un par chapitre + notes de chapitres en Word), en pièce jointe ou via
+  Google Drive (connecteur disponible). Plan : extraire dans un dossier isolé → analyser la
+  structure Excel → convertir au format JSON de `ngp.html` (ngp, cle, position, chapitre,
+  designation, designation_complete, unite, dd, tva, fodec, dc, air, autres) → rapport
+  d'écarts vs ancien tarif (ajouts/suppressions/taux) à valider → mise à jour `ngp.html` sur la
+  branche de travail ; fusion dans `main` seulement sur demande. Notes de chapitres : à intégrer
+  plus tard (ex. bouton « Notes du chapitre »), à décider avec l'utilisateur.
 - Paiement par carte pour NGP — plan décidé (2026-11-19) :
   - L'utilisateur a un **compte marchand ClicToPay** (API register.do / getOrderStatusExtended.do ;
     identifiants API à saisir par lui côté serveur, jamais dans le chat ni dans le dépôt).
