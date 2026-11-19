@@ -31,7 +31,8 @@ Claude le lit automatiquement au début de chaque session. Il doit être mis à 
 - Renommage de `Flashcards Valeur en Douane.html.html` → `Flashcards Valeur en Douane.html`
   (aucun lien interne ne pointait vers l'ancien nom).
 - Branche par défaut du dépôt : `claude/maritime-shipping-website-rp11iu` (pas de `main`).
-- Pull request ouverte vers la branche par défaut, en attente de validation par l'utilisateur.
+- Pull request #4 (https://github.com/Isctransit/Cad/pull/4) ouverte vers la branche par défaut,
+  en attente de validation par l'utilisateur ; surveillée par Claude (commentaires, revues).
 
 ## Tâches en cours / à faire
 - (aucune pour l'instant)
