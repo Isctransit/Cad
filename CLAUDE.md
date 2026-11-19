@@ -56,6 +56,10 @@ Claude le lit automatiquement au début de chaque session. Il doit être mis à 
   `blur()` puis `focus()` dans `setMode` pour forcer le rechargement du clavier.
   PR #6 créée et **fusionnée dans `main`** à la demande de l'utilisateur (commit b3ac568).
   Vérifié par l'utilisateur sur iPhone : le clavier change bien (correctif validé).
+- Recherche d'une version « tarif 2025 » de la NGP : **introuvable dans le dépôt** (toutes les
+  branches, PR #1 à #7 et l'historique vérifiés). `ngp.html` (main) et `recherche_ngp/data.json`
+  (branche python-tutoring) contiennent **les mêmes 17 265 lignes** (ancien tarif). Si la version
+  2025 existe, elle est hors GitHub (PC de l'utilisateur, Drive, autre session non poussée).
 
 ## Tâches en cours / à faire
 - Paiement par carte pour NGP — plan décidé (2026-11-19) :
