@@ -50,6 +50,10 @@ Claude le lit automatiquement au début de chaque session. Il doit être mis à 
   dans la section outils de `formation.html`. Publié sur `main`.
 - Ajout de `ngp.html` + carte « Recherche NGP — Tarif » (.t5) sur `formation.html`. Choix utilisateur :
   7 jours gratuits puis 5 DT/mois, paiement par carte bancaire uniquement.
+- Correctif `ngp.html` (branche `claude/stoic-archimedes-3mh4g8`) : en passant de « Code » à
+  « Désignation », le clavier mobile restait numérique. Cause : `removeAttribute('inputmode')`
+  sur un champ déjà focalisé ne change pas le clavier. Fix : `inputmode="text"` explicite +
+  `blur()` puis `focus()` dans `setMode` pour forcer le rechargement du clavier.
 
 ## Tâches en cours / à faire
 - Paiement par carte pour NGP — plan décidé (2026-11-19) :
