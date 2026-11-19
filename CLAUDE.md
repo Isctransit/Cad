@@ -17,6 +17,7 @@ Claude le lit automatiquement au début de chaque session. Il doit être mis à 
 - `formation.html` : page Formation CAD (liens vers les outils de révision ci-dessous).
 - `flashcards_valeur.html` : flashcards de révision « Valeur en Douane — CAD 2026 ».
 - `revision_examen_oral_V2_corrige.html` : révision de l'examen oral CAD (cours animé, voix + musique).
+- `table33.html` : Table 33 — codes des régimes douaniers (filtrable, icône intégrée).
 - `QCM_VALEUR.html`, dossier `caisse/`, `CNAME` (domaine personnalisé GitHub Pages).
 
 ## Décisions et informations à retenir
@@ -44,6 +45,8 @@ Claude le lit automatiquement au début de chaque session. Il doit être mis à 
   sont supprimés.
 - Attention : la mention « École Nationale des Douanes » a été volontairement retirée du site
   (historique de `main`) ; ne pas la réintroduire.
+- Ajout de `table33.html` (Table 33 — régimes douaniers) + carte « Table 33 » (style .t4 bleu marine)
+  dans la section outils de `formation.html`. Publié sur `main`.
 
 ## Tâches en cours / à faire
 - (aucune pour l'instant)
