@@ -18,6 +18,7 @@ Claude le lit automatiquement au début de chaque session. Il doit être mis à 
 - `flashcards_valeur.html` : flashcards de révision « Valeur en Douane — CAD 2026 ».
 - `revision_examen_oral_V2_corrige.html` : révision de l'examen oral CAD (cours animé, voix + musique).
 - `table33.html` : Table 33 — codes des régimes douaniers (filtrable, icône intégrée).
+- `ngp.html` : Recherche NGP — Tarif Douanier Tunisien (9,5 Mo) ; essai gratuit 7 jours (localStorage `ngp_essai_debut`) puis écran « 5 DT/mois, carte bancaire uniquement » (bouton provisoire = mailto info@stt.tn, pas encore de paiement en ligne).
 - `QCM_VALEUR.html`, dossier `caisse/`, `CNAME` (domaine personnalisé GitHub Pages).
 
 ## Décisions et informations à retenir
@@ -47,6 +48,9 @@ Claude le lit automatiquement au début de chaque session. Il doit être mis à 
   (historique de `main`) ; ne pas la réintroduire.
 - Ajout de `table33.html` (Table 33 — régimes douaniers) + carte « Table 33 » (style .t4 bleu marine)
   dans la section outils de `formation.html`. Publié sur `main`.
+- Ajout de `ngp.html` + carte « Recherche NGP — Tarif » (.t5) sur `formation.html`. Choix utilisateur :
+  7 jours gratuits puis 5 DT/mois, paiement par carte bancaire uniquement.
 
 ## Tâches en cours / à faire
-- (aucune pour l'instant)
+- Paiement par carte pour NGP : nécessite un compte marchand (ex. passerelle tunisienne) + un serveur
+  pour vérifier l'abonnement ; l'essai actuel est côté navigateur (contournable).
