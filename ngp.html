@@ -133,7 +133,7 @@ footer{margin-top:42px;font-size:12px;color:var(--muted);font-family:'IBM Plex M
   </div>
   <div class="searchbox">
     <span class="ico" id="ico">⌕</span>
-    <input id="q" autocomplete="off" placeholder="ex. miel, chemise coton, téléphone, huile d'olive…">
+    <input id="q" inputmode="text" autocomplete="off" placeholder="ex. miel, chemise coton, téléphone, huile d'olive…">
   </div>
   <div class="hint" id="hint">Saisissez au moins 3 lettres (les accents sont ignorés). Astuce : un chapitre peut être parcouru seul via le menu déroulant.</div>
   <div class="recents" id="recents"></div>
@@ -165,8 +165,8 @@ function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');clear
 function setMode(m){favView=false;$('favBtn').setAttribute('aria-pressed','false');mode=m;
   $('mKw').setAttribute('aria-selected',m==='kw');$('mCode').setAttribute('aria-selected',m==='code');
   if(m==='code'){$('q').placeholder='ex. 8517, 020110, 6109…';$('q').setAttribute('inputmode','numeric');$('hint').textContent='Saisissez au moins 4 chiffres (position tarifaire), puis affinez.';$('ico').textContent='#';}
-  else{$('q').placeholder="ex. miel, chemise coton, téléphone, huile d'olive…";$('q').removeAttribute('inputmode');$('hint').textContent='Saisissez au moins 3 lettres (les accents sont ignorés). Astuce : un chapitre peut être parcouru seul via le menu déroulant.';$('ico').textContent='⌕';}
-  $('q').value='';$('q').focus();drawRecents();render();}
+  else{$('q').placeholder="ex. miel, chemise coton, téléphone, huile d'olive…";$('q').setAttribute('inputmode','text');$('hint').textContent='Saisissez au moins 3 lettres (les accents sont ignorés). Astuce : un chapitre peut être parcouru seul via le menu déroulant.';$('ico').textContent='⌕';}
+  const q=$('q');q.value='';q.blur();q.focus();drawRecents();render();}
 function toggleFavView(){favView=!favView;$('favBtn').setAttribute('aria-pressed',favView);render();}
 function drawRecents(){const box=$('recents');if(favView||!hist.length){box.innerHTML='';return;}
   box.innerHTML='<span class="lbl">Récent :</span>'+hist.slice(0,6).map(h=>`<span class="chip" onclick="replay('${h.replace(/'/g,"\\'")}')">${h}</span>`).join('');}
