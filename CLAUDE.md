@@ -52,5 +52,13 @@ Claude le lit automatiquement au début de chaque session. Il doit être mis à 
   7 jours gratuits puis 5 DT/mois, paiement par carte bancaire uniquement.
 
 ## Tâches en cours / à faire
-- Paiement par carte pour NGP : nécessite un compte marchand (ex. passerelle tunisienne) + un serveur
-  pour vérifier l'abonnement ; l'essai actuel est côté navigateur (contournable).
+- Paiement par carte pour NGP — plan décidé (2026-11-19) :
+  - L'utilisateur a un **compte marchand ClicToPay** (API register.do / getOrderStatusExtended.do ;
+    identifiants API à saisir par lui côté serveur, jamais dans le chat ni dans le dépôt).
+  - Hébergement à souscrire chez **Hexabyte** : mutualisé Linux cPanel, PHP 8.1+ (cURL, OpenSSL,
+    PDO MySQL, mbstring), 1 base MySQL, 2–5 Go, trafic ≥ 50 Go/mois, SSL gratuit, cron, appels HTTPS
+    sortants autorisés (ClicToPay), sous-domaine **app.stt.tn** (le site reste sur GitHub Pages).
+  - Backend à écrire en **PHP + MySQL** : comptes (e-mail), essai 7 jours côté serveur, paiement
+    5 DT → accès 30 jours, ngp.html servi uniquement aux abonnés.
+  - En attente : l'utilisateur souscrit l'hébergement et demande les accès TEST ClicToPay ;
+    ensuite Claude prépare les fichiers PHP + guide de mise en ligne.
